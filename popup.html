@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 400px;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      margin: 0;
+      color: white;
+    }
+    
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    h1 {
+      margin: 0 0 20px 0;
+      font-size: 24px;
+      text-align: center;
+      font-weight: 300;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 150px;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    
+    textarea:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+    
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    button {
+      flex: 1;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      backdrop-filter: blur(5px);
+    }
+    
+    button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .run-btn {
+      background: linear-gradient(45deg, #4CAF50, #45a049);
+    }
+    
+    .run-btn:hover {
+      background: linear-gradient(45deg, #45a049, #4CAF50);
+    }
+    
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      text-align: center;
+      min-height: 20px;
+    }
+    
+    .success {
+      background: rgba(76, 175, 80, 0.2);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+    
+    .error {
+      background: rgba(244, 67, 54, 0.2);
+      border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+    
+    .examples {
+      margin-top: 15px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    
+    .example-btn {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      margin: 2px;
+      border-radius: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 JS Script Runner</h1>
+    
+    <label for="scriptInput">JavaScript Code:</label>
+    <textarea id="scriptInput" placeholder="Enter your JavaScript code here...&#10;&#10;Example:&#10;return document.title + ' - ' + window.location.href;">// Your code here
+return "Hello from JS Script Runner!";</textarea>
+    
+    <div class="button-group">
+      <button id="runBtn" class="run-btn">▶ Run Script</button>
+      <button id="downloadBtn">📥 Download Result</button>
+    </div>
+    
+    <div id="status" class="status"></div>
+    
+    <div class="examples">
+      <strong>Quick Examples:</strong><br>
+      <span class="example-btn" onclick="loadExample('title')">Page Title</span>
+      <span class="example-btn" onclick="loadExample('links')">All Links</span>
+      <span class="example-btn" onclick="loadExample('images')">All Images</span>
+      <span class="example-btn" onclick="loadExample('custom')">Custom Data</span>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html> 

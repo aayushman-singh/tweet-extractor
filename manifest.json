@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "JS Script Runner",
+  "version": "1.0",
+  "description": "A lightweight Chrome extension that runs JavaScript scripts and downloads results as HTML",
+  "permissions": [
+    "activeTab",
+    "downloads"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "JS Script Runner"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+} 
