@@ -18,9 +18,9 @@ module.exports = {
     max_memory_restart: '400M', // Restart if memory exceeds 400MB (t4g.micro has 1GB)
     
     // Logging
-    log_file: '/home/ubuntu/logs/api.log',
-    out_file: '/home/ubuntu/logs/api-out.log',
-    error_file: '/home/ubuntu/logs/api-error.log',
+    log_file: '/home/ec2-user/logs/api.log',
+    out_file: '/home/ec2-user/logs/api-out.log',
+    error_file: '/home/ec2-user/logs/api-error.log',
     log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
     merge_logs: true,
     
