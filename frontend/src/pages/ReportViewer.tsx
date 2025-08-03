@@ -46,7 +46,7 @@ interface Tweet {
 }
 
 interface ReportData {
-  profileInfo: {
+  profileInfo?: {
     username: string;
     displayName: string;
     description?: string;
@@ -132,6 +132,7 @@ const ReportViewer: React.FC = () => {
 
   useEffect(() => {
     if (reportData) {
+      console.log('🔍 [FRONTEND] useEffect triggered, reportData changed:', reportData);
       filterAndSortTweets();
     }
   }, [reportData, sortBy, searchQuery]);
@@ -149,6 +150,8 @@ const ReportViewer: React.FC = () => {
       console.log('🔍 [FRONTEND] Received report data:', response.data);
       console.log('🔍 [FRONTEND] Number of tweets:', response.data.tweets?.length || 0);
       console.log('🔍 [FRONTEND] Profile info:', response.data.profileInfo);
+      console.log('🔍 [FRONTEND] Profile info type:', typeof response.data.profileInfo);
+      console.log('🔍 [FRONTEND] Profile info username:', response.data.profileInfo?.username);
       console.log('🔍 [FRONTEND] Stats:', response.data.stats);
       
       setReportData(response.data);
@@ -166,6 +169,9 @@ const ReportViewer: React.FC = () => {
 
   const filterAndSortTweets = () => {
     if (!reportData) return;
+
+    console.log('🔍 [FRONTEND] Filtering tweets, reportData:', reportData);
+    console.log('🔍 [FRONTEND] Profile info in filterAndSortTweets:', reportData.profileInfo);
 
     let filtered = reportData.tweets;
 
@@ -258,7 +264,7 @@ const ReportViewer: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', `${reportData?.profileInfo.username}_tweet_archive.json`);
+      link.setAttribute('download', `${reportData?.profileInfo?.username || 'user'}_tweet_archive.json`);
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -336,13 +342,13 @@ const ReportViewer: React.FC = () => {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h1 className="text-3xl font-bold text-gray-900">
-                📊 Tweet Archive for @{reportData.profileInfo.username}
+                📊 Tweet Archive for @{reportData.profileInfo?.username || 'user'}
               </h1>
               <p className="text-gray-600 mt-2">
-                {reportData.profileInfo.displayName}
-                {reportData.profileInfo.description && (
+                {reportData.profileInfo?.displayName || 'User'}
+                {reportData.profileInfo?.description && (
                   <span className="block text-sm text-gray-500 mt-1">
-                    {reportData.profileInfo.description}
+                    {reportData.profileInfo?.description}
                   </span>
                 )}
               </p>
@@ -437,6 +443,7 @@ const ReportViewer: React.FC = () => {
 
         {/* Tweets */}
         <div className="space-y-4">
+          {(() => { console.log('🔍 [FRONTEND] Rendering tweets, profileInfo:', reportData.profileInfo); return null; })()}
           {filteredTweets.map((tweet) => (
             <Card key={tweet.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
@@ -444,14 +451,14 @@ const ReportViewer: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
                       <span className="text-white text-sm font-bold">
-                        {reportData.profileInfo.username.charAt(0).toUpperCase()}
+                        {reportData.profileInfo?.username?.charAt(0).toUpperCase() || 'U'}
                       </span>
                     </div>
                     <div>
                       <span className="font-semibold text-gray-900">
-                        {reportData.profileInfo.displayName}
+                        {reportData.profileInfo?.displayName || 'User'}
                       </span>
-                      <span className="text-gray-500 ml-2">@{reportData.profileInfo.username}</span>
+                      <span className="text-gray-500 ml-2">@{reportData.profileInfo?.username || 'user'}</span>
                     </div>
                   </div>
                   <span className="text-sm text-gray-500">{formatDate(tweet.created_at)}</span>

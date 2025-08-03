@@ -577,10 +577,14 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
     
     let reportData;
     
+    // Debug: Log the full content for debugging (commented out to avoid excessive logging)
+    // console.log('📊 [API] Full S3 content:', content);
+    
     // First, try to parse as pure JSON
     try {
       reportData = JSON.parse(content);
       console.log('📊 [API] Content parsed as pure JSON successfully');
+      console.log('📊 [API] Parsed reportData keys:', Object.keys(reportData));
     } catch (jsonError) {
       console.log('📊 [API] Not pure JSON, trying HTML extraction...');
       
@@ -611,6 +615,7 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
     if (reportData.metadata) {
       // Use metadata format
       console.log('📊 [API] Found metadata section:', reportData.metadata);
+      console.log('📊 [API] Metadata username:', reportData.metadata.username);
       profileInfo = {
         username: reportData.metadata.username || 'user',
         displayName: reportData.metadata.username || 'User',
@@ -692,7 +697,12 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
       reportData.generatedAt = new Date().toISOString();
     }
     
-    console.log('📊 [API] Sending report data');
+    // Add the extracted profileInfo to the response
+    reportData.profileInfo = profileInfo;
+    
+    console.log('📊 [API] Sending report data with profileInfo:', profileInfo);
+    console.log('📊 [API] Final reportData keys:', Object.keys(reportData));
+    console.log('📊 [API] Final reportData.profileInfo:', reportData.profileInfo);
     res.json(reportData);
     
   } catch (error) {
