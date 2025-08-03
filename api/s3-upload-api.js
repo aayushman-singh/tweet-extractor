@@ -332,7 +332,6 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
       Key: generatedFilename,
       Body: content,
       ContentType: contentType || 'text/html',
-      ACL: 'public-read', // Make the file publicly accessible
       CacheControl: 'max-age=31536000', // Cache for 1 year
       Metadata: {
         'source': 'tweet-extractor-extension',

@@ -14,14 +14,14 @@ async function handleAPIUpload(data, authToken) {
   try {
     console.log('📤 Uploading to S3 via API...');
     
-    const response = await fetch('https://extractor.aayushman.dev/api/upload', {
+    const response = await fetch('https://extractor.aayushman.dev/api/upload-to-s3', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`
       },
       body: JSON.stringify({
-        data: data,
+        content: typeof data === 'string' ? data : JSON.stringify(data, null, 2),
         filename: data.filename || 'tweet_archive.json',
         contentType: 'application/json'
       })

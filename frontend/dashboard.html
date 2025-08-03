@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - X Tweet Extractor</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <h1>📊 Dashboard</h1>
+            <div class="user-info">
+                <span id="userEmail"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <main class="dashboard-main">
+            <section class="stats-section">
+                <h2>📈 Your Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Archives</h3>
+                        <p id="totalArchives">Loading...</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Size</h3>
+                        <p id="totalSize">Loading...</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Last Archive</h3>
+                        <p id="lastArchive">Loading...</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="archives-section">
+                <h2>📁 Recent Archives</h2>
+                <div id="archivesList" class="archives-list">
+                    <p>Loading your archives...</p>
+                </div>
+            </section>
+        </main>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        const API_BASE = window.API_BASE_URL || window.location.origin;
+        
+        // Check authentication
+        const token = localStorage.getItem('authToken');
+        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+        
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+        
+        // Display user info
+        document.getElementById('userEmail').textContent = userData.email || 'User';
+        
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userData');
+            window.location.href = 'index.html';
+        });
+        
+        // Load user profile and stats
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Update stats
+                    document.getElementById('totalArchives').textContent = data.stats.total_archives || 0;
+                    document.getElementById('totalSize').textContent = formatBytes(data.stats.total_size || 0);
+                    document.getElementById('lastArchive').textContent = data.stats.last_archive_date ? 
+                        new Date(data.stats.last_archive_date).toLocaleDateString() : 'None';
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+        
+        // Load recent archives
+        async function loadArchives() {
+            try {
+                const response = await fetch(`${API_BASE}/api/recent-uploads?limit=10`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const archivesList = document.getElementById('archivesList');
+                    
+                    if (data.files && data.files.length > 0) {
+                        archivesList.innerHTML = data.files.map(file => `
+                            <div class="archive-item">
+                                <div class="archive-info">
+                                    <h4>${file.filename}</h4>
+                                    <p>Size: ${formatBytes(file.size)} | Created: ${new Date(file.lastModified).toLocaleDateString()}</p>
+                                </div>
+                                <a href="${file.url}" target="_blank" class="btn btn-secondary">View</a>
+                            </div>
+                        `).join('');
+                    } else {
+                        archivesList.innerHTML = '<p>No archives found. Use the Chrome extension to extract your first tweets!</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading archives:', error);
+                document.getElementById('archivesList').innerHTML = '<p>Error loading archives. Please try again.</p>';
+            }
+        }
+        
+        // Utility function to format bytes
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        // Load data on page load
+        loadProfile();
+        loadArchives();
+    </script>
+</body>
+</html> 
