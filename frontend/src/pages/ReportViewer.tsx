@@ -138,8 +138,7 @@ const ReportViewer: React.FC = () => {
 
   const fetchReportData = async () => {
     try {
-      setLoading(true);
-      console.log('Fetching report data for ID:', reportId);
+      console.log('🔍 [FRONTEND] Fetching report data for ID:', reportId);
       const token = localStorage.getItem('authToken');
       const response = await axios.get(`${API_BASE}/api/report/${reportId}`, {
         headers: {
@@ -147,15 +146,19 @@ const ReportViewer: React.FC = () => {
         }
       });
       
+      console.log('🔍 [FRONTEND] Received report data:', response.data);
+      console.log('🔍 [FRONTEND] Number of tweets:', response.data.tweets?.length || 0);
+      console.log('🔍 [FRONTEND] Profile info:', response.data.profileInfo);
+      console.log('🔍 [FRONTEND] Stats:', response.data.stats);
+      
       setReportData(response.data);
     } catch (error) {
       console.error('Failed to fetch report:', error);
       toast({
         title: "Error",
-        description: "Failed to load the report",
+        description: "Failed to fetch report data",
         variant: "destructive",
       });
-      navigate('/dashboard');
     } finally {
       setLoading(false);
     }

@@ -340,7 +340,17 @@ class XTweetScraper {
 
 
   // Upload to S3 via API
+  static uploadInProgress = false;
+  
   async uploadToS3(data, authToken, apiBase = 'https://extractor.aayushman.dev') {
+    // Prevent multiple simultaneous uploads
+    if (XTweetScraper.uploadInProgress) {
+      console.log('⚠️ [UPLOAD] Upload already in progress, ignoring duplicate request');
+      throw new Error('Upload already in progress');
+    }
+    
+    XTweetScraper.uploadInProgress = true;
+    
     try {
       console.log('📤 [UPLOAD] Starting S3 upload process...');
       console.log('📤 [UPLOAD] API Base:', apiBase);
@@ -379,20 +389,23 @@ class XTweetScraper {
         }, '*');
         console.log('📤 [UPLOAD] Upload request sent');
         
-        // Timeout after 30 seconds
+        // Timeout after 60 seconds (increased from 30)
         setTimeout(() => {
           console.log('📤 [UPLOAD] Upload timeout reached');
           window.removeEventListener('message', handleResponse);
+          XTweetScraper.uploadInProgress = false;
           reject(new Error('Upload timeout'));
-        }, 30000);
+        }, 60000);
       });
       
       console.log('✅ [UPLOAD] Upload successful:', response);
+      XTweetScraper.uploadInProgress = false;
       return response;
       
     } catch (error) {
       console.error('❌ [UPLOAD] Upload error:', error);
       console.error('❌ [UPLOAD] Error details:', error.message);
+      XTweetScraper.uploadInProgress = false;
       throw error;
     }
   }

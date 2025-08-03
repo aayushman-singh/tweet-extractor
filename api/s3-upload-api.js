@@ -570,131 +570,126 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
       Key: archive.s3_key
     }).promise();
     
-    // Parse the HTML content to extract JSON data
-    const htmlContent = s3Response.Body.toString('utf-8');
-    console.log('📊 [API] S3 content length:', htmlContent.length);
-    
-    // Extract JSON data from the HTML (this is a simplified approach)
-    // In a real implementation, you'd want to store the JSON data separately
-    const jsonMatch = htmlContent.match(/<script id="tweet-data" type="application\/json">(.*?)<\/script>/s);
+    // Parse the content - try JSON first, then HTML extraction
+    const content = s3Response.Body.toString('utf-8');
+    console.log('📊 [API] S3 content length:', content.length);
+    console.log('📊 [API] Content starts with:', content.substring(0, 100));
     
     let reportData;
-    if (jsonMatch) {
-      try {
-        reportData = JSON.parse(jsonMatch[1]);
-        console.log('📊 [API] JSON data extracted successfully');
-        
-        // If the JSON data contains metadata information, use it
-        if (reportData.metadata) {
-          console.log('📊 [API] Using metadata from JSON data');
-          reportData.profileInfo = {
-            username: reportData.metadata.username || 'user',
-            displayName: reportData.metadata.username || 'User', // Use username as display name if no separate display name
-            description: '',
-            followers_count: 0,
-            following_count: 0,
-            tweet_count: reportData.metadata.total_tweets || (reportData.tweets ? reportData.tweets.length : 100)
-          };
-          
-          // Set timeline from metadata if available
-          if (reportData.metadata.date_range) {
-            reportData.timeline = {
-              startDate: reportData.metadata.date_range.oldest,
-              endDate: reportData.metadata.date_range.newest
-            };
-          }
-          
-          // Set generatedAt from metadata
-          reportData.generatedAt = reportData.metadata.extracted_at || new Date().toISOString();
-          
-        } else if (reportData.profile) {
-          // Fallback to profile object if metadata doesn't exist
-          console.log('📊 [API] Using profile info from JSON data');
-          reportData.profileInfo = {
-            username: reportData.profile.username || 'user',
-            displayName: reportData.profile.displayName || 'User',
-            description: reportData.profile.bio || '',
-            followers_count: reportData.profile.followers || 0,
-            following_count: reportData.profile.following || 0,
-            tweet_count: reportData.tweets ? reportData.tweets.length : 100
-          };
-        } else {
-          // Use profile info from database as fallback
-          console.log('📊 [API] Using profile info from database');
-          reportData.profileInfo = archive.profile_info || {
-            username: 'user',
-            displayName: 'User',
-            description: '',
-            followers_count: 0,
-            following_count: 0,
-            tweet_count: archive.tweet_count || 100
-          };
+    
+    // First, try to parse as pure JSON
+    try {
+      reportData = JSON.parse(content);
+      console.log('📊 [API] Content parsed as pure JSON successfully');
+    } catch (jsonError) {
+      console.log('📊 [API] Not pure JSON, trying HTML extraction...');
+      
+      // Fallback to HTML extraction (for older files)
+      const jsonMatch = content.match(/<script id="tweet-data" type="application\/json">(.*?)<\/script>/s);
+      
+      if (jsonMatch) {
+        try {
+          reportData = JSON.parse(jsonMatch[1]);
+          console.log('📊 [API] JSON data extracted from HTML successfully');
+        } catch (htmlJsonError) {
+          console.error('📊 [API] Failed to parse JSON from HTML:', htmlJsonError);
+          return res.status(500).json({ error: 'Failed to parse report data' });
         }
-        
-        // Ensure tweets array exists
-        if (!reportData.tweets) {
-          reportData.tweets = [];
-        }
-        
-        // Calculate stats from actual tweets
-        const stats = {
-          totalTweets: reportData.tweets.length,
-          totalLikes: 0,
-          totalRetweets: 0,
-          totalViews: 0,
-          totalReplies: 0
-        };
-        
-        reportData.tweets.forEach(tweet => {
-          if (tweet.metrics) {
-            stats.totalLikes += tweet.metrics.likes || 0;
-            stats.totalRetweets += tweet.metrics.retweets || 0;
-            stats.totalViews += tweet.metrics.views || 0;
-            stats.totalReplies += tweet.metrics.replies || 0;
-          } else if (tweet.favorite_count !== undefined) {
-            // Handle the format from your example
-            stats.totalLikes += tweet.favorite_count || 0;
-            stats.totalRetweets += tweet.retweet_count || 0;
-          }
-        });
-        
-        // If metadata has engagement info, use it
-        if (reportData.metadata && reportData.metadata.total_engagement) {
-          stats.totalLikes = reportData.metadata.total_engagement.likes || stats.totalLikes;
-          stats.totalRetweets = reportData.metadata.total_engagement.retweets || stats.totalRetweets;
-        }
-        
-        reportData.stats = stats;
-        
-        // Set timeline if not already set from metadata
-        if (!reportData.timeline) {
-          if (reportData.tweets.length > 0) {
-            const dates = reportData.tweets.map(t => new Date(t.created_at || t.timestamp)).sort();
-            reportData.timeline = {
-              startDate: dates[0].toISOString(),
-              endDate: dates[dates.length - 1].toISOString()
-            };
-          } else {
-            reportData.timeline = {
-              startDate: new Date().toISOString(),
-              endDate: new Date().toISOString()
-            };
-          }
-        }
-        
-        // Set generatedAt if not already set
-        if (!reportData.generatedAt) {
-          reportData.generatedAt = new Date().toISOString();
-        }
-        
-      } catch (parseError) {
-        console.error('Failed to parse JSON data:', parseError);
-        reportData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
+      } else {
+        console.error('📊 [API] No JSON data found in content');
+        return res.status(500).json({ error: 'No valid report data found' });
       }
+    }
+    
+    // Extract profile information from JSON data if available
+    let profileInfo = {
+      username: 'user',
+      displayName: 'User'
+    };
+    let tweetCount = 100;
+
+    if (reportData.metadata) {
+      // Use metadata format
+      console.log('📊 [API] Found metadata section:', reportData.metadata);
+      profileInfo = {
+        username: reportData.metadata.username || 'user',
+        displayName: reportData.metadata.username || 'User',
+        bio: '',
+        followers: 0,
+        following: 0
+      };
+      tweetCount = reportData.metadata.total_tweets || (reportData.tweets ? reportData.tweets.length : 100);
+      console.log('📊 [API] Extracted profile info from metadata:', profileInfo);
+    } else if (reportData.profile) {
+      // Use profile format (fallback)
+      console.log('📊 [API] Found profile section:', reportData.profile);
+      profileInfo = {
+        username: reportData.profile.username || 'user',
+        displayName: reportData.profile.displayName || 'User',
+        bio: reportData.profile.bio || '',
+        followers: reportData.profile.followers || 0,
+        following: reportData.profile.following || 0
+      };
+      tweetCount = reportData.tweets ? reportData.tweets.length : 100;
+      console.log('📊 [API] Extracted profile info from profile:', profileInfo);
     } else {
-      // Generate default report data if no JSON found
-      console.log('📊 [API] No JSON data found, generating default');
-      reportData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
+      console.log('📊 [API] No metadata or profile section found, using defaults');
+    }
+    
+    // Ensure tweets array exists
+    if (!reportData.tweets) {
+      reportData.tweets = [];
+    }
+    
+    // Calculate stats from actual tweets
+    const stats = {
+      totalTweets: reportData.tweets.length,
+      totalLikes: 0,
+      totalRetweets: 0,
+      totalViews: 0,
+      totalReplies: 0
+    };
+    
+    reportData.tweets.forEach(tweet => {
+      if (tweet.metrics) {
+        stats.totalLikes += tweet.metrics.likes || 0;
+        stats.totalRetweets += tweet.metrics.retweets || 0;
+        stats.totalViews += tweet.metrics.views || 0;
+        stats.totalReplies += tweet.metrics.replies || 0;
+      } else if (tweet.favorite_count !== undefined) {
+        // Handle the format from your example
+        stats.totalLikes += tweet.favorite_count || 0;
+        stats.totalRetweets += tweet.retweet_count || 0;
+      }
+    });
+    
+    // If metadata has engagement info, use it
+    if (reportData.metadata && reportData.metadata.total_engagement) {
+      stats.totalLikes = reportData.metadata.total_engagement.likes || stats.totalLikes;
+      stats.totalRetweets = reportData.metadata.total_engagement.retweets || stats.totalRetweets;
+    }
+    
+    reportData.stats = stats;
+    
+    // Set timeline if not already set from metadata
+    if (!reportData.timeline) {
+      if (reportData.tweets.length > 0) {
+        const dates = reportData.tweets.map(t => new Date(t.created_at || t.timestamp)).sort();
+        reportData.timeline = {
+          startDate: dates[0].toISOString(),
+          endDate: dates[dates.length - 1].toISOString()
+        };
+      } else {
+        reportData.timeline = {
+          startDate: new Date().toISOString(),
+          endDate: new Date().toISOString()
+        };
+      }
+    }
+    
+    // Set generatedAt if not already set
+    if (!reportData.generatedAt) {
+      reportData.generatedAt = new Date().toISOString();
     }
     
     console.log('📊 [API] Sending report data');
@@ -729,122 +724,134 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
       Key: archive.s3_key
     }).promise();
     
-    const htmlContent = s3Response.Body.toString('utf-8');
+    const content = s3Response.Body.toString('utf-8');
     
-    // Extract JSON data from the HTML
-    const jsonMatch = htmlContent.match(/<script id="tweet-data" type="application\/json">(.*?)<\/script>/s);
-    
+    // Parse the content - try JSON first, then HTML extraction
     let jsonData;
-    if (jsonMatch) {
-      try {
-        jsonData = JSON.parse(jsonMatch[1]);
-        
-        // If the JSON data contains metadata information, use it
-        if (jsonData.metadata) {
-          console.log('📊 [API] Using metadata from JSON data for download');
-          jsonData.profileInfo = {
-            username: jsonData.metadata.username || 'user',
-            displayName: jsonData.metadata.username || 'User', // Use username as display name if no separate display name
-            description: '',
-            followers_count: 0,
-            following_count: 0,
-            tweet_count: jsonData.metadata.total_tweets || (jsonData.tweets ? jsonData.tweets.length : 100)
-          };
-          
-          // Set timeline from metadata if available
-          if (jsonData.metadata.date_range) {
-            jsonData.timeline = {
-              startDate: jsonData.metadata.date_range.oldest,
-              endDate: jsonData.metadata.date_range.newest
-            };
-          }
-          
-          // Set generatedAt from metadata
-          jsonData.generatedAt = jsonData.metadata.extracted_at || new Date().toISOString();
-          
-        } else if (jsonData.profile) {
-          // Fallback to profile object if metadata doesn't exist
-          jsonData.profileInfo = {
-            username: jsonData.profile.username || 'user',
-            displayName: jsonData.profile.displayName || 'User',
-            description: jsonData.profile.bio || '',
-            followers_count: jsonData.profile.followers || 0,
-            following_count: jsonData.profile.following || 0,
-            tweet_count: jsonData.tweets ? jsonData.tweets.length : 100
-          };
-        } else {
-          // Use profile info from database as fallback
-          jsonData.profileInfo = archive.profile_info || {
-            username: 'user',
-            displayName: 'User',
-            description: '',
-            followers_count: 0,
-            following_count: 0,
-            tweet_count: archive.tweet_count || 100
-          };
+    
+    // First, try to parse as pure JSON
+    try {
+      jsonData = JSON.parse(content);
+      console.log('📊 [API] Download: Content parsed as pure JSON successfully');
+    } catch (jsonError) {
+      console.log('📊 [API] Download: Not pure JSON, trying HTML extraction...');
+      
+      // Fallback to HTML extraction (for older files)
+      const jsonMatch = content.match(/<script id="tweet-data" type="application\/json">(.*?)<\/script>/s);
+      
+      if (jsonMatch) {
+        try {
+          jsonData = JSON.parse(jsonMatch[1]);
+          console.log('📊 [API] Download: JSON data extracted from HTML successfully');
+        } catch (htmlJsonError) {
+          console.error('📊 [API] Download: Failed to parse JSON from HTML:', htmlJsonError);
+          return res.status(500).json({ error: 'Failed to parse report data' });
         }
-        
-        // Ensure tweets array exists
-        if (!jsonData.tweets) {
-          jsonData.tweets = [];
-        }
-        
-        // Calculate stats from actual tweets
-        const stats = {
-          totalTweets: jsonData.tweets.length,
-          totalLikes: 0,
-          totalRetweets: 0,
-          totalViews: 0,
-          totalReplies: 0
-        };
-        
-        jsonData.tweets.forEach(tweet => {
-          if (tweet.metrics) {
-            stats.totalLikes += tweet.metrics.likes || 0;
-            stats.totalRetweets += tweet.metrics.retweets || 0;
-            stats.totalViews += tweet.metrics.views || 0;
-            stats.totalReplies += tweet.metrics.replies || 0;
-          } else if (tweet.favorite_count !== undefined) {
-            // Handle the format from your example
-            stats.totalLikes += tweet.favorite_count || 0;
-            stats.totalRetweets += tweet.retweet_count || 0;
-          }
-        });
-        
-        // If metadata has engagement info, use it
-        if (jsonData.metadata && jsonData.metadata.total_engagement) {
-          stats.totalLikes = jsonData.metadata.total_engagement.likes || stats.totalLikes;
-          stats.totalRetweets = jsonData.metadata.total_engagement.retweets || stats.totalRetweets;
-        }
-        
-        jsonData.stats = stats;
-        
-        // Set timeline if not already set from metadata
-        if (!jsonData.timeline) {
-          if (jsonData.tweets.length > 0) {
-            const dates = jsonData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
-            jsonData.timeline = {
-              startDate: dates[0].toISOString(),
-              endDate: dates[dates.length - 1].toISOString()
-            };
-          } else {
-            jsonData.timeline = {
-              startDate: new Date().toISOString(),
-              endDate: new Date().toISOString()
-            };
-          }
-        }
-        
-        // Set generatedAt if not already set
-        if (!jsonData.generatedAt) {
-          jsonData.generatedAt = new Date().toISOString();
-        }
-        
-      } catch (parseError) {
-        jsonData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
+      } else {
+        console.error('📊 [API] Download: No JSON data found in content');
+        return res.status(500).json({ error: 'No valid report data found' });
       }
+    }
+    
+    // If the JSON data contains metadata information, use it
+    if (jsonData.metadata) {
+      console.log('📊 [API] Using metadata from JSON data for download');
+      jsonData.profileInfo = {
+        username: jsonData.metadata.username || 'user',
+        displayName: jsonData.metadata.username || 'User', // Use username as display name if no separate display name
+        description: '',
+        followers_count: 0,
+        following_count: 0,
+        tweet_count: jsonData.metadata.total_tweets || (jsonData.tweets ? jsonData.tweets.length : 100)
+      };
+      
+      // Set timeline from metadata if available
+      if (jsonData.metadata.date_range) {
+        jsonData.timeline = {
+          startDate: jsonData.metadata.date_range.oldest,
+          endDate: jsonData.metadata.date_range.newest
+        };
+      }
+      
+      // Set generatedAt from metadata
+      jsonData.generatedAt = jsonData.metadata.extracted_at || new Date().toISOString();
+      
+    } else if (jsonData.profile) {
+      // Fallback to profile object if metadata doesn't exist
+      jsonData.profileInfo = {
+        username: jsonData.profile.username || 'user',
+        displayName: jsonData.profile.displayName || 'User',
+        description: jsonData.profile.bio || '',
+        followers_count: jsonData.profile.followers || 0,
+        following_count: jsonData.profile.following || 0,
+        tweet_count: jsonData.tweets ? jsonData.tweets.length : 100
+      };
     } else {
-      jsonData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
+      // Use profile info from database as fallback
+      jsonData.profileInfo = archive.profile_info || {
+        username: 'user',
+        displayName: 'User',
+        description: '',
+        followers_count: 0,
+        following_count: 0,
+        tweet_count: archive.tweet_count || 100
+      };
+    }
+    
+    // Ensure tweets array exists
+    if (!jsonData.tweets) {
+      jsonData.tweets = [];
+    }
+    
+    // Calculate stats from actual tweets
+    const stats = {
+      totalTweets: jsonData.tweets.length,
+      totalLikes: 0,
+      totalRetweets: 0,
+      totalViews: 0,
+      totalReplies: 0
+    };
+    
+    jsonData.tweets.forEach(tweet => {
+      if (tweet.metrics) {
+        stats.totalLikes += tweet.metrics.likes || 0;
+        stats.totalRetweets += tweet.metrics.retweets || 0;
+        stats.totalViews += tweet.metrics.views || 0;
+        stats.totalReplies += tweet.metrics.replies || 0;
+      } else if (tweet.favorite_count !== undefined) {
+        // Handle the format from your example
+        stats.totalLikes += tweet.favorite_count || 0;
+        stats.totalRetweets += tweet.retweet_count || 0;
+      }
+    });
+    
+    // If metadata has engagement info, use it
+    if (jsonData.metadata && jsonData.metadata.total_engagement) {
+      stats.totalLikes = jsonData.metadata.total_engagement.likes || stats.totalLikes;
+      stats.totalRetweets = jsonData.metadata.total_engagement.retweets || stats.totalRetweets;
+    }
+    
+    jsonData.stats = stats;
+    
+    // Set timeline if not already set from metadata
+    if (!jsonData.timeline) {
+      if (jsonData.tweets.length > 0) {
+        const dates = jsonData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
+        jsonData.timeline = {
+          startDate: dates[0].toISOString(),
+          endDate: dates[dates.length - 1].toISOString()
+        };
+      } else {
+        jsonData.timeline = {
+          startDate: new Date().toISOString(),
+          endDate: new Date().toISOString()
+        };
+      }
+    }
+    
+    // Set generatedAt if not already set
+    if (!jsonData.generatedAt) {
+      jsonData.generatedAt = new Date().toISOString();
     }
     
     res.setHeader('Content-Type', 'application/json');

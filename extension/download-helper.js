@@ -52,20 +52,41 @@ window.handleTweetDownload = async function(count, uploadToS3 = false, authToken
 };
 
 // Listen for download requests
+let isDownloadInProgress = false;
+
 document.addEventListener('startTweetDownload', function(event) {
+  if (isDownloadInProgress) {
+    console.log('⚠️ Download already in progress, ignoring duplicate request');
+    return;
+  }
+  
   if (event.detail && event.detail.count) {
     const count = event.detail.count;
     const uploadToS3 = event.detail.uploadToS3 || false;
     const authToken = event.detail.authToken || null;
     
     console.log('🚀 Helper script starting download for', count, 'tweets, uploadToS3:', uploadToS3);
+    isDownloadInProgress = true;
     
     window.handleTweetDownload(count, uploadToS3, authToken).then(result => {
       console.log('📝 Helper script finished download, sending result back');
+      isDownloadInProgress = false;
       document.dispatchEvent(new CustomEvent('downloadTweetsResult', {
         detail: {
           action: 'downloadTweetsResult',
           result: result
+        }
+      }));
+    }).catch(error => {
+      console.error('❌ Download error:', error);
+      isDownloadInProgress = false;
+      document.dispatchEvent(new CustomEvent('downloadTweetsResult', {
+        detail: {
+          action: 'downloadTweetsResult',
+          result: {
+            success: false,
+            error: error.message
+          }
         }
       }));
     });

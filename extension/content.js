@@ -24,6 +24,8 @@ document.addEventListener('startTweetExtraction', function(event) {
         detail: { count: event.detail.count }
       }));
     }
+  } else if (isDownloading) {
+    console.log('⚠️ Download already in progress, ignoring duplicate request');
   }
 });
 
