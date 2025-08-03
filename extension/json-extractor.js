@@ -52,7 +52,7 @@
                 throw new Error('No tweets found. Please make sure you are on a profile page with tweets.');
             }
 
-            // Upload to S3 via API
+            // Upload to S3 via API using postMessage to content script
             const uploadResult = await uploadToAPI(tweetsData, authToken, apiBase);
             
             return {
@@ -279,33 +279,46 @@
         try {
             const jsonContent = JSON.stringify(tweetsData, null, 2);
             
-            // Use chrome.runtime.sendMessage to bypass CSP restrictions
+            // Use postMessage to communicate with content script
             return new Promise((resolve, reject) => {
-                chrome.runtime.sendMessage({
-                    action: 'uploadToAPI',
+                const messageId = Date.now() + Math.random();
+                
+                // Listen for response
+                const handleResponse = (event) => {
+                    if (event.data.type === 'uploadResponse' && event.data.id === messageId) {
+                        window.removeEventListener('message', handleResponse);
+                        if (event.data.success) {
+                            resolve({
+                                url: event.data.url,
+                                filename: event.data.filename
+                            });
+                        } else {
+                            reject(new Error(event.data.error || 'Upload failed'));
+                        }
+                    }
+                };
+                
+                window.addEventListener('message', handleResponse);
+                
+                // Send upload request to content script
+                window.postMessage({
+                    type: 'uploadRequest',
+                    id: messageId,
                     data: {
                         content: jsonContent,
                         contentType: 'application/json',
                         authToken: authToken,
                         apiBase: apiBase
                     }
-                }, (response) => {
-                    if (chrome.runtime.lastError) {
-                        reject(new Error(chrome.runtime.lastError.message));
-                        return;
-                    }
-                    
-                    if (response.success) {
-                        resolve({
-                            url: response.url,
-                            filename: response.filename
-                        });
-                    } else {
-                        reject(new Error(response.error || 'Upload failed'));
-                    }
-                });
+                }, '*');
+                
+                // Timeout after 30 seconds
+                setTimeout(() => {
+                    window.removeEventListener('message', handleResponse);
+                    reject(new Error('Upload timeout'));
+                }, 30000);
             });
-
+            
         } catch (error) {
             console.error('❌ Upload error:', error);
             throw new Error(`Upload failed: ${error.message}`);

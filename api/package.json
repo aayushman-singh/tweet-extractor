@@ -1,11 +1,17 @@
 {
-  "name": "tweet-downloader-s3-api",
-  "version": "1.0.0",
-  "description": "S3 upload API for Tweet Downloader Chrome Extension",
-  "main": "s3-upload-api.js",
+  "name": "tweet-extractor-api",
+  "version": "2.0.0",
+  "description": "Tweet Extractor API - Optimized for AWS t4g instances",
+  "main": "server.js",
   "scripts": {
-    "start": "node s3-upload-api.js",
-    "dev": "nodemon s3-upload-api.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "prod": "NODE_ENV=production node server.js",
+    "pm2:start": "pm2 start ecosystem.config.js",
+    "pm2:stop": "pm2 stop tweet-extractor-api",
+    "pm2:restart": "pm2 restart tweet-extractor-api",
+    "pm2:logs": "pm2 logs tweet-extractor-api",
+    "test": "node test-endpoints.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -13,12 +19,27 @@
     "cors": "^2.8.5",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.6.3"
+    "mongoose": "^7.6.3",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "express-rate-limit": "^7.1.5",
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
   },
   "engines": {
-    "node": ">=16.0.0"
-  }
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": [
+    "twitter",
+    "tweet-extractor", 
+    "api",
+    "aws",
+    "t4g",
+    "chrome-extension"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
 }

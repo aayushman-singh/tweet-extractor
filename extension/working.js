@@ -337,41 +337,129 @@ class XTweetScraper {
     console.log(`💾 Exported ${tweets.length} tweets to ${filename}`);
   }
 
-  // Upload HTML to S3 bucket
-  async uploadToS3(htmlContent, filename) {
-    try {
-      // S3 upload configuration
-      const API_BASE_URL = 'https://extractor.aayushman.dev'; // Your API domain
-      
-      // Upload via your API endpoint
-      const response = await fetch(`${API_BASE_URL}/api/upload-to-s3`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          filename: filename,
-          content: htmlContent,
-          contentType: 'text/html'
-        })
-      });
 
-      if (response.ok) {
-        const result = await response.json();
-        console.log(`✅ HTML uploaded successfully: ${result.url}`);
-        return { success: true, url: result.url };
-      } else {
-        const errorText = await response.text();
-        throw new Error(`Failed to upload to S3: ${errorText}`);
-      }
+
+  // Upload to S3 via API
+  async uploadToS3(data, authToken, apiBase = 'https://extractor.aayushman.dev') {
+    try {
+      console.log('📤 Uploading to S3 via API...');
+      
+      // Send upload request to content script
+      const response = await new Promise((resolve, reject) => {
+        // Set up response listener
+        const handleResponse = (event) => {
+          if (event.data && event.data.type === 'uploadResponse') {
+            window.removeEventListener('message', handleResponse);
+            if (event.data.success) {
+              resolve(event.data);
+            } else {
+              reject(new Error(event.data.error || 'Upload failed'));
+            }
+          }
+        };
+        
+        window.addEventListener('message', handleResponse);
+        
+        // Send upload request
+        window.postMessage({
+          type: 'uploadRequest',
+          data: data,
+          authToken: authToken
+        }, '*');
+        
+        // Timeout after 30 seconds
+        setTimeout(() => {
+          window.removeEventListener('message', handleResponse);
+          reject(new Error('Upload timeout'));
+        }, 30000);
+      });
+      
+      console.log('✅ Upload successful:', response);
+      return response;
+      
     } catch (error) {
-      console.error('❌ S3 upload failed:', error);
-      return { success: false, error: error.message };
+      console.error('❌ Upload error:', error);
+      throw error;
     }
   }
 
-  // Generate and download/upload HTML report
-  exportToHTML(tweets, username = "User", uploadToS3 = false) {
+  // Export tweets to JSON format
+  async exportToJSON(tweets, username = "User", uploadToS3 = false, authToken = null, apiBase = 'https://extractor.aayushman.dev') {
+    try {
+      console.log('📝 Exporting tweets to JSON format...');
+      
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const filename = `${username}_tweet_archive_${tweets.length}_${timestamp}.json`;
+      
+      // Prepare JSON data
+      const jsonData = {
+        metadata: {
+          username: username,
+          total_tweets: tweets.length,
+          extracted_at: new Date().toISOString(),
+          date_range: {
+            oldest: tweets[tweets.length - 1]?.created_at?.toISOString(),
+            newest: tweets[0]?.created_at?.toISOString()
+          },
+          total_engagement: {
+            likes: tweets.reduce((sum, t) => sum + t.favorite_count, 0),
+            retweets: tweets.reduce((sum, t) => sum + t.retweet_count, 0)
+          }
+        },
+        tweets: tweets.map(tweet => ({
+          id: tweet.id,
+          text: tweet.text,
+          created_at: tweet.created_at.toISOString(),
+          retweet_count: tweet.retweet_count,
+          favorite_count: tweet.favorite_count
+        }))
+      };
+      
+      if (uploadToS3 && authToken) {
+        // Upload to S3
+        console.log('☁️ Uploading JSON to S3...');
+        const uploadResult = await this.uploadToS3(jsonData, authToken, apiBase);
+        
+        return {
+          success: true,
+          count: tweets.length,
+          filename: filename,
+          url: uploadResult.url,
+          message: 'JSON archive uploaded to cloud storage'
+        };
+      } else {
+        // Local download
+        const jsonString = JSON.stringify(jsonData, null, 2);
+        const dataBlob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        link.click();
+        URL.revokeObjectURL(url);
+        
+        console.log(`📄 Generated JSON archive with ${tweets.length} tweets!`);
+        
+        return {
+          success: true,
+          count: tweets.length,
+          filename: filename,
+          message: 'JSON archive downloaded locally'
+        };
+      }
+      
+    } catch (error) {
+      console.error('❌ Error exporting to JSON:', error);
+      return {
+        success: false,
+        error: error.message
+      };
+    }
+  }
+
+  // Generate and download HTML report (COMMENTED OUT - OLD FUNCTIONALITY)
+  /*
+  exportToHTML(tweets, username = "User") {
     const oldest = this.getOldestTweets(tweets, 20);
     const newest = this.getNewestTweets(tweets, 20);
 
@@ -759,46 +847,18 @@ class XTweetScraper {
 </body>
 </html>`;
 
-    if (uploadToS3) {
-      // Upload to S3 and return URL
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
-      const filename = `report${Date.now()}.html`; // Simple filename like report4534535.html
-      
-      const uploadResult = await this.uploadToS3(html, filename);
-      
-      if (uploadResult.success) {
-        console.log(`🎨 Generated and uploaded HTML archive with ${tweets.length} tweets!`);
-        console.log(`🌐 View at: ${uploadResult.url}`);
-        
-        // Also copy URL to clipboard
-        try {
-          await navigator.clipboard.writeText(uploadResult.url);
-          console.log(`📋 URL copied to clipboard!`);
-        } catch (e) {
-          console.log(`📋 Could not copy to clipboard: ${e.message}`);
-        }
-        
-        return uploadResult.url;
-      } else {
-        console.error(`❌ Upload failed: ${uploadResult.error}`);
-        // Fallback to local download
-        uploadToS3 = false;
-      }
-    }
+    // Local download
+    const dataBlob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${username}_tweet_archive.html`;
+    link.click();
+    URL.revokeObjectURL(url);
     
-    if (!uploadToS3) {
-      // Local download
-      const dataBlob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${username}_tweet_archive.html`;
-      link.click();
-      URL.revokeObjectURL(url);
-      
-      console.log(`🎨 Generated HTML archive with ${tweets.length} tweets!`);
-    }
+    console.log(`🎨 Generated HTML archive with ${tweets.length} tweets!`);
   }
+  */
 
   // Helper function to escape HTML
   escapeHtml(text) {
@@ -936,7 +996,7 @@ class XTweetScraper {
   }
 
   // Download tweets function that can be called from popup
-  async downloadTweets(count = 100, uploadToS3 = false) {
+  async downloadTweets(count = 100, uploadToS3 = false, authToken = null, apiBase = 'https://extractor.aayushman.dev') {
     try {
       console.log(`🚀 Starting download of ${count} tweets...`);
       
@@ -960,19 +1020,25 @@ class XTweetScraper {
       
       console.log(`✅ Successfully fetched ${limitedTweets.length} tweets (requested: ${count})`);
       
-      // Export to HTML file or upload to S3
-      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-      const filename = `${username}_tweet_archive_${limitedTweets.length}_${timestamp}.html`;
-      const exportResult = await this.exportToHTML(limitedTweets, username, uploadToS3);
-      
-      return {
-        success: true,
-        count: limitedTweets.length,
-        filename: filename,
-        tweets: limitedTweets,
-        uploadedToS3: uploadToS3,
-        url: uploadToS3 ? exportResult : null
-      };
+      if (uploadToS3 && authToken) {
+        // Export to JSON and upload to S3
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `${username}_tweet_archive_${limitedTweets.length}_${timestamp}.json`;
+        const result = await this.exportToJSON(limitedTweets, username, uploadToS3, authToken, apiBase);
+        return result;
+      } else {
+        // Export to HTML file (local download)
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `${username}_tweet_archive_${limitedTweets.length}_${timestamp}.html`;
+        this.exportToHTML(limitedTweets, username);
+        
+        return {
+          success: true,
+          count: limitedTweets.length,
+          filename: filename,
+          tweets: limitedTweets
+        };
+      }
       
     } catch (error) {
       console.error("❌ Error downloading tweets:", error);
@@ -1013,7 +1079,7 @@ class XTweetScraper {
     );
 
     // Generate and download HTML archive
-    this.exportToHTML(tweets, finalUsername);
+    await this.exportToHTML(tweets, finalUsername);
 
     // Also save JSON backup
     setTimeout(() => {
@@ -1078,6 +1144,43 @@ if (tokens.authToken && tokens.csrfToken) {
       return null;
     }
   };
+
+  // Listen for download requests from extension popup
+  document.addEventListener('startTweetDownload', async function(event) {
+    console.log('🚀 Tweet Downloader: Starting tweet download...');
+    console.log('📋 Event detail:', event.detail);
+    
+    const { count, uploadToS3, authToken } = event.detail;
+    
+    try {
+      console.log('🔍 Starting download with count:', count, 'uploadToS3:', uploadToS3);
+      const result = await scraper.downloadTweets(count, uploadToS3, authToken);
+      
+      console.log('📊 Download result:', result);
+      
+      if (result.success) {
+        // Dispatch success result
+        console.log('✅ Dispatching success result');
+        document.dispatchEvent(new CustomEvent('downloadTweetsResult', {
+          detail: result
+        }));
+      } else {
+        throw new Error(result.error || 'Download failed');
+      }
+    } catch (error) {
+      console.error('❌ Download error:', error);
+      
+      // Dispatch error result
+      console.log('❌ Dispatching error result');
+      document.dispatchEvent(new CustomEvent('downloadTweetsResult', {
+        detail: {
+          success: false,
+          error: error.message
+        }
+      }));
+    }
+  });
+
 } else {
   console.error("❌ Could not extract required tokens from session");
 }

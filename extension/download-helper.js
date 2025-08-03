@@ -1,5 +1,5 @@
 // Download helper script that runs in the page context
-window.handleTweetDownload = async function(count, uploadToS3 = false) {
+window.handleTweetDownload = async function(count, uploadToS3 = false, authToken = null) {
   try {
     // Check if we're on Twitter/X
     if (!window.location.hostname.includes('x.com') && !window.location.hostname.includes('twitter.com')) {
@@ -38,8 +38,8 @@ window.handleTweetDownload = async function(count, uploadToS3 = false) {
     
     console.log('✅ TweetScraper found, calling downloadTweets...');
     
-    // Call the downloadTweets method with upload option
-    const result = await window.tweetScraper.downloadTweets(count, uploadToS3);
+    // Call the downloadTweets method with S3 upload parameters
+    const result = await window.tweetScraper.downloadTweets(count, uploadToS3, authToken);
     return result;
     
   } catch (error) {
@@ -56,9 +56,11 @@ document.addEventListener('startTweetDownload', function(event) {
   if (event.detail && event.detail.count) {
     const count = event.detail.count;
     const uploadToS3 = event.detail.uploadToS3 || false;
-    console.log('🚀 Helper script starting download for', count, 'tweets', uploadToS3 ? '(uploading to S3)' : '(local download)');
+    const authToken = event.detail.authToken || null;
     
-    window.handleTweetDownload(count, uploadToS3).then(result => {
+    console.log('🚀 Helper script starting download for', count, 'tweets, uploadToS3:', uploadToS3);
+    
+    window.handleTweetDownload(count, uploadToS3, authToken).then(result => {
       console.log('📝 Helper script finished download, sending result back');
       document.dispatchEvent(new CustomEvent('downloadTweetsResult', {
         detail: {

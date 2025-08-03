@@ -27,7 +27,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["working.js", "download-helper.js", "json-extractor.js"],
+      "resources": ["working.js", "download-helper.js"],
       "matches": ["<all_urls>"]
     }
   ]

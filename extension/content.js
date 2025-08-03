@@ -1,27 +1,36 @@
 // Content script that runs in the context of web pages
-let isExtracting = false;
+let isDownloading = false;
 
-// Listen for tweet extraction requests from the popup
-document.addEventListener('requestTweetExtraction', function(event) {
-  if (event.detail && event.detail.count && !isExtracting) {
+// Listen for tweet extraction requests from the popup (new event name)
+document.addEventListener('startTweetExtraction', function(event) {
+  if (event.detail && event.detail.count && !isDownloading) {
     console.log('📥 Content script received extraction request for', event.detail.count, 'tweets');
-    isExtracting = true;
+    isDownloading = true;
     
-    // Trigger the extraction using the injected helper script
-    document.dispatchEvent(new CustomEvent('startTweetExtraction', {
-      detail: { 
-        count: event.detail.count,
-        authToken: event.detail.authToken,
-        apiBase: event.detail.apiBase
-      }
-    }));
+    // Check if S3 upload is requested
+    if (event.detail.uploadToS3 && event.detail.authToken) {
+      console.log('☁️ S3 upload requested with auth token');
+      // Trigger the extraction with S3 upload using the injected helper script
+      document.dispatchEvent(new CustomEvent('startTweetDownload', {
+        detail: { 
+          count: event.detail.count,
+          uploadToS3: true,
+          authToken: event.detail.authToken
+        }
+      }));
+    } else {
+      // Trigger the download using the injected helper script (legacy event name)
+      document.dispatchEvent(new CustomEvent('startTweetDownload', {
+        detail: { count: event.detail.count }
+      }));
+    }
   }
 });
 
-// Listen for extraction completion from helper script
+// Listen for extraction completion from helper script (new event name)
 document.addEventListener('extractionResult', function(event) {
   console.log('✅ Content script received extraction result');
-  isExtracting = false;
+  isDownloading = false;
   
   // Forward the result back to the popup
   document.dispatchEvent(new CustomEvent('tweetExtractionComplete', {
@@ -34,9 +43,9 @@ document.addEventListener('extractionResult', function(event) {
 
 // Legacy support for old download events (backward compatibility)
 document.addEventListener('requestTweetDownload', function(event) {
-  if (event.detail && event.detail.count && !isExtracting) {
+  if (event.detail && event.detail.count && !isDownloading) {
     console.log('📥 Content script received legacy download request for', event.detail.count, 'tweets');
-    isExtracting = true;
+    isDownloading = true;
     
     // Trigger the download using the injected helper script
     document.dispatchEvent(new CustomEvent('startTweetDownload', {
@@ -47,7 +56,7 @@ document.addEventListener('requestTweetDownload', function(event) {
 
 document.addEventListener('downloadTweetsResult', function(event) {
   console.log('✅ Content script received legacy download result');
-  isExtracting = false;
+  isDownloading = false;
   
   // Forward the result back to the popup
   document.dispatchEvent(new CustomEvent('tweetDownloadComplete', {
@@ -63,48 +72,38 @@ function isProfilePage() {
   return profilePattern.test(path);
 }
 
-// Inject the JSON extractor script for tweet extraction functionality
-function injectExtractorScript() {
+// Inject the working.js script for tweet scraping functionality
+function injectWorkingScript() {
   // Only inject on Twitter/X pages
   if (window.location.hostname.includes('x.com') || window.location.hostname.includes('twitter.com')) {
-    console.log('🗂️ X Archive Extractor: Injecting JSON extractor script...');
+    console.log('🐦 Tweet Downloader: Injecting scraper script...');
     
-    // Check if JSON extractor script is already injected
-    if (document.querySelector('script[src*="json-extractor.js"]')) {
-      console.log('✅ JSON extractor script already injected');
+    // Check if script is already injected
+    if (document.querySelector('script[src*="working.js"]')) {
+      console.log('✅ Working.js script already injected');
     } else {
       const script = document.createElement('script');
-      script.src = chrome.runtime.getURL('json-extractor.js');
+      script.src = chrome.runtime.getURL('working.js');
       script.onload = function() {
-        console.log('✅ JSON extractor script loaded successfully');
+        console.log('✅ Working.js script loaded successfully');
       };
       script.onerror = function() {
-        console.error('❌ Failed to load JSON extractor script');
+        console.error('❌ Failed to load working.js script');
       };
       document.head.appendChild(script);
     }
     
-    // Legacy support: Also inject old scripts for backward compatibility
-    if (!document.querySelector('script[src*="working.js"]')) {
-      const legacyScript = document.createElement('script');
-      legacyScript.src = chrome.runtime.getURL('working.js');
-      legacyScript.onload = function() {
-        console.log('✅ Legacy working.js script loaded');
-      };
-      legacyScript.onerror = function() {
-        console.warn('⚠️ Legacy working.js script not found (optional)');
-      };
-      document.head.appendChild(legacyScript);
-    }
-    
-    if (!document.querySelector('script[src*="download-helper.js"]')) {
+    // Also inject the download helper script
+    if (document.querySelector('script[src*="download-helper.js"]')) {
+      console.log('✅ Download helper script already injected');
+    } else {
       const helperScript = document.createElement('script');
       helperScript.src = chrome.runtime.getURL('download-helper.js');
       helperScript.onload = function() {
-        console.log('✅ Legacy download helper script loaded');
+        console.log('✅ Download helper script loaded successfully');
       };
       helperScript.onerror = function() {
-        console.warn('⚠️ Legacy download helper script not found (optional)');
+        console.error('❌ Failed to load download helper script');
       };
       document.head.appendChild(helperScript);
     }
@@ -112,7 +111,32 @@ function injectExtractorScript() {
 }
 
 // Inject the script immediately when the content script loads
-injectExtractorScript();
+injectWorkingScript();
+
+// Handle S3 upload requests from injected scripts
+window.addEventListener('message', function(event) {
+  if (event.data && event.data.type === 'uploadRequest') {
+    console.log('📤 Content script received upload request from injected script');
+    
+    // Forward the upload request to the background script
+    chrome.runtime.sendMessage({
+      action: 'uploadToAPI',
+      data: event.data.data,
+      authToken: event.data.authToken
+    }, function(response) {
+      console.log('📤 Upload response received:', response);
+      
+      // Send the response back to the injected script
+      window.postMessage({
+        type: 'uploadResponse',
+        success: response.success,
+        url: response.url,
+        filename: response.filename,
+        error: response.error
+      }, '*');
+    });
+  }
+});
 
 // Also inject when the page changes (for SPA navigation)
 let lastUrl = location.href;
@@ -120,9 +144,9 @@ new MutationObserver(() => {
   const url = location.href;
   if (url !== lastUrl) {
     lastUrl = url;
-    console.log('🔄 URL changed, checking if extractor needs to be injected...');
-    if (window.location.hostname.includes('x.com') || window.location.hostname.includes('twitter.com')) {
-      setTimeout(injectExtractorScript, 1000); // Small delay to ensure page is loaded
+    console.log('🔄 URL changed, checking if scraper needs to be injected...');
+    if ((window.location.hostname.includes('x.com') || window.location.hostname.includes('twitter.com')) && !window.tweetScraper) {
+      setTimeout(injectWorkingScript, 1000); // Small delay to ensure page is loaded
     }
   }
 }).observe(document, { subtree: true, childList: true }); 
