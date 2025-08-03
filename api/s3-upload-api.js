@@ -26,7 +26,9 @@ app.use(
       "https://extractor.aayushman.dev",
       "https://tweet-extractor-api.vercel.app",
       "https://tweet-extractor-api.vercel.app/api/upload-to-s3",
-    ],
+      process.env.API_BASE_URL ? `http://${process.env.API_BASE_URL}` : null,
+      process.env.API_BASE_URL ? `https://${process.env.API_BASE_URL}` : null
+    ].filter(Boolean), // Remove null values
     credentials: true,
   })
 );
@@ -426,13 +428,6 @@ app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
     console.error('❌ Error listing user files:', error);
     res.status(500).json({ error: 'Failed to load your archives' });
   }
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 S3 Upload API running on port ${PORT}`);
-  console.log(`📁 Bucket: ${process.env.S3_BUCKET_NAME}`);
-  console.log(`🌍 Region: ${process.env.AWS_REGION}`);
 });
 
 module.exports = app;

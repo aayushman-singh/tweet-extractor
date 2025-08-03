@@ -118,6 +118,9 @@ Add your environment variables:
 PORT=3000
 NODE_ENV=production
 
+# API Base URL (your EC2 instance IP or domain)
+API_BASE_URL=13.203.72.69
+
 # JWT Secret (generate a strong one)
 JWT_SECRET=your-super-secret-jwt-key-change-this-immediately
 
