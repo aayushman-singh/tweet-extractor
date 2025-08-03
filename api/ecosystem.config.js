@@ -25,7 +25,7 @@ module.exports = {
     merge_logs: true,
     
     // Environment variables
-    env: {
+    env_production: {
       NODE_ENV: 'production',
       PORT: 8000
     },
