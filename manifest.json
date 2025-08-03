@@ -1,15 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "JS Script Runner",
+  "name": "Tweet Downloader",
   "version": "1.0",
-  "description": "A lightweight Chrome extension that runs JavaScript scripts and downloads results as HTML",
+  "description": "Download tweets from Twitter/X profile pages",
   "permissions": [
     "activeTab",
-    "downloads"
+    "downloads",
+    "scripting"
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "JS Script Runner"
+    "default_title": "Tweet Downloader"
   },
   "content_scripts": [
     {
@@ -19,5 +20,11 @@
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["working.js", "download-helper.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 } 

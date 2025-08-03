@@ -1,207 +1,108 @@
-let lastResult = null;
-
-// Example scripts
-const examples = {
-  title: `// Get page title and URL
-return {
-  title: document.title,
-  url: window.location.href,
-  timestamp: new Date().toISOString()
-};`,
-  
-  links: `// Get all links on the page
-const links = Array.from(document.querySelectorAll('a')).map(link => ({
-  text: link.textContent.trim(),
-  href: link.href,
-  title: link.title
-}));
-
-return {
-  totalLinks: links.length,
-  links: links.slice(0, 50) // Limit to first 50 links
-};`,
-  
-  images: `// Get all images on the page
-const images = Array.from(document.querySelectorAll('img')).map(img => ({
-  src: img.src,
-  alt: img.alt,
-  width: img.width,
-  height: img.height
-}));
-
-return {
-  totalImages: images.length,
-  images: images.slice(0, 30) // Limit to first 30 images
-};`,
-  
-  custom: `// Custom data extraction example
-const data = {
-  pageInfo: {
-    title: document.title,
-    url: window.location.href,
-    description: document.querySelector('meta[name="description"]')?.content || 'No description',
-    keywords: document.querySelector('meta[name="keywords"]')?.content || 'No keywords'
-  },
-  headings: Array.from(document.querySelectorAll('h1, h2, h3')).map(h => ({
-    level: h.tagName,
-    text: h.textContent.trim()
-  })),
-  forms: Array.from(document.querySelectorAll('form')).map(form => ({
-    action: form.action,
-    method: form.method,
-    inputs: Array.from(form.querySelectorAll('input')).map(input => ({
-      type: input.type,
-      name: input.name,
-      placeholder: input.placeholder
-    }))
-  }))
-};
-
-return data;`
-};
-
-// Load example scripts
-function loadExample(type) {
-  const textarea = document.getElementById('scriptInput');
-  textarea.value = examples[type];
-  showStatus('Example loaded!', 'success');
-}
-
 // Show status message
 function showStatus(message, type = 'success') {
   const status = document.getElementById('status');
   status.textContent = message;
   status.className = `status ${type}`;
   
-  // Clear status after 3 seconds
-  setTimeout(() => {
-    status.textContent = '';
-    status.className = 'status';
-  }, 3000);
+  // Clear status after 5 seconds for success/error, keep info messages
+  if (type !== 'info') {
+    setTimeout(() => {
+      status.textContent = 'Navigate to a Twitter/X profile page to download tweets';
+      status.className = 'status info';
+    }, 5000);
+  }
 }
 
-// Run the JavaScript script
-async function runScript() {
-  const scriptInput = document.getElementById('scriptInput');
-  const script = scriptInput.value.trim();
+// Download tweets functionality
+async function downloadTweets() {
+  const tweetCountSelect = document.getElementById('tweetCount');
+  const customTweetCountInput = document.getElementById('customTweetCount');
+  const downloadBtn = document.getElementById('downloadTweetsBtn');
   
-  if (!script) {
-    showStatus('Please enter some JavaScript code!', 'error');
-    return;
+  // Get the selected count
+  let count;
+  if (tweetCountSelect.value === 'custom') {
+    count = parseInt(customTweetCountInput.value);
+    if (!count || count < 1 || count > 50000) {
+      showStatus('Please enter a valid number between 1 and 50000', 'error');
+      return;
+    }
+  } else {
+    count = parseInt(tweetCountSelect.value);
   }
   
   try {
-    showStatus('Running script...', 'success');
+    // Disable button and show loading
+    downloadBtn.disabled = true;
+    downloadBtn.textContent = '⏳ Downloading...';
+    showStatus(`Starting download of ${count} tweets as HTML archive...`, 'info');
     
     // Get the active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    // Execute the script in the content script
-    const result = await chrome.tabs.sendMessage(tab.id, {
-      action: 'executeScript',
-      script: script
+    // Execute script in the page to trigger download
+    const results = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (tweetCount) => {
+        // Send message to content script
+        document.dispatchEvent(new CustomEvent('requestTweetDownload', {
+          detail: { count: tweetCount }
+        }));
+        
+        // Return a promise that will be resolved when we get the result
+        return new Promise((resolve) => {
+          const handleResult = (event) => {
+            if (event.detail && event.detail.action === 'downloadTweetsResult') {
+              document.removeEventListener('tweetDownloadComplete', handleResult);
+              resolve(event.detail.result);
+            }
+          };
+          document.addEventListener('tweetDownloadComplete', handleResult);
+          
+          // Timeout after 30 seconds
+          setTimeout(() => {
+            document.removeEventListener('tweetDownloadComplete', handleResult);
+            resolve({
+              success: false,
+              error: 'Download timed out'
+            });
+          }, 30000);
+        });
+      },
+      args: [count]
     });
     
+    const result = results[0].result;
+    
     if (result.success) {
-      lastResult = result.data;
-      showStatus('Script executed successfully!', 'success');
+      showStatus(`✅ Successfully downloaded ${result.count} tweets as HTML archive!`, 'success');
     } else {
-      showStatus(`Error: ${result.error}`, 'error');
+      showStatus(`❌ Error: ${result.error}`, 'error');
     }
   } catch (error) {
-    showStatus(`Error: ${error.message}`, 'error');
+    showStatus(`❌ Error: ${error.message}`, 'error');
+  } finally {
+    // Re-enable button
+    downloadBtn.disabled = false;
+    downloadBtn.textContent = '📥 Download HTML Archive';
   }
 }
 
-// Download result as HTML
-function downloadResult() {
-  if (!lastResult) {
-    showStatus('No result to download! Run a script first.', 'error');
-    return;
-  }
+// Handle custom tweet count input visibility
+function handleTweetCountChange() {
+  const tweetCountSelect = document.getElementById('tweetCount');
+  const customTweetCountInput = document.getElementById('customTweetCount');
   
-  try {
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `js-script-result-${timestamp}.html`;
-    
-    // Create HTML content
-    const htmlContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JS Script Result</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .result {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        pre {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            border-left: 4px solid #667eea;
-        }
-        .timestamp {
-            color: #666;
-            font-size: 14px;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>🚀 JS Script Runner - Result</h1>
-        <p class="timestamp">Generated on: ${new Date().toLocaleString()}</p>
-    </div>
-    <div class="result">
-        <h2>Script Output:</h2>
-        <pre>${JSON.stringify(lastResult, null, 2)}</pre>
-    </div>
-</body>
-</html>`;
-    
-    // Create blob and download
-    const blob = new Blob([htmlContent], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    
-    chrome.downloads.download({
-      url: url,
-      filename: filename,
-      saveAs: true
-    });
-    
-    showStatus('Download started!', 'success');
-  } catch (error) {
-    showStatus(`Download error: ${error.message}`, 'error');
+  if (tweetCountSelect.value === 'custom') {
+    customTweetCountInput.style.display = 'block';
+    customTweetCountInput.focus();
+  } else {
+    customTweetCountInput.style.display = 'none';
   }
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('runBtn').addEventListener('click', runScript);
-  document.getElementById('downloadBtn').addEventListener('click', downloadResult);
-  
-  // Allow Ctrl+Enter to run script
-  document.getElementById('scriptInput').addEventListener('keydown', function(e) {
-    if (e.ctrlKey && e.key === 'Enter') {
-      runScript();
-    }
-  });
+  document.getElementById('downloadTweetsBtn').addEventListener('click', downloadTweets);
+  document.getElementById('tweetCount').addEventListener('change', handleTweetCountChange);
 }); 

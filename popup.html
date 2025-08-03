@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <style>
     body {
-      width: 400px;
+      width: 350px;
       padding: 20px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
       margin: 0;
       color: white;
     }
@@ -33,60 +33,50 @@
       font-weight: 500;
     }
     
-    textarea {
-      width: 100%;
-      height: 150px;
-      border: none;
-      border-radius: 8px;
-      padding: 12px;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      resize: vertical;
-      box-sizing: border-box;
+    .tweet-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
     }
     
-    textarea:focus {
+    .tweet-input-group select,
+    .tweet-input-group input {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 14px;
+    }
+    
+    .tweet-input-group select:focus,
+    .tweet-input-group input:focus {
       outline: none;
       box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
     }
     
-    .button-group {
-      display: flex;
-      gap: 10px;
-      margin-top: 15px;
-    }
-    
-    button {
-      flex: 1;
+    .download-tweets-btn {
+      width: 100%;
+      background: linear-gradient(45deg, #17bf63, #0fa866);
+      color: white;
+      font-weight: 600;
       padding: 12px 20px;
       border: none;
       border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
       cursor: pointer;
       transition: all 0.3s ease;
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      backdrop-filter: blur(5px);
     }
     
-    button:hover {
-      background: rgba(255, 255, 255, 0.3);
+    .download-tweets-btn:hover {
+      background: linear-gradient(45deg, #0fa866, #17bf63);
       transform: translateY(-2px);
     }
     
-    button:active {
-      transform: translateY(0);
-    }
-    
-    .run-btn {
-      background: linear-gradient(45deg, #4CAF50, #45a049);
-    }
-    
-    .run-btn:hover {
-      background: linear-gradient(45deg, #45a049, #4CAF50);
+    .download-tweets-btn:disabled {
+      background: rgba(255, 255, 255, 0.2);
+      cursor: not-allowed;
+      transform: none;
     }
     
     .status {
@@ -99,8 +89,8 @@
     }
     
     .success {
-      background: rgba(76, 175, 80, 0.2);
-      border: 1px solid rgba(76, 175, 80, 0.3);
+      background: rgba(23, 191, 99, 0.2);
+      border: 1px solid rgba(23, 191, 99, 0.3);
     }
     
     .error {
@@ -108,43 +98,32 @@
       border: 1px solid rgba(244, 67, 54, 0.3);
     }
     
-    .examples {
-      margin-top: 15px;
-      font-size: 12px;
-      opacity: 0.8;
-    }
-    
-    .example-btn {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 6px 12px;
-      margin: 2px;
-      border-radius: 4px;
-      font-size: 11px;
-      cursor: pointer;
+    .info {
+      background: rgba(29, 161, 242, 0.2);
+      border: 1px solid rgba(29, 161, 242, 0.3);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🚀 JS Script Runner</h1>
+    <h1>🐦 Tweet Downloader</h1>
     
-    <label for="scriptInput">JavaScript Code:</label>
-    <textarea id="scriptInput" placeholder="Enter your JavaScript code here...&#10;&#10;Example:&#10;return document.title + ' - ' + window.location.href;">// Your code here
-return "Hello from JS Script Runner!";</textarea>
-    
-    <div class="button-group">
-      <button id="runBtn" class="run-btn">▶ Run Script</button>
-      <button id="downloadBtn">📥 Download Result</button>
+    <label for="tweetCount">Number of Tweets:</label>
+    <div class="tweet-input-group">
+      <select id="tweetCount">
+        <option value="10">10</option>
+        <option value="100" selected>100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+        <option value="10000">10000</option>
+        <option value="custom">Custom</option>
+      </select>
+      <input type="number" id="customTweetCount" placeholder="Enter custom number" min="1" max="50000" style="display: none;">
     </div>
+    <button id="downloadTweetsBtn" class="download-tweets-btn">📥 Download HTML Archive</button>
     
-    <div id="status" class="status"></div>
-    
-    <div class="examples">
-      <strong>Quick Examples:</strong><br>
-      <span class="example-btn" onclick="loadExample('title')">Page Title</span>
-      <span class="example-btn" onclick="loadExample('links')">All Links</span>
-      <span class="example-btn" onclick="loadExample('images')">All Images</span>
-      <span class="example-btn" onclick="loadExample('custom')">Custom Data</span>
+    <div id="status" class="status info">
+      Navigate to a Twitter/X profile page to download tweets
     </div>
   </div>
   

@@ -1,0 +1,4567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tweet Archive - AbhinavXJ</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 20px; 
+            background: #15202b; 
+            color: #fff;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+            padding: 20px; 
+            background: #1a2732; 
+            border-radius: 12px;
+        }
+        .stats { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+            gap: 15px; 
+            margin: 20px 0;
+        }
+        .stat { 
+            background: #253341; 
+            padding: 15px; 
+            border-radius: 8px; 
+            text-align: center;
+        }
+        .stat-number { font-size: 24px; font-weight: bold; color: #1d9bf0; }
+        .stat-label { font-size: 14px; color: #8b98a5; }
+        .section { 
+            margin: 30px 0; 
+            background: #1a2732; 
+            border-radius: 12px; 
+            padding: 20px;
+        }
+        .section h2 { 
+            color: #1d9bf0; 
+            border-bottom: 2px solid #253341; 
+            padding-bottom: 10px;
+        }
+        .tweet { 
+            background: #253341; 
+            border-radius: 8px; 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-left: 3px solid #1d9bf0;
+        }
+        .tweet-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px;
+        }
+        .tweet-date { 
+            color: #8b98a5; 
+            font-size: 14px;
+        }
+        .tweet-text { 
+            margin: 10px 0; 
+            line-height: 1.5;
+        }
+        .tweet-stats { 
+            display: flex; 
+            gap: 20px; 
+            font-size: 14px; 
+            color: #8b98a5; 
+            margin-top: 10px;
+        }
+        .tweet-stat { 
+            display: flex; 
+            align-items: center; 
+            gap: 5px;
+        }
+        .user-info { 
+            color: #1d9bf0; 
+            font-weight: bold;
+        }
+        .download-links { 
+            text-align: center; 
+            margin: 20px 0;
+        }
+        .download-btn { 
+            background: #1d9bf0; 
+            color: white; 
+            padding: 10px 20px; 
+            text-decoration: none; 
+            border-radius: 20px; 
+            margin: 0 10px; 
+            display: inline-block;
+        }
+        .timeline { 
+            background: linear-gradient(to bottom, #1d9bf0 0%, #8b98a5 100%); 
+            height: 200px; 
+            border-radius: 8px; 
+            position: relative; 
+            margin: 20px 0;
+        }
+        .timeline-info { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            text-align: center; 
+            background: rgba(0,0,0,0.8); 
+            padding: 20px; 
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Tweet Archive for @AbhinavXJ</h1>
+            <p>Generated on 8/2/2025</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">155</div>
+                    <div class="stat-label">Total Tweets</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">7,397</div>
+                    <div class="stat-label">Total Likes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">101</div>
+                    <div class="stat-label">Total RTs</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">339,551</div>
+                    <div class="stat-label">Total Views</div>
+                </div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-info">
+                    <strong>Timeline Span</strong><br>
+                    Tue Jul 08 2025 → Sat Aug 02 2025
+                </div>
+            </div>
+        </div>
+
+        <div class="download-links">
+            <button class="download-btn" onclick="downloadJSON()">📄 Download JSON</button>
+            <button class="download-btn" onclick="downloadCSV()">📊 Download CSV</button>
+        </div>
+
+        <div class="section">
+            <h2>🕰️ Oldest Tweets (20)</h2>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/8/2025, 8:21:31 PM</div>
+                    </div>
+                    <div class="tweet-text">Lmao I reached @ThePrimeagen's subreddit 😭</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 557</div>
+                        <div class="tweet-stat">❤️ 17</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/8/2025, 11:18:03 PM</div>
+                    </div>
+                    <div class="tweet-text">one thing I've realised after watching midsommar and speak no evil is 
+
+DO NOT I repeat NEVER accept an invitation from someone from europe to visit their home in countryside</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 439</div>
+                        <div class="tweet-stat">❤️ 12</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/9/2025, 2:21:55 AM</div>
+                    </div>
+                    <div class="tweet-text">@ vijaywada 
+Man i wanted to take the photo of this bridge I was crossing over krishna river! But there's no light unfortunately ( pic on left ) https://t.co/0ADOOeb5xO</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 538</div>
+                        <div class="tweet-stat">❤️ 22</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 0</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/9/2025, 5:44:08 AM</div>
+                    </div>
+                    <div class="tweet-text">Good morning 🌄 https://t.co/rwoaSkMXUF</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 444</div>
+                        <div class="tweet-stat">❤️ 11</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 2</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/9/2025, 12:24:02 PM</div>
+                    </div>
+                    <div class="tweet-text">new place, new setup https://t.co/0xa9Ayyn6k</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 747</div>
+                        <div class="tweet-stat">❤️ 30</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 5</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/9/2025, 3:32:00 PM</div>
+                    </div>
+                    <div class="tweet-text">Me too https://t.co/LZrM6TzDDZ</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 897</div>
+                        <div class="tweet-stat">❤️ 26</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 8</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/10/2025, 2:47:36 AM</div>
+                    </div>
+                    <div class="tweet-text">again will have to do DSA rounds 🥲 https://t.co/cOjklBjFFT</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 708</div>
+                        <div class="tweet-stat">❤️ 17</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 6</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/10/2025, 9:51:23 AM</div>
+                    </div>
+                    <div class="tweet-text">What are these classes man 😭 I don't even go to core CS classes https://t.co/4DPzuttXR1</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 846</div>
+                        <div class="tweet-stat">❤️ 19</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 6</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/10/2025, 6:38:12 PM</div>
+                    </div>
+                    <div class="tweet-text">🤣🫵was giving Media dot net OA, and their server crashed 🤣🫵 hire more dsa peeps and not backend devs and see the results yourself!</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 654</div>
+                        <div class="tweet-stat">❤️ 17</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 5</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/10/2025, 8:08:39 PM</div>
+                    </div>
+                    <div class="tweet-text">I am asked to put my codeforces rating in one application, I don't have a codeforces account💀What should I put? Also how much time will it take to reach a decent in there? If I start now</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 791</div>
+                        <div class="tweet-stat">❤️ 13</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 6</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/10/2025, 8:19:04 PM</div>
+                    </div>
+                    <div class="tweet-text">Why does codeforces site look like we are in 2000s? https://t.co/YjzM6yieOd</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 41,657</div>
+                        <div class="tweet-stat">❤️ 789</div>
+                        <div class="tweet-stat">🔄 12</div>
+                        <div class="tweet-stat">💬 119</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/10/2025, 11:06:11 PM</div>
+                    </div>
+                    <div class="tweet-text">don't even care abt 40ms, I solved using binary search where it wasn't evident so lfg https://t.co/FvXSWKaZDY</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 845</div>
+                        <div class="tweet-stat">❤️ 16</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 4</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/11/2025, 3:13:40 AM</div>
+                    </div>
+                    <div class="tweet-text">revised OS interview questions
+did 3 lc problems</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 911</div>
+                        <div class="tweet-stat">❤️ 25</div>
+                        <div class="tweet-stat">🔄 1</div>
+                        <div class="tweet-stat">💬 1</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/12/2025, 8:40:53 AM</div>
+                    </div>
+                    <div class="tweet-text">I will create AGI.</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 489</div>
+                        <div class="tweet-stat">❤️ 18</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 1</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/12/2025, 3:28:08 PM</div>
+                    </div>
+                    <div class="tweet-text">the biggest belief you might have right now is probably based upon lies.
+
+In 1950s doctors used to recommend cigarettes https://t.co/FAZLd9usYg</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 610</div>
+                        <div class="tweet-stat">❤️ 11</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/12/2025, 7:41:05 PM</div>
+                    </div>
+                    <div class="tweet-text">why does this has 13 bookmarks 😭</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 530</div>
+                        <div class="tweet-stat">❤️ 9</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 4</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/12/2025, 9:26:05 PM</div>
+                    </div>
+                    <div class="tweet-text">take care of your health
+you grind daily fuck up your sleep schedule don't take preventive measures only to get sick one day and just like that a whole week gone. 
+Was it really worth it to lose that much time coz you wanted to stretch one more hour?</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 596</div>
+                        <div class="tweet-stat">❤️ 17</div>
+                        <div class="tweet-stat">🔄 1</div>
+                        <div class="tweet-stat">💬 1</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/12/2025, 9:59:53 PM</div>
+                    </div>
+                    <div class="tweet-text">guys I made something similar while I was learning react long time back, give it a try 
+https://t.co/x644kSuVTc https://t.co/cpDPGZkEU5</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 1,174</div>
+                        <div class="tweet-stat">❤️ 21</div>
+                        <div class="tweet-stat">🔄 1</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/13/2025, 1:35:14 AM</div>
+                    </div>
+                    <div class="tweet-text">I love test cricket, miss kohli tho</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 606</div>
+                        <div class="tweet-stat">❤️ 4</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 0</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/13/2025, 1:42:48 AM</div>
+                    </div>
+                    <div class="tweet-text">more than anyone else I want to be inside of banglore asap</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 634</div>
+                        <div class="tweet-stat">❤️ 15</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 1</div>
+                    </div>
+                </div>
+            
+        </div>
+
+        <div class="section">
+            <h2>🆕 Newest Tweets (20)</h2>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/2/2025, 7:53:56 PM</div>
+                    </div>
+                    <div class="tweet-text">this generation is cooked https://t.co/a7664RsXL0</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 261</div>
+                        <div class="tweet-stat">❤️ 21</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 2</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/2/2025, 1:26:38 PM</div>
+                    </div>
+                    <div class="tweet-text">what do you guys even do apart from coding? Got any hobbies ?</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 6,933</div>
+                        <div class="tweet-stat">❤️ 99</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 115</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/2/2025, 7:33:45 AM</div>
+                    </div>
+                    <div class="tweet-text">Good morning guyz https://t.co/ZcOlPsyPzu</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 645</div>
+                        <div class="tweet-stat">❤️ 30</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 5</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/2/2025, 6:44:32 AM</div>
+                    </div>
+                    <div class="tweet-text">I love dp, ignore the accuracy https://t.co/V3DSCD3wY4</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 442</div>
+                        <div class="tweet-stat">❤️ 18</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 1</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/2/2025, 1:59:36 AM</div>
+                    </div>
+                    <div class="tweet-text">Good Morning 
+( I slept 1 hour )
+no breakfast image coz even for that I need to wait for 5 more fucking hours</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 445</div>
+                        <div class="tweet-stat">❤️ 18</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 5</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 11:52:29 PM</div>
+                    </div>
+                    <div class="tweet-text">10th - 95.8
+12th - 95.6
+Jee mains and adv cleared both ( no IIT tho )
+sem 1 - 9.24
+sem 2 - 9.29
+sem 3 - 8.76
+sem 4 - 9.2
+sem 5 - 9.12
+sem 6 - 9.38</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 5,597</div>
+                        <div class="tweet-stat">❤️ 104</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 17</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 10:25:24 PM</div>
+                    </div>
+                    <div class="tweet-text">well so I woke up at 5pm, started writing blog at 5:30, finished by 8pm and i think i am cooked for tonight too</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 654</div>
+                        <div class="tweet-stat">❤️ 30</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 10:09:25 PM</div>
+                    </div>
+                    <div class="tweet-text">RT @d4rsh_tw: If you're thinking of learning system design or just want to read about the basic terms, you should read this blog. It's so b…</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 0</div>
+                        <div class="tweet-stat">❤️ 0</div>
+                        <div class="tweet-stat">🔄 1</div>
+                        <div class="tweet-stat">💬 0</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 12:51:30 PM</div>
+                    </div>
+                    <div class="tweet-text">Should I apply and settle in Japan 🥰 https://t.co/POhxVPTSNQ</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 945</div>
+                        <div class="tweet-stat">❤️ 31</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 12:47:56 PM</div>
+                    </div>
+                    <div class="tweet-text">btw an account over with over 1.6 million followers, follows me and uses my site and DMd me last night when it went down 😝</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 2,864</div>
+                        <div class="tweet-stat">❤️ 48</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 4</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 12:29:22 PM</div>
+                    </div>
+                    <div class="tweet-text">lately I've been answering calls in my sleep which I don't even remember.
+this ain't going to end well for me 😭</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 569</div>
+                        <div class="tweet-stat">❤️ 22</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 4</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 12:17:08 PM</div>
+                    </div>
+                    <div class="tweet-text">I made this ppt for college project 
+Professional enough right https://t.co/uOmHGc9QEE</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 822</div>
+                        <div class="tweet-stat">❤️ 29</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 4</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 5:49:18 AM</div>
+                    </div>
+                    <div class="tweet-text">Guys https://t.co/Nk7x4mO3aN is back to life again! and it would not have been possible without @PanzerBread , he is a cracked dude, go follow him
+can't thank him enough</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 564</div>
+                        <div class="tweet-stat">❤️ 12</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 3</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 2:20:50 AM</div>
+                    </div>
+                    <div class="tweet-text">RT @JustClipX: We regret to inform that https://t.co/GjbeurDXgx
+has exceeded the free tier limit and is currently down under maintainance.…</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 0</div>
+                        <div class="tweet-stat">❤️ 0</div>
+                        <div class="tweet-stat">🔄 1</div>
+                        <div class="tweet-stat">💬 0</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">8/1/2025, 2:14:50 AM</div>
+                    </div>
+                    <div class="tweet-text">not my site crashing at 2 am
+fuck you render
+other free alternatives guys? https://t.co/pH5AO4EJhl</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 1,230</div>
+                        <div class="tweet-stat">❤️ 18</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 5</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/31/2025, 11:51:40 PM</div>
+                    </div>
+                    <div class="tweet-text">"we provide 11 9s of availability" https://t.co/S5Iqp0IaUn</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 411</div>
+                        <div class="tweet-stat">❤️ 9</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 2</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/31/2025, 7:45:28 PM</div>
+                    </div>
+                    <div class="tweet-text">Guys show some love to his blog!! It's really well written give it a read</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 459</div>
+                        <div class="tweet-stat">❤️ 18</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 1</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/31/2025, 3:00:30 PM</div>
+                    </div>
+                    <div class="tweet-text">going to class is so tiring man how do you guys do it everyday?</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 574</div>
+                        <div class="tweet-stat">❤️ 17</div>
+                        <div class="tweet-stat">🔄 1</div>
+                        <div class="tweet-stat">💬 5</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/31/2025, 11:10:33 AM</div>
+                    </div>
+                    <div class="tweet-text">nice
+btw going to attend a class now
+big feat for me https://t.co/o1i0G2KESG</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 1,393</div>
+                        <div class="tweet-stat">❤️ 31</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 10</div>
+                    </div>
+                </div>
+            
+                <div class="tweet">
+                    <div class="tweet-header">
+                        <div class="user-info">@AbhinavXJ</div>
+                        <div class="tweet-date">7/31/2025, 7:05:52 AM</div>
+                    </div>
+                    <div class="tweet-text">Good morning 
+( I slept broken 3 hours ) https://t.co/x06qELlAcB</div>
+                    <div class="tweet-stats">
+                        <div class="tweet-stat">👀 600</div>
+                        <div class="tweet-stat">❤️ 29</div>
+                        <div class="tweet-stat">🔄 0</div>
+                        <div class="tweet-stat">💬 4</div>
+                    </div>
+                </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const tweetsData = [
+  {
+    "id": "1942597420325732596",
+    "text": "Lmao I reached @ThePrimeagen's subreddit 😭",
+    "created_at": "2025-07-08T14:51:31.000Z",
+    "retweet_count": 0,
+    "favorite_count": 17,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1942597420325732596",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1942597420325732596",
+    "view_count": 557,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1942641845944655950",
+    "text": "one thing I've realised after watching midsommar and speak no evil is \n\nDO NOT I repeat NEVER accept an invitation from someone from europe to visit their home in countryside",
+    "created_at": "2025-07-08T17:48:03.000Z",
+    "retweet_count": 0,
+    "favorite_count": 12,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1942641845944655950",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1942641845944655950",
+    "view_count": 439,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1942688118269960493",
+    "text": "@ vijaywada \nMan i wanted to take the photo of this bridge I was crossing over krishna river! But there's no light unfortunately ( pic on left ) https://t.co/0ADOOeb5xO",
+    "created_at": "2025-07-08T20:51:55.000Z",
+    "retweet_count": 0,
+    "favorite_count": 22,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1942688118269960493",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1942688118269960493",
+    "view_count": 538,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1942739007722381519",
+    "text": "Good morning 🌄 https://t.co/rwoaSkMXUF",
+    "created_at": "2025-07-09T00:14:08.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1942739007722381519",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1942739007722381519",
+    "view_count": 444,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1942839645177626863",
+    "text": "new place, new setup https://t.co/0xa9Ayyn6k",
+    "created_at": "2025-07-09T06:54:02.000Z",
+    "retweet_count": 0,
+    "favorite_count": 30,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1942839645177626863",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1942839645177626863",
+    "view_count": 747,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1942886950861709789",
+    "text": "Me too https://t.co/LZrM6TzDDZ",
+    "created_at": "2025-07-09T10:02:00.000Z",
+    "retweet_count": 0,
+    "favorite_count": 26,
+    "reply_count": 8,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1942886950861709789",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1942886950861709789",
+    "view_count": 897,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943056971399336196",
+    "text": "again will have to do DSA rounds 🥲 https://t.co/cOjklBjFFT",
+    "created_at": "2025-07-09T21:17:36.000Z",
+    "retweet_count": 0,
+    "favorite_count": 17,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943056971399336196",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1943056971399336196",
+    "view_count": 708,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943163617181946094",
+    "text": "What are these classes man 😭 I don't even go to core CS classes https://t.co/4DPzuttXR1",
+    "created_at": "2025-07-10T04:21:23.000Z",
+    "retweet_count": 0,
+    "favorite_count": 19,
+    "reply_count": 6,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943163617181946094",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1943163617181946094",
+    "view_count": 846,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943296194492702895",
+    "text": "🤣🫵was giving Media dot net OA, and their server crashed 🤣🫵 hire more dsa peeps and not backend devs and see the results yourself!",
+    "created_at": "2025-07-10T13:08:12.000Z",
+    "retweet_count": 0,
+    "favorite_count": 17,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943296194492702895",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1943296194492702895",
+    "view_count": 654,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943318958779830462",
+    "text": "I am asked to put my codeforces rating in one application, I don't have a codeforces account💀What should I put? Also how much time will it take to reach a decent in there? If I start now",
+    "created_at": "2025-07-10T14:38:39.000Z",
+    "retweet_count": 0,
+    "favorite_count": 13,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943318958779830462",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1943318958779830462",
+    "view_count": 791,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943321578013618291",
+    "text": "Why does codeforces site look like we are in 2000s? https://t.co/YjzM6yieOd",
+    "created_at": "2025-07-10T14:49:04.000Z",
+    "retweet_count": 12,
+    "favorite_count": 789,
+    "reply_count": 119,
+    "quote_count": 10,
+    "bookmark_count": 83,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943321578013618291",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1943321578013618291",
+    "view_count": 41657,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943363637139451978",
+    "text": "don't even care abt 40ms, I solved using binary search where it wasn't evident so lfg https://t.co/FvXSWKaZDY",
+    "created_at": "2025-07-10T17:36:11.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943363637139451978",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1943363637139451978",
+    "view_count": 845,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943425918397247882",
+    "text": "revised OS interview questions\ndid 3 lc problems",
+    "created_at": "2025-07-10T21:43:40.000Z",
+    "retweet_count": 1,
+    "favorite_count": 25,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943425918397247882",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1943425918397247882",
+    "view_count": 911,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943870654065127824",
+    "text": "I will create AGI.",
+    "created_at": "2025-07-12T03:10:53.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943870654065127824",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1943870654065127824",
+    "view_count": 489,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1943973140108886099",
+    "text": "the biggest belief you might have right now is probably based upon lies.\n\nIn 1950s doctors used to recommend cigarettes https://t.co/FAZLd9usYg",
+    "created_at": "2025-07-12T09:58:08.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1943973140108886099",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1943973140108886099",
+    "view_count": 610,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944036798898090201",
+    "text": "why does this has 13 bookmarks 😭",
+    "created_at": "2025-07-12T14:11:05.000Z",
+    "retweet_count": 0,
+    "favorite_count": 9,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944036798898090201",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944036798898090201",
+    "view_count": 530,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944063222187012393",
+    "text": "take care of your health\nyou grind daily fuck up your sleep schedule don't take preventive measures only to get sick one day and just like that a whole week gone. \nWas it really worth it to lose that much time coz you wanted to stretch one more hour?",
+    "created_at": "2025-07-12T15:56:05.000Z",
+    "retweet_count": 1,
+    "favorite_count": 17,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944063222187012393",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944063222187012393",
+    "view_count": 596,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944071725685387757",
+    "text": "guys I made something similar while I was learning react long time back, give it a try \nhttps://t.co/x644kSuVTc https://t.co/cpDPGZkEU5",
+    "created_at": "2025-07-12T16:29:53.000Z",
+    "retweet_count": 1,
+    "favorite_count": 21,
+    "reply_count": 3,
+    "quote_count": 1,
+    "bookmark_count": 4,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944071725685387757",
+    "is_quote_status": true,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1944071725685387757",
+    "view_count": 1174,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944125921595953339",
+    "text": "I love test cricket, miss kohli tho",
+    "created_at": "2025-07-12T20:05:14.000Z",
+    "retweet_count": 0,
+    "favorite_count": 4,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944125921595953339",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944125921595953339",
+    "view_count": 606,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944127825088573524",
+    "text": "more than anyone else I want to be inside of banglore asap",
+    "created_at": "2025-07-12T20:12:48.000Z",
+    "retweet_count": 0,
+    "favorite_count": 15,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944127825088573524",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944127825088573524",
+    "view_count": 634,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944256614674162077",
+    "text": "Next 3 months are make it or break it for me,have to give it all it takes.\nkind of reminds me of my JEE times when I didn't prepare anything until the exams were postponed and I got 1.5 months and I decided to finally go for it, cleared both mains and advanced,and got 2k in vitee",
+    "created_at": "2025-07-13T04:44:34.000Z",
+    "retweet_count": 2,
+    "favorite_count": 354,
+    "reply_count": 10,
+    "quote_count": 1,
+    "bookmark_count": 83,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944256614674162077",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944256614674162077",
+    "view_count": 21103,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944305188707479614",
+    "text": "my roommate who's a mechanical engineer and specialises in CAD tools/simulation, was having an interview with a founder and he was suggested to switch the fields to core mechanical coz AI can do what he's doing\nAI is coming after mechanical guys too, I wonder what will CS guys do",
+    "created_at": "2025-07-13T07:57:35.000Z",
+    "retweet_count": 0,
+    "favorite_count": 24,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944305188707479614",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944305188707479614",
+    "view_count": 782,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944379683669467429",
+    "text": "guys check out this cool project by this cracked dude",
+    "created_at": "2025-07-13T12:53:36.000Z",
+    "retweet_count": 0,
+    "favorite_count": 7,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944379683669467429",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944379683669467429",
+    "view_count": 499,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944391998074499265",
+    "text": "Since when did these become real jobs? https://t.co/n1bMRQl3st",
+    "created_at": "2025-07-13T13:42:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944391998074499265",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1944391998074499265",
+    "view_count": 699,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944447637169803486",
+    "text": "no one's talking about how good  @ChatGPTapp 's voice-to-text is",
+    "created_at": "2025-07-13T17:23:37.000Z",
+    "retweet_count": 0,
+    "favorite_count": 8,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944447637169803486",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944447637169803486",
+    "view_count": 384,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944474492736331917",
+    "text": "Have you guys tried google's AI mode yet?\nHow is it different from comet? and it is free too! https://t.co/Lo9BSATXZ2",
+    "created_at": "2025-07-13T19:10:20.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944474492736331917",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1944474492736331917",
+    "view_count": 714,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944515483472183379",
+    "text": "I can't do this asteroid problem anymore fck stacks, good night",
+    "created_at": "2025-07-13T21:53:13.000Z",
+    "retweet_count": 0,
+    "favorite_count": 7,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944515483472183379",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944515483472183379",
+    "view_count": 354,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944519945158820348",
+    "text": "I sometimes think about how living alone is scary af, you might just end up getting sick maybe get a stroke or something and no one would realise until maybe hours or days too when it would be too late",
+    "created_at": "2025-07-13T22:10:57.000Z",
+    "retweet_count": 0,
+    "favorite_count": 21,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944519945158820348",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944519945158820348",
+    "view_count": 715,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944646552099950967",
+    "text": "How was she not an actress?\nOh wait coz if she did, royal family won't accept her ( meghan ref)\nbut wait, they anyways never accepted her https://t.co/aicY18F7fL",
+    "created_at": "2025-07-14T06:34:02.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944646552099950967",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1944646552099950967",
+    "view_count": 476,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944738948808609978",
+    "text": "fyi @elonmusk is a co-founder of @OpenAI",
+    "created_at": "2025-07-14T12:41:11.000Z",
+    "retweet_count": 0,
+    "favorite_count": 8,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944738948808609978",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944738948808609978",
+    "view_count": 421,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944772686082936941",
+    "text": "If you are not watching ind vs eng test match rn you are missing on a lot of things I can't even tell you",
+    "created_at": "2025-07-14T14:55:15.000Z",
+    "retweet_count": 0,
+    "favorite_count": 8,
+    "reply_count": 1,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944772686082936941",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944772686082936941",
+    "view_count": 871,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944789044061454773",
+    "text": "sab ki fielding set hogyi well played @imjadeja and @mdsirajofficial",
+    "created_at": "2025-07-14T16:00:15.000Z",
+    "retweet_count": 0,
+    "favorite_count": 6,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944789044061454773",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944789044061454773",
+    "view_count": 406,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944796548363387060",
+    "text": "why do these stupid stack problems have so many edge cases",
+    "created_at": "2025-07-14T16:30:04.000Z",
+    "retweet_count": 0,
+    "favorite_count": 6,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944796548363387060",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944796548363387060",
+    "view_count": 334,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944821266629976238",
+    "text": "we aren't far from getting an Arasaka corp irl and the day we get it, it's over for us",
+    "created_at": "2025-07-14T18:08:17.000Z",
+    "retweet_count": 0,
+    "favorite_count": 6,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944821266629976238",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944821266629976238",
+    "view_count": 299,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944850912255844549",
+    "text": "cool now tell it to\n- Migrate from redux to zustand\n- Do all the state management while maintaining the connection between zustand and Context API\n- Install and configure tailwind v4 properly\n- Migrate database from postgresSQL to DynamoDB\n- match the UI to 99% of the design file",
+    "created_at": "2025-07-14T20:06:05.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944850912255844549",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944850912255844549",
+    "view_count": 736,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944853004919955577",
+    "text": "windsurf is being tossed around more than that blue girl",
+    "created_at": "2025-07-14T20:14:24.000Z",
+    "retweet_count": 0,
+    "favorite_count": 0,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944853004919955577",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944853004919955577",
+    "view_count": 356,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944856426108870818",
+    "text": "I have a startup idea",
+    "created_at": "2025-07-14T20:28:00.000Z",
+    "retweet_count": 0,
+    "favorite_count": 1,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944856426108870818",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1944856426108870818",
+    "view_count": 396,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944867956015686007",
+    "text": "wtf am i even doing",
+    "created_at": "2025-07-14T21:13:49.000Z",
+    "retweet_count": 0,
+    "favorite_count": 6,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944867956015686007",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944867956015686007",
+    "view_count": 472,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944883235265356023",
+    "text": "average usage time per session \n\nall these mega corps try to maximize this matrix in any way possible. chatgpt and gemini are great, but will a   \nhot Mikasa lookalike AI will get people more engaged or reading texts?\nyou know the answer, and this makes it worse for the addict",
+    "created_at": "2025-07-14T22:14:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 10,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944883235265356023",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944883235265356023",
+    "view_count": 454,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1944977859036041401",
+    "text": "are any blr based startups hiring rn? where do I see their job posting, they rarely appear on the sites",
+    "created_at": "2025-07-15T04:30:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 9,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1944977859036041401",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1944977859036041401",
+    "view_count": 575,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945052421627040118",
+    "text": "I almost slept then got a mail that I got shortlisted for meesho ( only 6 from my branch ) have physical OA in one hour",
+    "created_at": "2025-07-15T09:26:49.000Z",
+    "retweet_count": 1,
+    "favorite_count": 215,
+    "reply_count": 22,
+    "quote_count": 1,
+    "bookmark_count": 13,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945052421627040118",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945052421627040118",
+    "view_count": 12352,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945057103300759698",
+    "text": "never let the meme die XD",
+    "created_at": "2025-07-15T09:45:25.000Z",
+    "retweet_count": 0,
+    "favorite_count": 13,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945057103300759698",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1945057103300759698",
+    "view_count": 630,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945093300920443078",
+    "text": "vibez https://t.co/lsRA3onhEM",
+    "created_at": "2025-07-15T12:09:15.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945093300920443078",
+    "is_quote_status": false,
+    "lang": "es",
+    "possibly_sensitive": false,
+    "rest_id": "1945093300920443078",
+    "view_count": 710,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945137203446702222",
+    "text": "update: got cooked ig\n3 questions \nSolved half test cases in 2, for rest got TLE\nDidn't get the logic of 3rd question",
+    "created_at": "2025-07-15T15:03:42.000Z",
+    "retweet_count": 0,
+    "favorite_count": 17,
+    "reply_count": 2,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945137203446702222",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1945137203446702222",
+    "view_count": 1486,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945149806499815912",
+    "text": "cleared round1 of adobe hackathon \nthis was unexpected 💀 but let's see what I've gotta build in round2",
+    "created_at": "2025-07-15T15:53:47.000Z",
+    "retweet_count": 0,
+    "favorite_count": 66,
+    "reply_count": 12,
+    "quote_count": 0,
+    "bookmark_count": 5,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945149806499815912",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945149806499815912",
+    "view_count": 2926,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945342104626180568",
+    "text": "\"10th grades does not matter\"\n\nNah they be wilding but I am eligible so let's see https://t.co/U9993107pI",
+    "created_at": "2025-07-16T04:37:55.000Z",
+    "retweet_count": 3,
+    "favorite_count": 308,
+    "reply_count": 53,
+    "quote_count": 4,
+    "bookmark_count": 38,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945342104626180568",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1945342104626180568",
+    "view_count": 28836,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945533842544366077",
+    "text": "sup guys",
+    "created_at": "2025-07-16T17:19:48.000Z",
+    "retweet_count": 0,
+    "favorite_count": 8,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945533842544366077",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945533842544366077",
+    "view_count": 438,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945549381928976530",
+    "text": "this, late night, alone &gt;&gt; https://t.co/bsUAUnljty",
+    "created_at": "2025-07-16T18:21:33.000Z",
+    "retweet_count": 0,
+    "favorite_count": 12,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945549381928976530",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1945549381928976530",
+    "view_count": 456,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945725572291965171",
+    "text": "I again forgot to put alarm, anyways the day is packed with many activities, gm",
+    "created_at": "2025-07-17T06:01:40.000Z",
+    "retweet_count": 0,
+    "favorite_count": 12,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945725572291965171",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945725572291965171",
+    "view_count": 355,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945836460361527478",
+    "text": "update: another rejection",
+    "created_at": "2025-07-17T13:22:18.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 7,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945836460361527478",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1945836460361527478",
+    "view_count": 592,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945854719806542121",
+    "text": "It's only when you enter final year you realise why it's called so",
+    "created_at": "2025-07-17T14:34:52.000Z",
+    "retweet_count": 1,
+    "favorite_count": 19,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945854719806542121",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945854719806542121",
+    "view_count": 510,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945879976387190822",
+    "text": "I went to library for the first time after so many years only to open the laptop and the song Body by Meghan thee Stallion started blasting on full volume 😭 if you know that song you know the starting is the worst",
+    "created_at": "2025-07-17T16:15:13.000Z",
+    "retweet_count": 0,
+    "favorite_count": 15,
+    "reply_count": 7,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945879976387190822",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945879976387190822",
+    "view_count": 757,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1945955768827781619",
+    "text": "A note to myself.\nTake care of your mental health.\nLife will get tough, it's not easy for anyone,\nBut nothing is worth causing harm to you",
+    "created_at": "2025-07-17T21:16:24.000Z",
+    "retweet_count": 1,
+    "favorite_count": 16,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1945955768827781619",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1945955768827781619",
+    "view_count": 488,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946082156381671647",
+    "text": "fun fact this criteria is met by 798 people across 4 campuses",
+    "created_at": "2025-07-18T05:38:37.000Z",
+    "retweet_count": 0,
+    "favorite_count": 19,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946082156381671647",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1946082156381671647",
+    "view_count": 824,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946210580878241930",
+    "text": "useRef gives you a reference to the actual element in the browser and not the react DOM, that's why changing it does't make react to re-render",
+    "created_at": "2025-07-18T14:08:55.000Z",
+    "retweet_count": 1,
+    "favorite_count": 27,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946210580878241930",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946210580878241930",
+    "view_count": 504,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946251981108166689",
+    "text": "if you are not confident in yourself how do you expect the interviewer to be",
+    "created_at": "2025-07-18T16:53:26.000Z",
+    "retweet_count": 0,
+    "favorite_count": 10,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946251981108166689",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946251981108166689",
+    "view_count": 412,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946289828267745610",
+    "text": "BRO I CAN'T BELIEVE EVEN AFTER DOING ALL THE DEEP RESEARCH I HAVE TO TELL GEMINI PRO 2.5 THE BETTER WAY TO DO SOMETHING! AND NOT THE FAULTY WAY IT KEPT GIVING\n\nAI IS NOT TAKING OVER ANY TIME SOON",
+    "created_at": "2025-07-18T19:23:50.000Z",
+    "retweet_count": 0,
+    "favorite_count": 23,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946289828267745610",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946289828267745610",
+    "view_count": 501,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946297286751080543",
+    "text": "hey god please make my alarm ring tomorrow before 8 am i need to wake up to give OA",
+    "created_at": "2025-07-18T19:53:28.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946297286751080543",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946297286751080543",
+    "view_count": 327,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946302215494521320",
+    "text": "the line between reality and what's not is getting blurry, blade runner 2047 might actually happen who knows",
+    "created_at": "2025-07-18T20:13:03.000Z",
+    "retweet_count": 0,
+    "favorite_count": 9,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946302215494521320",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946302215494521320",
+    "view_count": 314,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946304816546029576",
+    "text": "So today \nI revised react interview questions \ndid couple of strings problem \nbroke my head fighting with gemini for 4 hours to figure something out which I still haven't so idk but I am giving up on it for now will see tomorrow",
+    "created_at": "2025-07-18T20:23:23.000Z",
+    "retweet_count": 1,
+    "favorite_count": 24,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946304816546029576",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946304816546029576",
+    "view_count": 638,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946432583841251337",
+    "text": "i hate these ppts before OA just waste of time will make us sit 2 hours just to hear their corporate bs",
+    "created_at": "2025-07-19T04:51:05.000Z",
+    "retweet_count": 0,
+    "favorite_count": 25,
+    "reply_count": 1,
+    "quote_count": 1,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946432583841251337",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946432583841251337",
+    "view_count": 1080,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946445909698748743",
+    "text": "Yea and now they tell us test won't be conducted today but in August \nWTF bruh wasted my 4 hours",
+    "created_at": "2025-07-19T05:44:02.000Z",
+    "retweet_count": 0,
+    "favorite_count": 12,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946445909698748743",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1946445909698748743",
+    "view_count": 538,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946491122823713184",
+    "text": "I'm fairly surprised how none of you has caught out the funny part about my banner yet",
+    "created_at": "2025-07-19T08:43:42.000Z",
+    "retweet_count": 0,
+    "favorite_count": 14,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946491122823713184",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946491122823713184",
+    "view_count": 1176,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946531597014180075",
+    "text": "I get a really nice view from my room btw.\nHow does yours look? Share https://t.co/0O6EK4yzKI",
+    "created_at": "2025-07-19T11:24:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 14,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946531597014180075",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1946531597014180075",
+    "view_count": 662,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946546851001623036",
+    "text": "every picture you have taken is of a younger you even if by a nanosecond",
+    "created_at": "2025-07-19T12:25:09.000Z",
+    "retweet_count": 0,
+    "favorite_count": 7,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946546851001623036",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946546851001623036",
+    "view_count": 343,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946578273867071997",
+    "text": "bruh wtf is react-redux even about just use zustand",
+    "created_at": "2025-07-19T14:30:00.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946578273867071997",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946578273867071997",
+    "view_count": 574,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946683242335359331",
+    "text": "3 am \nanyone up and grinding?",
+    "created_at": "2025-07-19T21:27:07.000Z",
+    "retweet_count": 0,
+    "favorite_count": 24,
+    "reply_count": 7,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946683242335359331",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946683242335359331",
+    "view_count": 748,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946693827403890747",
+    "text": "I've won in life thank you amrit sir🙏 https://t.co/nU4H6MkKxJ",
+    "created_at": "2025-07-19T22:09:10.000Z",
+    "retweet_count": 0,
+    "favorite_count": 14,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946693827403890747",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1946693827403890747",
+    "view_count": 709,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946709831362175186",
+    "text": "how that one leetcode problem be looking at me at 4:42 am https://t.co/BmhcA9DcAi",
+    "created_at": "2025-07-19T23:12:46.000Z",
+    "retweet_count": 0,
+    "favorite_count": 15,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946709831362175186",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1946709831362175186",
+    "view_count": 425,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946713854047907963",
+    "text": "I love dp",
+    "created_at": "2025-07-19T23:28:45.000Z",
+    "retweet_count": 0,
+    "favorite_count": 2,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946713854047907963",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1946713854047907963",
+    "view_count": 348,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946838362478006662",
+    "text": "day starts now \nlot to learn today \nLess go 🫶\nBtw this is the tree I planted a month back, it has grown a lot! https://t.co/nPhSDzmngf",
+    "created_at": "2025-07-20T07:43:30.000Z",
+    "retweet_count": 0,
+    "favorite_count": 37,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946838362478006662",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1946838362478006662",
+    "view_count": 871,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1946879114666971279",
+    "text": "meanwhile I have 0 attendance this sem, and close to zero all prev years",
+    "created_at": "2025-07-20T10:25:26.000Z",
+    "retweet_count": 0,
+    "favorite_count": 15,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1946879114666971279",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1946879114666971279",
+    "view_count": 709,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947000757565411731",
+    "text": "sometimes I feel i should have left everything and  just did dsa alone after seeing people grabbing 30LPA+ just by that and cloning projects from GitHub",
+    "created_at": "2025-07-20T18:28:48.000Z",
+    "retweet_count": 28,
+    "favorite_count": 972,
+    "reply_count": 19,
+    "quote_count": 3,
+    "bookmark_count": 163,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947000757565411731",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947000757565411731",
+    "view_count": 31931,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947186289473990847",
+    "text": "I mean thanks i guess ??😭😭 https://t.co/SyuR986XAX",
+    "created_at": "2025-07-21T06:46:03.000Z",
+    "retweet_count": 0,
+    "favorite_count": 32,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947186289473990847",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947186289473990847",
+    "view_count": 1173,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947277372618592687",
+    "text": "bruh i decide to attend a  class for once and the faculty shouts at me to get out 😭",
+    "created_at": "2025-07-21T12:47:58.000Z",
+    "retweet_count": 0,
+    "favorite_count": 22,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947277372618592687",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947277372618592687",
+    "view_count": 783,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947341727641035199",
+    "text": "do you really enjoy what you are doing?\nhonest answers only",
+    "created_at": "2025-07-21T17:03:42.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 15,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947341727641035199",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947341727641035199",
+    "view_count": 1103,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947381786994168009",
+    "text": "haven't done much today, gonna do next 3 hours leetcode \nyou can join with me if you want",
+    "created_at": "2025-07-21T19:42:53.000Z",
+    "retweet_count": 0,
+    "favorite_count": 22,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947381786994168009",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947381786994168009",
+    "view_count": 678,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947410215235948574",
+    "text": "I hate this problem wasted 1 hour almost still can't figure it out https://t.co/bqncLGxSHt",
+    "created_at": "2025-07-21T21:35:51.000Z",
+    "retweet_count": 0,
+    "favorite_count": 28,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 5,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947410215235948574",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947410215235948574",
+    "view_count": 921,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947546673791832084",
+    "text": "I've watched death note, cyberpunk edge runners and grave of fireflies \nWill you weebs include me",
+    "created_at": "2025-07-22T06:38:05.000Z",
+    "retweet_count": 0,
+    "favorite_count": 12,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947546673791832084",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947546673791832084",
+    "view_count": 620,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947567132851769660",
+    "text": "let's enjoy some food https://t.co/TUwLU1q8th",
+    "created_at": "2025-07-22T07:59:23.000Z",
+    "retweet_count": 0,
+    "favorite_count": 31,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947567132851769660",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947567132851769660",
+    "view_count": 787,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947624464734458193",
+    "text": "JavaScript is not a real language.\nIt isn't even multithreaded.\nDon't even has it's own background task processing system and relies on browser's cpp networking libraries whenever you execute async/await.\nIt has a call stack, browser's event loop handles all the background stuff",
+    "created_at": "2025-07-22T11:47:12.000Z",
+    "retweet_count": 0,
+    "favorite_count": 26,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947624464734458193",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947624464734458193",
+    "view_count": 703,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947684673863487663",
+    "text": "I find it rather funny that these companies couldn't find a better way to select candidates than leetcode/codeforces over past decades",
+    "created_at": "2025-07-22T15:46:27.000Z",
+    "retweet_count": 0,
+    "favorite_count": 20,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947684673863487663",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947684673863487663",
+    "view_count": 495,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947699520021926267",
+    "text": "Humans have figured out a way to artificially mutate the gene at specific spots, using CRISPR-cas9, it goes to that part of the gene, makes a cut, and then we can replace it\nThis is the tech that can actually cure cancer, but if it comes in wrong hands, it can cause cancer too",
+    "created_at": "2025-07-22T16:45:26.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 1,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947699520021926267",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947699520021926267",
+    "view_count": 681,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947716029029007431",
+    "text": "Btw if you wonder why I know this is coz i am majoring in Bioinformatics too",
+    "created_at": "2025-07-22T17:51:02.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947716029029007431",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1947716029029007431",
+    "view_count": 328,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947750511018709250",
+    "text": "anyone up? what you guys upto right now",
+    "created_at": "2025-07-22T20:08:03.000Z",
+    "retweet_count": 0,
+    "favorite_count": 25,
+    "reply_count": 17,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947750511018709250",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1947750511018709250",
+    "view_count": 1300,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947833367464186261",
+    "text": "Good night guys https://t.co/ALUt3p2m4o",
+    "created_at": "2025-07-23T01:37:18.000Z",
+    "retweet_count": 0,
+    "favorite_count": 20,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947833367464186261",
+    "is_quote_status": true,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947833367464186261",
+    "view_count": 704,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947903662086664382",
+    "text": "so what is our plans for today? \nWhatever it is, let's try to get the maximum output by the end of the day https://t.co/4mf2m2h8js",
+    "created_at": "2025-07-23T06:16:37.000Z",
+    "retweet_count": 0,
+    "favorite_count": 14,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947903662086664382",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947903662086664382",
+    "view_count": 377,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947926178997882915",
+    "text": "got my laptop stand back, it makes a difference https://t.co/oqT9wCopQW",
+    "created_at": "2025-07-23T07:46:06.000Z",
+    "retweet_count": 0,
+    "favorite_count": 25,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947926178997882915",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947926178997882915",
+    "view_count": 559,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1947992842770784762",
+    "text": "do you guys listen to true crime? If you do, this is a great channel https://t.co/iBCVzSxRKd",
+    "created_at": "2025-07-23T12:11:00.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 5,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1947992842770784762",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1947992842770784762",
+    "view_count": 536,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948087931568070919",
+    "text": "I slept at weird times today, and that too small naps, anyway have to recover the time that got lost\nWill be doing leetcode next 3 hours\nsee you after that",
+    "created_at": "2025-07-23T18:28:51.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 2,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948087931568070919",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948087931568070919",
+    "view_count": 761,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948131971185651978",
+    "text": "will all this really be worth it, anyways\nif you are reading this, why are you awake at 3 am",
+    "created_at": "2025-07-23T21:23:51.000Z",
+    "retweet_count": 0,
+    "favorite_count": 8,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948131971185651978",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1948131971185651978",
+    "view_count": 347,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948156987524476956",
+    "text": "I need to sleep. How to sleep in 5 mins?",
+    "created_at": "2025-07-23T23:03:15.000Z",
+    "retweet_count": 0,
+    "favorite_count": 13,
+    "reply_count": 6,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948156987524476956",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948156987524476956",
+    "view_count": 906,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948219800498663785",
+    "text": "This is too funny.\nAnd sleep guys \ngm \ntoday is packed with activities",
+    "created_at": "2025-07-24T03:12:51.000Z",
+    "retweet_count": 1,
+    "favorite_count": 19,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948219800498663785",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1948219800498663785",
+    "view_count": 548,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948232036038177279",
+    "text": "lmao just realised I haven't even slept 2 hours wtf am i doing",
+    "created_at": "2025-07-24T04:01:28.000Z",
+    "retweet_count": 0,
+    "favorite_count": 15,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948232036038177279",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1948232036038177279",
+    "view_count": 512,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948323977967046882",
+    "text": "&gt; finds someone working at FAANG\n&gt; thinks to follow them, might learn something\n&gt; opens bio \n&gt; topmate acc\nliterally everytime",
+    "created_at": "2025-07-24T10:06:49.000Z",
+    "retweet_count": 0,
+    "favorite_count": 21,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948323977967046882",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948323977967046882",
+    "view_count": 567,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948333724778606820",
+    "text": "your organs move all the times inside your body, but your brain ignores them so you don't feel it.\nbut heart is one organ, brain can't ignore, instead it makes us feel it more",
+    "created_at": "2025-07-24T10:45:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 20,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948333724778606820",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948333724778606820",
+    "view_count": 432,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948410311784144985",
+    "text": "luck so bad, had a question in OA which didn't let me change the language :) and so how much I tried couldn't do it.\nand so didn't get shortlisted while everyone else who had the language chose privilege most of them got to the next round.\nCan I blame luck on this one?",
+    "created_at": "2025-07-24T15:49:52.000Z",
+    "retweet_count": 0,
+    "favorite_count": 24,
+    "reply_count": 11,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948410311784144985",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948410311784144985",
+    "view_count": 992,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948455695436681433",
+    "text": "night view https://t.co/rb9Gj0eqdA",
+    "created_at": "2025-07-24T18:50:13.000Z",
+    "retweet_count": 0,
+    "favorite_count": 15,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948455695436681433",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1948455695436681433",
+    "view_count": 386,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948459205876240865",
+    "text": "night view 2.0 https://t.co/P6kJdeOCH8",
+    "created_at": "2025-07-24T19:04:09.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948459205876240865",
+    "is_quote_status": true,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1948459205876240865",
+    "view_count": 415,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948479129495486924",
+    "text": "you went to high school, I went to school high\nWe are not the same",
+    "created_at": "2025-07-24T20:23:20.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948479129495486924",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948479129495486924",
+    "view_count": 498,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948829881112166644",
+    "text": "check out this cool project by this cracked cat ( dude )",
+    "created_at": "2025-07-25T19:37:05.000Z",
+    "retweet_count": 0,
+    "favorite_count": 14,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948829881112166644",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1948829881112166644",
+    "view_count": 424,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948837465126830219",
+    "text": "insane day it was, got 0 time to do anything\nhow are you guys doing?",
+    "created_at": "2025-07-25T20:07:13.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948837465126830219",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948837465126830219",
+    "view_count": 640,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948852797606428684",
+    "text": "am jeolous of all of you who are in 1st, 2nd, and 3rd years rn\nyou got so much time in your hands",
+    "created_at": "2025-07-25T21:08:09.000Z",
+    "retweet_count": 13,
+    "favorite_count": 513,
+    "reply_count": 65,
+    "quote_count": 3,
+    "bookmark_count": 52,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948852797606428684",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1948852797606428684",
+    "view_count": 17982,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948859954817118547",
+    "text": "this is insane, this is kinda dumb, but how does one make sure to follow all vulnerability guidelines to prevent your product getting hacked? how do you guys do?",
+    "created_at": "2025-07-25T21:36:35.000Z",
+    "retweet_count": 0,
+    "favorite_count": 7,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948859954817118547",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1948859954817118547",
+    "view_count": 430,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948878555913568425",
+    "text": "no caption, it's so over for me https://t.co/3oDxuOyCSh",
+    "created_at": "2025-07-25T22:50:30.000Z",
+    "retweet_count": 0,
+    "favorite_count": 8,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948878555913568425",
+    "is_quote_status": true,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1948878555913568425",
+    "view_count": 468,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948951214747775144",
+    "text": "finished the test in 10 mins.\nLess go \nFrom being cooked to cooking the test \nAlso don't sleep late guys 😭😭😭",
+    "created_at": "2025-07-26T03:39:14.000Z",
+    "retweet_count": 0,
+    "favorite_count": 23,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948951214747775144",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1948951214747775144",
+    "view_count": 784,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1948980687278878890",
+    "text": "What's this lunch even https://t.co/pYbBA5WIZq",
+    "created_at": "2025-07-26T05:36:20.000Z",
+    "retweet_count": 0,
+    "favorite_count": 4,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1948980687278878890",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1948980687278878890",
+    "view_count": 556,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949050179342225612",
+    "text": "you make a decision at each minute of your life voluntarily or involuntarily without knowing what its impact could be. Butterfly effect is real.\nSometimes I think what if I would have done that thing differently? But I can never know if that would still work or not",
+    "created_at": "2025-07-26T10:12:29.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949050179342225612",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949050179342225612",
+    "view_count": 511,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949078978196812157",
+    "text": "All I need is 2 months of plan and focus.\nDone that 2wice already one during jee times and one this summer vacation. And both resulted in  great outcomes.\nNow it's my 3rd 2 months which starts now.\nI know I'm gonna cook it this time too.",
+    "created_at": "2025-07-26T12:06:55.000Z",
+    "retweet_count": 18,
+    "favorite_count": 554,
+    "reply_count": 11,
+    "quote_count": 0,
+    "bookmark_count": 166,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949078978196812157",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949078978196812157",
+    "view_count": 20263,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949087484325040468",
+    "text": "guys check this out, this post deserves max reach\nand you can follow him too, he is cracked in a field many dont even try to enter",
+    "created_at": "2025-07-26T12:40:43.000Z",
+    "retweet_count": 0,
+    "favorite_count": 13,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 3,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949087484325040468",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1949087484325040468",
+    "view_count": 921,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949156333783245230",
+    "text": "Okay, I've been working on 3 projects recently.\nWill start posting about them tonight or prolly tomorrow.\n2 of them are related to PDF parsing (python) and the other one is in cpp its a system that gives you opportunities to make profit in crypto and much more, will share it soon",
+    "created_at": "2025-07-26T17:14:18.000Z",
+    "retweet_count": 2,
+    "favorite_count": 47,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 4,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949156333783245230",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1949156333783245230",
+    "view_count": 1788,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949236028797321463",
+    "text": "anyone up at 4am\nwhat you guys doing? \nI am fighting with perplexity",
+    "created_at": "2025-07-26T22:30:58.000Z",
+    "retweet_count": 0,
+    "favorite_count": 22,
+    "reply_count": 8,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949236028797321463",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949236028797321463",
+    "view_count": 1027,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949415268163424592",
+    "text": "how did you guys fix your sleep schedule? Need tips, I'm oversleeping",
+    "created_at": "2025-07-27T10:23:12.000Z",
+    "retweet_count": 0,
+    "favorite_count": 93,
+    "reply_count": 43,
+    "quote_count": 1,
+    "bookmark_count": 10,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949415268163424592",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949415268163424592",
+    "view_count": 5885,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949558354831167928",
+    "text": "peak ubuntu experience\ncan't even close it https://t.co/NSWuF057p3",
+    "created_at": "2025-07-27T19:51:47.000Z",
+    "retweet_count": 0,
+    "favorite_count": 22,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949558354831167928",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1949558354831167928",
+    "view_count": 545,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949577539799916721",
+    "text": "yk it's good when you get appreciated coz of your projects https://t.co/qSXDNhXwpt",
+    "created_at": "2025-07-27T21:08:01.000Z",
+    "retweet_count": 0,
+    "favorite_count": 44,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949577539799916721",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1949577539799916721",
+    "view_count": 1671,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949682979938472043",
+    "text": "How do you guys sleep at night knowing you will never be able to find out what's beneath our observable universe?",
+    "created_at": "2025-07-28T04:07:00.000Z",
+    "retweet_count": 0,
+    "favorite_count": 25,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949682979938472043",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949682979938472043",
+    "view_count": 776,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949686593226481698",
+    "text": "fun lil fact about me: I was boys topper of my school both in 10th and 12th grade",
+    "created_at": "2025-07-28T04:21:21.000Z",
+    "retweet_count": 0,
+    "favorite_count": 21,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949686593226481698",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949686593226481698",
+    "view_count": 850,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949781202262761786",
+    "text": "I thought today I'll fix the schedule 🥲 ended up oversleeping again in afternoon",
+    "created_at": "2025-07-28T10:37:18.000Z",
+    "retweet_count": 0,
+    "favorite_count": 23,
+    "reply_count": 7,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949781202262761786",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949781202262761786",
+    "view_count": 546,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949794889241117131",
+    "text": "I used to wonder how does websocket work, found out TCP being fully duplex has 2 streams, one for sending the data and one for receiving both running independently i.e http is just slowing down the transmission, can't we just use ws everywhere?We can but it's just we dont need it",
+    "created_at": "2025-07-28T11:31:41.000Z",
+    "retweet_count": 0,
+    "favorite_count": 28,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949794889241117131",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949794889241117131",
+    "view_count": 828,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949808657643823164",
+    "text": "what the hell, 22 Lakhs ?? I mean, I get kirat sir is goated but 22 Lakhs? is this only for the riches? can anyone confirm this is true",
+    "created_at": "2025-07-28T12:26:24.000Z",
+    "retweet_count": 6,
+    "favorite_count": 332,
+    "reply_count": 26,
+    "quote_count": 4,
+    "bookmark_count": 49,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949808657643823164",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1949808657643823164",
+    "view_count": 27536,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949853411307933915",
+    "text": "See this is the thing, when you apply for real jobs in real companies for a position of a developer, they care about your projects and skills and on basis of those they give you opportunity. Not everywhere you need to pass a stupid DSA test with O(1) complexity.",
+    "created_at": "2025-07-28T15:24:14.000Z",
+    "retweet_count": 0,
+    "favorite_count": 21,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949853411307933915",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1949853411307933915",
+    "view_count": 714,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949866835459092656",
+    "text": "btw if you guys have commented any query under my posts and I haven't replied you can DM me, been getting so many notifs it gets lost",
+    "created_at": "2025-07-28T16:17:35.000Z",
+    "retweet_count": 0,
+    "favorite_count": 23,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949866835459092656",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949866835459092656",
+    "view_count": 718,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949903558855577949",
+    "text": "https://t.co/Yuyjrap9Xm",
+    "created_at": "2025-07-28T18:43:30.000Z",
+    "retweet_count": 0,
+    "favorite_count": 16,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949903558855577949",
+    "is_quote_status": false,
+    "lang": "zxx",
+    "possibly_sensitive": false,
+    "rest_id": "1949903558855577949",
+    "view_count": 469,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1949958287291461682",
+    "text": "fuck fixing sleep schedule\nwe ball.",
+    "created_at": "2025-07-28T22:20:58.000Z",
+    "retweet_count": 0,
+    "favorite_count": 17,
+    "reply_count": 4,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1949958287291461682",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1949958287291461682",
+    "view_count": 1208,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950007187310329883",
+    "text": "Good morning \n( I haven't slept ) https://t.co/hGaecsoN6M",
+    "created_at": "2025-07-29T01:35:17.000Z",
+    "retweet_count": 0,
+    "favorite_count": 49,
+    "reply_count": 11,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950007187310329883",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950007187310329883",
+    "view_count": 1960,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950141423069561186",
+    "text": "I take my words back.\nI need to fix it.\nWe ain't ballin with this one",
+    "created_at": "2025-07-29T10:28:41.000Z",
+    "retweet_count": 0,
+    "favorite_count": 25,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950141423069561186",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1950141423069561186",
+    "view_count": 608,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950168544500498714",
+    "text": "yea when it's my turn they introduce round2 of topcoders test till last year there was only round1🫵\nBtw I cleared round1 \nIt's at 10:30 am tomorrow \nMeans i can't mess my sleep today ( it's already messed ) https://t.co/0lFadwGsXf",
+    "created_at": "2025-07-29T12:16:28.000Z",
+    "retweet_count": 0,
+    "favorite_count": 31,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950168544500498714",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950168544500498714",
+    "view_count": 972,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950262078461399159",
+    "text": "having an offer in your hand gives you so much confidence in your next interviews",
+    "created_at": "2025-07-29T18:28:08.000Z",
+    "retweet_count": 1,
+    "favorite_count": 29,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950262078461399159",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1950262078461399159",
+    "view_count": 723,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950322311242142012",
+    "text": "Someone missed me.\nHere I am back\n( I'm cooked )\n\nAlso you guys miss my tweets?",
+    "created_at": "2025-07-29T22:27:28.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950322311242142012",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1950322311242142012",
+    "view_count": 819,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950369790989914427",
+    "text": "Good morning \n( I slept 2 hours ) https://t.co/8j8Pq9dXVf",
+    "created_at": "2025-07-30T01:36:08.000Z",
+    "retweet_count": 0,
+    "favorite_count": 31,
+    "reply_count": 6,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950369790989914427",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950369790989914427",
+    "view_count": 905,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950393074519330879",
+    "text": "\"we offer 9 9s of availability\" https://t.co/PLzJBzWF2s",
+    "created_at": "2025-07-30T03:08:40.000Z",
+    "retweet_count": 0,
+    "favorite_count": 11,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950393074519330879",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950393074519330879",
+    "view_count": 623,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950435143581389220",
+    "text": "Guys I killed the test\nGraph question came \nDid in 15 mins \nLfg 😭 I'm so happy",
+    "created_at": "2025-07-30T05:55:50.000Z",
+    "retweet_count": 4,
+    "favorite_count": 472,
+    "reply_count": 22,
+    "quote_count": 0,
+    "bookmark_count": 20,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950435143581389220",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1950435143581389220",
+    "view_count": 20131,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950534575245185485",
+    "text": "Good morning/evening https://t.co/JKy7nYVPH7",
+    "created_at": "2025-07-30T12:30:56.000Z",
+    "retweet_count": 0,
+    "favorite_count": 25,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950534575245185485",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950534575245185485",
+    "view_count": 548,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950565843114271122",
+    "text": "where am I even heading to https://t.co/fV5m4hZNOS",
+    "created_at": "2025-07-30T14:35:11.000Z",
+    "retweet_count": 0,
+    "favorite_count": 17,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950565843114271122",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950565843114271122",
+    "view_count": 673,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950706104003887587",
+    "text": "so I slept at 2, and been waking up in like past 1 hour multiple times idk why ig my body won't let me sleep",
+    "created_at": "2025-07-30T23:52:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 19,
+    "reply_count": 4,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950706104003887587",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1950706104003887587",
+    "view_count": 640,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950732109393354817",
+    "text": "Good morning \n( I slept broken 3 hours ) https://t.co/x06qELlAcB",
+    "created_at": "2025-07-31T01:35:52.000Z",
+    "retweet_count": 0,
+    "favorite_count": 29,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950732109393354817",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950732109393354817",
+    "view_count": 600,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950793685958025671",
+    "text": "nice\nbtw going to attend a class now\nbig feat for me https://t.co/o1i0G2KESG",
+    "created_at": "2025-07-31T05:40:33.000Z",
+    "retweet_count": 0,
+    "favorite_count": 31,
+    "reply_count": 10,
+    "quote_count": 0,
+    "bookmark_count": 3,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950793685958025671",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950793685958025671",
+    "view_count": 1393,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950851555957015034",
+    "text": "going to class is so tiring man how do you guys do it everyday?",
+    "created_at": "2025-07-31T09:30:30.000Z",
+    "retweet_count": 1,
+    "favorite_count": 17,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950851555957015034",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1950851555957015034",
+    "view_count": 574,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950923271513244072",
+    "text": "Guys show some love to his blog!! It's really well written give it a read",
+    "created_at": "2025-07-31T14:15:28.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950923271513244072",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1950923271513244072",
+    "view_count": 459,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1950985225733022166",
+    "text": "\"we provide 11 9s of availability\" https://t.co/S5Iqp0IaUn",
+    "created_at": "2025-07-31T18:21:40.000Z",
+    "retweet_count": 0,
+    "favorite_count": 9,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1950985225733022166",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1950985225733022166",
+    "view_count": 411,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951021257606177192",
+    "text": "not my site crashing at 2 am\nfuck you render\nother free alternatives guys? https://t.co/pH5AO4EJhl",
+    "created_at": "2025-07-31T20:44:50.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 5,
+    "quote_count": 2,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951021257606177192",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951021257606177192",
+    "view_count": 1230,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951022767501090897",
+    "text": "RT @JustClipX: We regret to inform that https://t.co/GjbeurDXgx\nhas exceeded the free tier limit and is currently down under maintainance.…",
+    "created_at": "2025-07-31T20:50:50.000Z",
+    "retweet_count": 1,
+    "favorite_count": 0,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951022767501090897",
+    "is_quote_status": true,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951022767501090897",
+    "view_count": 0,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951075227263443167",
+    "text": "Guys https://t.co/Nk7x4mO3aN is back to life again! and it would not have been possible without @PanzerBread , he is a cracked dude, go follow him\ncan't thank him enough",
+    "created_at": "2025-08-01T00:19:18.000Z",
+    "retweet_count": 0,
+    "favorite_count": 12,
+    "reply_count": 3,
+    "quote_count": 1,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951075227263443167",
+    "is_quote_status": true,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951075227263443167",
+    "view_count": 564,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951172832622420479",
+    "text": "I made this ppt for college project \nProfessional enough right https://t.co/uOmHGc9QEE",
+    "created_at": "2025-08-01T06:47:08.000Z",
+    "retweet_count": 0,
+    "favorite_count": 29,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 2,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951172832622420479",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951172832622420479",
+    "view_count": 822,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951175908951314901",
+    "text": "lately I've been answering calls in my sleep which I don't even remember.\nthis ain't going to end well for me 😭",
+    "created_at": "2025-08-01T06:59:22.000Z",
+    "retweet_count": 0,
+    "favorite_count": 22,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951175908951314901",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1951175908951314901",
+    "view_count": 569,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951180580889993693",
+    "text": "btw an account over with over 1.6 million followers, follows me and uses my site and DMd me last night when it went down 😝",
+    "created_at": "2025-08-01T07:17:56.000Z",
+    "retweet_count": 0,
+    "favorite_count": 48,
+    "reply_count": 4,
+    "quote_count": 0,
+    "bookmark_count": 3,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951180580889993693",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1951180580889993693",
+    "view_count": 2864,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951181479620284548",
+    "text": "Should I apply and settle in Japan 🥰 https://t.co/POhxVPTSNQ",
+    "created_at": "2025-08-01T07:21:30.000Z",
+    "retweet_count": 0,
+    "favorite_count": 31,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951181479620284548",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951181479620284548",
+    "view_count": 945,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951321882059227639",
+    "text": "RT @d4rsh_tw: If you're thinking of learning system design or just want to read about the basic terms, you should read this blog. It's so b…",
+    "created_at": "2025-08-01T16:39:25.000Z",
+    "retweet_count": 1,
+    "favorite_count": 0,
+    "reply_count": 0,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951321882059227639",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1951321882059227639",
+    "view_count": 0,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951325904719720554",
+    "text": "well so I woke up at 5pm, started writing blog at 5:30, finished by 8pm and i think i am cooked for tonight too",
+    "created_at": "2025-08-01T16:55:24.000Z",
+    "retweet_count": 0,
+    "favorite_count": 30,
+    "reply_count": 3,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951325904719720554",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1951325904719720554",
+    "view_count": 654,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951347820096790770",
+    "text": "10th - 95.8\n12th - 95.6\nJee mains and adv cleared both ( no IIT tho )\nsem 1 - 9.24\nsem 2 - 9.29\nsem 3 - 8.76\nsem 4 - 9.2\nsem 5 - 9.12\nsem 6 - 9.38",
+    "created_at": "2025-08-01T18:22:29.000Z",
+    "retweet_count": 0,
+    "favorite_count": 104,
+    "reply_count": 17,
+    "quote_count": 0,
+    "bookmark_count": 10,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951347820096790770",
+    "is_quote_status": true,
+    "lang": "en",
+    "rest_id": "1951347820096790770",
+    "view_count": 5597,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951379810116313575",
+    "text": "Good Morning \n( I slept 1 hour )\nno breakfast image coz even for that I need to wait for 5 more fucking hours",
+    "created_at": "2025-08-01T20:29:36.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951379810116313575",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1951379810116313575",
+    "view_count": 445,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951451518714180037",
+    "text": "I love dp, ignore the accuracy https://t.co/V3DSCD3wY4",
+    "created_at": "2025-08-02T01:14:32.000Z",
+    "retweet_count": 0,
+    "favorite_count": 18,
+    "reply_count": 1,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951451518714180037",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951451518714180037",
+    "view_count": 442,
+    "source": "<a href=\"https://mobile.twitter.com\" rel=\"nofollow\">Twitter Web App</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951463904368009496",
+    "text": "Good morning guyz https://t.co/ZcOlPsyPzu",
+    "created_at": "2025-08-02T02:03:45.000Z",
+    "retweet_count": 0,
+    "favorite_count": 30,
+    "reply_count": 5,
+    "quote_count": 0,
+    "bookmark_count": 1,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951463904368009496",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951463904368009496",
+    "view_count": 645,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951552708739211629",
+    "text": "what do you guys even do apart from coding? Got any hobbies ?",
+    "created_at": "2025-08-02T07:56:38.000Z",
+    "retweet_count": 0,
+    "favorite_count": 99,
+    "reply_count": 115,
+    "quote_count": 2,
+    "bookmark_count": 8,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951552708739211629",
+    "is_quote_status": false,
+    "lang": "en",
+    "rest_id": "1951552708739211629",
+    "view_count": 6933,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  },
+  {
+    "id": "1951650176789319769",
+    "text": "this generation is cooked https://t.co/a7664RsXL0",
+    "created_at": "2025-08-02T14:23:56.000Z",
+    "retweet_count": 0,
+    "favorite_count": 21,
+    "reply_count": 2,
+    "quote_count": 0,
+    "bookmark_count": 0,
+    "user_id": "1663994484529717249",
+    "conversation_id": "1951650176789319769",
+    "is_quote_status": false,
+    "lang": "en",
+    "possibly_sensitive": false,
+    "rest_id": "1951650176789319769",
+    "view_count": 261,
+    "source": "<a href=\"http://twitter.com/download/android\" rel=\"nofollow\">Twitter for Android</a>",
+    "user": {
+      "id": "1663994484529717249",
+      "screen_name": "AbhinavXJ",
+      "name": "abhinav",
+      "verified": false,
+      "followers_count": 1678
+    }
+  }
+];
+        
+        function downloadJSON() {
+            const dataStr = JSON.stringify(tweetsData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'AbhinavXJ_tweets.json';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        function downloadCSV() {
+            const headers = ['id', 'text', 'created_at', 'favorite_count', 'retweet_count', 'reply_count', 'view_count', 'user_screen_name'];
+            const csvContent = [
+                headers.join(','),
+                ...tweetsData.map(tweet => [
+                    tweet.id,
+                    '"' + tweet.text.replace(/"/g, '""') + '"',
+                    tweet.created_at,
+                    tweet.favorite_count,
+                    tweet.retweet_count,
+                    tweet.reply_count,
+                    tweet.view_count,
+                    tweet.user?.screen_name || ''
+                ].join(','))
+            ].join('\n');
+            
+            const dataBlob = new Blob([csvContent], {type: 'text/csv'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'AbhinavXJ_tweets.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
