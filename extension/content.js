@@ -116,24 +116,34 @@ injectWorkingScript();
 // Handle S3 upload requests from injected scripts
 window.addEventListener('message', function(event) {
   if (event.data && event.data.type === 'uploadRequest') {
-    console.log('📤 Content script received upload request from injected script');
+    console.log('📤 [CONTENT] Received upload request from injected script');
+    console.log('📤 [CONTENT] Request data size:', JSON.stringify(event.data.data).length, 'bytes');
+    console.log('📤 [CONTENT] Auth token present:', !!event.data.authToken);
     
     // Forward the upload request to the background script
+    console.log('📤 [CONTENT] Forwarding to background script...');
     chrome.runtime.sendMessage({
       action: 'uploadToAPI',
       data: event.data.data,
       authToken: event.data.authToken
     }, function(response) {
-      console.log('📤 Upload response received:', response);
+      console.log('📤 [CONTENT] Background script response received:', response);
+      
+      if (response && response.success) {
+        console.log('📤 [CONTENT] Upload successful, sending response back');
+      } else {
+        console.log('📤 [CONTENT] Upload failed, sending error back:', response?.error);
+      }
       
       // Send the response back to the injected script
       window.postMessage({
         type: 'uploadResponse',
-        success: response.success,
-        url: response.url,
-        filename: response.filename,
-        error: response.error
+        success: response ? response.success : false,
+        url: response ? response.url : null,
+        filename: response ? response.filename : null,
+        error: response ? response.error : 'No response from background script'
       }, '*');
+      console.log('📤 [CONTENT] Response sent back to injected script');
     });
   }
 });

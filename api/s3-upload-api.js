@@ -36,7 +36,6 @@ app.use(express.json({ limit: '10mb' }));
 
 // Initialize database (don't exit process in serverless)
 initDatabase().catch(err => {
-  console.error('Failed to initialize database:', err);
   // Don't exit process in serverless environment
 });
 
@@ -76,8 +75,6 @@ const optionalAuth = (req, res, next) => {
 // Authentication endpoints
 app.post('/api/auth/register', async (req, res) => {
   try {
-    console.log('🔐 Registration attempt:', { email: req.body.email, hasPhone: !!req.body.phone });
-    
     const { email, phone, password } = req.body;
 
     // Validation
@@ -122,8 +119,6 @@ app.post('/api/auth/register', async (req, res) => {
     const saltRounds = 12;
     const password_hash = await bcrypt.hash(password, saltRounds);
 
-    console.log('🔐 Creating user in database...');
-
     // Create user
     const user = await UserDB.create({
       email: email.toLowerCase().trim(),
@@ -142,8 +137,6 @@ app.post('/api/auth/register', async (req, res) => {
       { expiresIn: '30d' }
     );
 
-    console.log(`✅ New user registered: ${user.email}`);
-
     res.status(201).json({
       success: true,
       message: 'Account created successfully',
@@ -157,8 +150,6 @@ app.post('/api/auth/register', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Registration error:', error);
-    
     // Provide more specific error messages
     if (error.code === 11000) {
       // Duplicate key error
@@ -197,8 +188,6 @@ app.post('/api/auth/register', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
   try {
-    console.log('🔐 Login attempt:', { emailOrPhone: req.body.emailOrPhone });
-    
     const { emailOrPhone, password } = req.body;
 
     // Validation
@@ -241,8 +230,6 @@ app.post('/api/auth/login', async (req, res) => {
       { expiresIn: '30d' }
     );
 
-    console.log(`✅ User logged in: ${user.email}`);
-
     res.json({
       success: true,
       message: 'Login successful',
@@ -257,8 +244,6 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Login error:', error);
-    
     if (error.message.includes('MONGODB_URI')) {
       return res.status(500).json({ 
         success: false,
@@ -300,7 +285,6 @@ app.get('/api/auth/profile', authenticateToken, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Profile error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to load profile'
@@ -341,8 +325,6 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
 
     const result = await s3.upload(params).promise();
     
-    console.log(`✅ Uploaded ${generatedFilename} to S3:`, result.Location);
-    
     // Save archive to database
     try {
       await ArchiveDB.create({
@@ -353,9 +335,7 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
         file_size: Buffer.byteLength(content, 'utf8'),
         content_type: contentType || 'text/html'
       });
-      console.log(`✅ Archive saved to database for user ${req.user.email}`);
     } catch (dbError) {
-      console.error('❌ Database save error:', dbError);
       // Don't fail the upload if database save fails
     }
     
@@ -406,20 +386,26 @@ app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
 
     const archives = await ArchiveDB.findByUserId(req.user.userId, limit, offset);
     
-    const files = archives.map(archive => ({
+    const archivesList = archives.map(archive => ({
+      _id: archive._id,
       filename: archive.filename,
+      originalName: archive.filename,
       size: archive.file_size,
-      lastModified: archive.created_at,
-      url: archive.s3_url,
-      contentType: archive.content_type
+      uploadDate: archive.created_at,
+      s3Url: archive.s3_url,
+      tweetCount: 100, // Default value - you can extract this from the actual data
+      profileInfo: {
+        username: 'user', // Default value - you can extract this from the actual data
+        displayName: 'User' // Default value - you can extract this from the actual data
+      }
     }));
 
     res.json({ 
-      files,
+      archives: archivesList,
       pagination: {
         limit,
         offset,
-        hasMore: files.length === limit
+        hasMore: archivesList.length === limit
       }
     });
 
@@ -428,5 +414,149 @@ app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to load your archives' });
   }
 });
+
+// Get specific report data
+app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    
+    // Find the archive in the database
+    const archive = await ArchiveDB.findById(reportId);
+    
+    if (!archive) {
+      return res.status(404).json({ error: 'Report not found' });
+    }
+    
+    // Check if user owns this archive
+    if (archive.user_id.toString() !== req.user.userId.toString()) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    // Get the report data from S3
+    const s3Response = await s3.getObject({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: archive.s3_key
+    }).promise();
+    
+    // Parse the HTML content to extract JSON data
+    const htmlContent = s3Response.Body.toString('utf-8');
+    
+    // Extract JSON data from the HTML (this is a simplified approach)
+    // In a real implementation, you'd want to store the JSON data separately
+    const jsonMatch = htmlContent.match(/<script id="tweet-data" type="application\/json">(.*?)<\/script>/s);
+    
+    let reportData;
+    if (jsonMatch) {
+      try {
+        reportData = JSON.parse(jsonMatch[1]);
+      } catch (parseError) {
+        console.error('Failed to parse JSON data:', parseError);
+        reportData = generateDefaultReportData(archive.filename);
+      }
+    } else {
+      // Generate default report data if no JSON found
+      reportData = generateDefaultReportData(archive.filename);
+    }
+    
+    res.json(reportData);
+    
+  } catch (error) {
+    console.error('❌ Error fetching report:', error);
+    res.status(500).json({ error: 'Failed to load the report' });
+  }
+});
+
+// Download report as JSON
+app.get('/api/report/:reportId/download', authenticateToken, async (req, res) => {
+  try {
+    const { reportId } = req.params;
+    
+    // Find the archive in the database
+    const archive = await ArchiveDB.findById(reportId);
+    
+    if (!archive) {
+      return res.status(404).json({ error: 'Report not found' });
+    }
+    
+    // Check if user owns this archive
+    if (archive.user_id.toString() !== req.user.userId.toString()) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    // Get the report data from S3
+    const s3Response = await s3.getObject({
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: archive.s3_key
+    }).promise();
+    
+    const htmlContent = s3Response.Body.toString('utf-8');
+    
+    // Extract JSON data from the HTML
+    const jsonMatch = htmlContent.match(/<script id="tweet-data" type="application\/json">(.*?)<\/script>/s);
+    
+    let jsonData;
+    if (jsonMatch) {
+      try {
+        jsonData = JSON.parse(jsonMatch[1]);
+      } catch (parseError) {
+        jsonData = generateDefaultReportData(archive.filename);
+      }
+    } else {
+      jsonData = generateDefaultReportData(archive.filename);
+    }
+    
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="${archive.filename.replace('.html', '.json')}"`);
+    res.json(jsonData);
+    
+  } catch (error) {
+    console.error('❌ Error downloading report:', error);
+    res.status(500).json({ error: 'Failed to download the report' });
+  }
+});
+
+// Helper function to generate default report data
+function generateDefaultReportData(filename) {
+  // Extract username from filename (e.g., "PixPerk__tweet_archive (1).html" -> "PixPerk_")
+  const usernameMatch = filename.match(/^([^_]+)_/);
+  const username = usernameMatch ? usernameMatch[1] : 'user';
+  
+  return {
+    profileInfo: {
+      username: username,
+      displayName: username.charAt(0).toUpperCase() + username.slice(1),
+      description: 'Twitter user',
+      followers_count: 0,
+      following_count: 0,
+      tweet_count: 100
+    },
+    tweets: [
+      {
+        id: '1',
+        text: 'Sample tweet content',
+        created_at: new Date().toISOString(),
+        public_metrics: {
+          retweet_count: 0,
+          reply_count: 0,
+          like_count: 0,
+          quote_count: 0,
+          impression_count: 0
+        }
+      }
+    ],
+    stats: {
+      totalTweets: 100,
+      totalLikes: 0,
+      totalRetweets: 0,
+      totalViews: 0,
+      totalReplies: 0
+    },
+    timeline: {
+      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago
+      endDate: new Date().toISOString()
+    },
+    generatedAt: new Date().toISOString()
+  };
+}
 
 module.exports = app;

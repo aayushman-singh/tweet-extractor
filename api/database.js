@@ -14,8 +14,6 @@ async function connectDB() {
             throw new Error('MONGODB_URI environment variable is not set');
         }
 
-        console.log('🔌 Attempting MongoDB connection...');
-        
         await mongoose.connect(mongoUri, {
             maxPoolSize: 5, // Reduced for serverless
             serverSelectionTimeoutMS: 10000, // Increased timeout
@@ -27,22 +25,17 @@ async function connectDB() {
         });
 
         isConnected = true;
-        console.log('✅ Connected to MongoDB Atlas');
-        console.log(`📁 Database: ${mongoose.connection.db.databaseName}`);
         
         // Set up connection event handlers
         mongoose.connection.on('error', (err) => {
-            console.error('❌ MongoDB connection error:', err);
             isConnected = false;
         });
         
         mongoose.connection.on('disconnected', () => {
-            console.log('⚠️ MongoDB disconnected');
             isConnected = false;
         });
         
     } catch (error) {
-        console.error('❌ MongoDB connection error:', error);
         isConnected = false;
         throw error;
     }
@@ -121,10 +114,7 @@ const Archive = mongoose.models.TweetArchive || mongoose.model('TweetArchive', a
 async function initDatabase() {
     try {
         await connectDB();
-        console.log('✅ MongoDB Atlas database initialized');
-        console.log('📋 Collections: tweet_users, tweet_archives');
     } catch (error) {
-        console.error('❌ Failed to initialize database:', error);
         throw error;
     }
 }
@@ -322,6 +312,32 @@ const ArchiveDB = {
                 content_type: archive.content_type,
                 created_at: archive.created_at
             }));
+        } catch (error) {
+            throw { error: 'Database error: ' + error.message };
+        }
+    },
+
+    // Get archive by ID
+    findById: async (archiveId) => {
+        try {
+            await connectDB();
+            
+            const archive = await Archive.findById(archiveId).lean();
+            
+            if (!archive) {
+                return null;
+            }
+            
+            return {
+                id: archive._id,
+                user_id: archive.user_id,
+                filename: archive.filename,
+                s3_key: archive.s3_key,
+                s3_url: archive.s3_url,
+                file_size: archive.file_size,
+                content_type: archive.content_type,
+                created_at: archive.created_at
+            };
         } catch (error) {
             throw { error: 'Database error: ' + error.message };
         }

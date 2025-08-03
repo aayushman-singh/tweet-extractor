@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
@@ -33,15 +34,32 @@ interface Archive {
 const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [archives, setArchives] = useState<Archive[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://extractor.aayushman.dev';
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://extractor.aayushman.dev';
 
   useEffect(() => {
     fetchArchives();
   }, []);
+
+  // Add keyboard shortcut for refresh
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
+        event.preventDefault();
+        if (!refreshing) {
+          handleRefresh();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [refreshing]);
 
   const fetchArchives = async () => {
     try {
@@ -52,6 +70,7 @@ const Dashboard: React.FC = () => {
         }
       });
       setArchives(response.data.archives || []);
+      setLastUpdated(new Date());
     } catch (error) {
       console.error('Failed to fetch archives:', error);
       toast({
@@ -66,12 +85,21 @@ const Dashboard: React.FC = () => {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await fetchArchives();
-    setRefreshing(false);
-    toast({
-      title: "Success",
-      description: "Archives refreshed",
-    });
+    try {
+      await fetchArchives();
+      toast({
+        title: "Success",
+        description: "Archives refreshed successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to refresh archives",
+        variant: "destructive",
+      });
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const handleLogout = () => {
@@ -91,13 +119,23 @@ const Dashboard: React.FC = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) {
+      return 'Just now';
+    } else if (diffInHours < 24) {
+      return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    } else if (diffInHours < 48) {
+      return 'Yesterday';
+    } else {
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    }
   };
 
   const downloadArchive = async (archive: Archive) => {
@@ -179,10 +217,25 @@ const Dashboard: React.FC = () => {
                 Manage your tweet archives and extraction history
               </p>
             </div>
-            <Button onClick={handleRefresh} disabled={refreshing}>
-              <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
+            <div className="flex flex-col items-end">
+              <Button 
+                onClick={handleRefresh} 
+                disabled={refreshing}
+                variant="outline"
+                className="border-blue-200 hover:bg-blue-50"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                {refreshing ? 'Refreshing...' : 'Refresh Archives'}
+              </Button>
+              <p className="text-xs text-gray-500 mt-1">
+                Press Ctrl+R to refresh
+              </p>
+              {lastUpdated && (
+                <p className="text-xs text-gray-400 mt-1">
+                  Last updated: {formatDate(lastUpdated.toISOString())}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Stats */}
@@ -255,34 +308,33 @@ const Dashboard: React.FC = () => {
               {archives.map((archive) => (
                 <Card key={archive._id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <FileText className="w-5 h-5 text-blue-500" />
-                        <CardTitle className="text-lg">{archive.originalName}</CardTitle>
-                      </div>
-                    </div>
-                    <CardDescription>
-                      {formatFileSize(archive.size)} • {formatDate(archive.uploadDate)}
-                    </CardDescription>
+                                         <div className="flex items-center justify-between">
+                       <div className="flex items-center space-x-2">
+                         <FileText className="w-5 h-5 text-blue-500" />
+                         <CardTitle className="text-lg">
+                           {archive.profileInfo?.username ? `@${archive.profileInfo.username}` : 'Tweet Archive'}
+                         </CardTitle>
+                       </div>
+                     </div>
+                     <CardDescription>
+                       {formatFileSize(archive.size)} • {formatDate(archive.uploadDate)}
+                       {archive.profileInfo?.displayName && (
+                         <span className="block text-xs text-gray-500 mt-1">
+                           {archive.profileInfo.displayName}
+                         </span>
+                       )}
+                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    {archive.profileInfo && (
-                      <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-                        <p className="text-sm font-medium text-gray-900">
-                          @{archive.profileInfo.username}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          {archive.profileInfo.displayName}
-                        </p>
-                        {archive.tweetCount && (
-                          <p className="text-sm text-gray-500 mt-1">
-                            {archive.tweetCount} tweets extracted
-                          </p>
-                        )}
-                      </div>
-                    )}
-                    
-                    <div className="flex space-x-2">
+                                     <CardContent>
+                     {archive.tweetCount && (
+                       <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-100">
+                         <p className="text-sm font-medium text-blue-900">
+                           📊 {archive.tweetCount} tweets extracted
+                         </p>
+                       </div>
+                     )}
+                     
+                     <div className="flex space-x-2">
                       <Button 
                         size="sm" 
                         onClick={() => downloadArchive(archive)}
@@ -294,7 +346,11 @@ const Dashboard: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline"
-                        onClick={() => window.open(archive.s3Url, '_blank')}
+                        onClick={() => {
+                          // Navigate to the React report viewer
+                          navigate(`/report/${archive._id}`);
+                        }}
+                        title="View Report"
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
@@ -306,6 +362,50 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8 mt-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <FileText className="w-5 h-5 text-white" />
+              </div>
+              <span className="text-xl font-bold">Tweet Extractor</span>
+            </div>
+            <p className="text-gray-400 mb-4">
+              Powerful tweet extraction made simple
+            </p>
+            <div className="flex justify-center space-x-6 text-sm text-gray-400 mb-4">
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="hover:text-white transition-colors">Support</a>
+            </div>
+            <div className="border-t border-gray-800 pt-4">
+              <p className="text-gray-400 text-sm">
+                Built with ❤️ by{' '}
+                <a 
+                  href="https://github.com/aayushman-singh" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                >
+                  Aayushman Singh
+                </a>
+                {' '}•{' '}
+                <a 
+                  href="https://aayushman.dev" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                >
+                  aayushman.dev
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

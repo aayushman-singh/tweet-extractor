@@ -185,10 +185,32 @@ const Home: React.FC = () => {
             <p className="text-gray-400 mb-4">
               Powerful tweet extraction made simple
             </p>
-            <div className="flex justify-center space-x-6 text-sm text-gray-400">
+            <div className="flex justify-center space-x-6 text-sm text-gray-400 mb-4">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
               <a href="#" className="hover:text-white transition-colors">Support</a>
+            </div>
+            <div className="border-t border-gray-800 pt-4">
+              <p className="text-gray-400 text-sm">
+                Built with ❤️ by{' '}
+                <a 
+                  href="https://github.com/aayushman-singh" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                >
+                  Aayushman Singh
+                </a>
+                {' '}•{' '}
+                <a 
+                  href="https://aayushman.dev" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
+                >
+                  aayushman.dev
+                </a>
+              </p>
             </div>
           </div>
         </div>

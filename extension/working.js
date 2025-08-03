@@ -53,27 +53,27 @@ class XTweetScraper {
     const tweets = [];
     let nextCursor = null;
 
-    console.log("🔍 Parsing response data...", data);
+    // console.log("🔍 Parsing response data...", data);
 
     try {
       // Based on your TypeScript interfaces, the correct path is:
       const instructions =
         data?.data?.user?.result?.timeline?.timeline?.instructions || [];
-      console.log("📋 Found instructions:", instructions.length);
+      // console.log("📋 Found instructions:", instructions.length);
 
       for (const instruction of instructions) {
-        console.log("📝 Processing instruction:", instruction.type);
+        // console.log("📝 Processing instruction:", instruction.type);
 
         if (instruction.type === "TimelineAddEntries" && instruction.entries) {
-          console.log("📦 Found entries:", instruction.entries.length);
+          // console.log("📦 Found entries:", instruction.entries.length);
 
           for (const entry of instruction.entries) {
-            console.log(
-              "🎯 Entry:",
-              entry.entryId,
-              "Type:",
-              entry.content?.entryType
-            );
+            // console.log(
+            //   "🎯 Entry:",
+            //   entry.entryId,
+            //   "Type:",
+            //   entry.content?.entryType
+            // );
 
             // Extract tweet data based on your interface
             if (
@@ -86,11 +86,11 @@ class XTweetScraper {
 
               if (tweetResult.__typename === "Tweet" && tweetResult.legacy) {
                 const tweet = tweetResult.legacy;
-                console.log(
-                  "✅ Found tweet:",
-                  tweet.id_str,
-                  tweet.full_text?.substring(0, 50) + "..."
-                );
+                // console.log(
+                //   "✅ Found tweet:",
+                //   tweet.id_str,
+                //   tweet.full_text?.substring(0, 50) + "..."
+                // );
 
                 tweets.push({
                   id: tweet.id_str,
@@ -140,10 +140,10 @@ class XTweetScraper {
               entry.content?.cursorType === "Bottom"
             ) {
               nextCursor = entry.content?.value;
-              console.log(
-                "🔄 Found cursor:",
-                nextCursor?.substring(0, 20) + "..."
-              );
+              // console.log(
+              //   "🔄 Found cursor:",
+              //   nextCursor?.substring(0, 20) + "..."
+              // );
             }
           }
         }
@@ -342,43 +342,57 @@ class XTweetScraper {
   // Upload to S3 via API
   async uploadToS3(data, authToken, apiBase = 'https://extractor.aayushman.dev') {
     try {
-      console.log('📤 Uploading to S3 via API...');
+      console.log('📤 [UPLOAD] Starting S3 upload process...');
+      console.log('📤 [UPLOAD] API Base:', apiBase);
+      console.log('📤 [UPLOAD] Auth token present:', !!authToken);
+      console.log('📤 [UPLOAD] Data size:', JSON.stringify(data).length, 'bytes');
       
       // Send upload request to content script
       const response = await new Promise((resolve, reject) => {
+        console.log('📤 [UPLOAD] Setting up message listener...');
+        
         // Set up response listener
         const handleResponse = (event) => {
+          console.log('📤 [UPLOAD] Received message:', event.data);
           if (event.data && event.data.type === 'uploadResponse') {
+            console.log('📤 [UPLOAD] Processing upload response...');
             window.removeEventListener('message', handleResponse);
             if (event.data.success) {
+              console.log('📤 [UPLOAD] Upload response success:', event.data);
               resolve(event.data);
             } else {
+              console.log('📤 [UPLOAD] Upload response error:', event.data.error);
               reject(new Error(event.data.error || 'Upload failed'));
             }
           }
         };
         
         window.addEventListener('message', handleResponse);
+        console.log('📤 [UPLOAD] Message listener attached');
         
         // Send upload request
+        console.log('📤 [UPLOAD] Sending upload request to content script...');
         window.postMessage({
           type: 'uploadRequest',
           data: data,
           authToken: authToken
         }, '*');
+        console.log('📤 [UPLOAD] Upload request sent');
         
         // Timeout after 30 seconds
         setTimeout(() => {
+          console.log('📤 [UPLOAD] Upload timeout reached');
           window.removeEventListener('message', handleResponse);
           reject(new Error('Upload timeout'));
         }, 30000);
       });
       
-      console.log('✅ Upload successful:', response);
+      console.log('✅ [UPLOAD] Upload successful:', response);
       return response;
       
     } catch (error) {
-      console.error('❌ Upload error:', error);
+      console.error('❌ [UPLOAD] Upload error:', error);
+      console.error('❌ [UPLOAD] Error details:', error.message);
       throw error;
     }
   }
