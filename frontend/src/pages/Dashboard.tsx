@@ -141,7 +141,10 @@ const Dashboard: React.FC = () => {
   const downloadArchive = async (archive: Archive) => {
     try {
       const token = localStorage.getItem('authToken');
-      const response = await axios.get(archive.s3Url, {
+      const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://extractor.aayushman.dev';
+      
+      // Use the API endpoint instead of direct S3 access to avoid CORS issues
+      const response = await axios.get(`${API_BASE}/api/report/${archive._id}/download`, {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -151,7 +154,7 @@ const Dashboard: React.FC = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', archive.originalName);
+      link.setAttribute('download', archive.originalName.replace('.html', '.json'));
       document.body.appendChild(link);
       link.click();
       link.remove();
@@ -159,9 +162,10 @@ const Dashboard: React.FC = () => {
 
       toast({
         title: "Download Started",
-        description: `${archive.originalName} is being downloaded`,
+        description: `${archive.originalName.replace('.html', '.json')} is being downloaded`,
       });
     } catch (error) {
+      console.error('Download error:', error);
       toast({
         title: "Download Failed",
         description: "Failed to download the archive",
@@ -348,6 +352,8 @@ const Dashboard: React.FC = () => {
                         variant="outline"
                         onClick={() => {
                           // Navigate to the React report viewer
+                          console.log('Navigating to report with ID:', archive._id);
+                          console.log('Archive object:', archive);
                           navigate(`/report/${archive._id}`);
                         }}
                         title="View Report"

@@ -311,6 +311,33 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
     const extension = isJson ? 'json' : 'html';
     const generatedFilename = `report-${dateStr}-${randomNumbers}.${extension}`;
 
+    // Extract profile information from JSON content if available
+    let profileInfo = {
+      username: 'user',
+      displayName: 'User'
+    };
+    let tweetCount = 100;
+
+    if (isJson) {
+      try {
+        const jsonData = JSON.parse(content);
+        if (jsonData.profile) {
+          profileInfo = {
+            username: jsonData.profile.username || 'user',
+            displayName: jsonData.profile.displayName || 'User',
+            bio: jsonData.profile.bio || '',
+            followers: jsonData.profile.followers || 0,
+            following: jsonData.profile.following || 0
+          };
+        }
+        if (jsonData.tweets && Array.isArray(jsonData.tweets)) {
+          tweetCount = jsonData.tweets.length;
+        }
+      } catch (parseError) {
+        console.warn('⚠️ Could not parse JSON content for profile info:', parseError);
+      }
+    }
+
     const params = {
       Bucket: process.env.S3_BUCKET_NAME,
       Key: generatedFilename,
@@ -319,13 +346,16 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
       CacheControl: 'max-age=31536000', // Cache for 1 year
       Metadata: {
         'source': 'tweet-extractor-extension',
-        'created': new Date().toISOString()
+        'created': new Date().toISOString(),
+        'profile-username': profileInfo.username,
+        'profile-displayname': profileInfo.displayName,
+        'tweet-count': tweetCount.toString()
       }
     };
 
     const result = await s3.upload(params).promise();
     
-    // Save archive to database
+    // Save archive to database with profile information
     try {
       await ArchiveDB.create({
         user_id: req.user.userId,
@@ -333,9 +363,12 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
         s3_key: result.Key,
         s3_url: result.Location,
         file_size: Buffer.byteLength(content, 'utf8'),
-        content_type: contentType || 'text/html'
+        content_type: contentType || 'text/html',
+        profile_info: profileInfo,
+        tweet_count: tweetCount
       });
     } catch (dbError) {
+      console.error('❌ Database save error:', dbError);
       // Don't fail the upload if database save fails
     }
     
@@ -343,7 +376,9 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
       success: true,
       url: result.Location,
       key: result.Key,
-      filename: generatedFilename
+      filename: generatedFilename,
+      profileInfo: profileInfo,
+      tweetCount: tweetCount
     });
 
   } catch (error) {
@@ -393,10 +428,10 @@ app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
       size: archive.file_size,
       uploadDate: archive.created_at,
       s3Url: archive.s3_url,
-      tweetCount: 100, // Default value - you can extract this from the actual data
-      profileInfo: {
-        username: 'user', // Default value - you can extract this from the actual data
-        displayName: 'User' // Default value - you can extract this from the actual data
+      tweetCount: archive.tweet_count || 100,
+      profileInfo: archive.profile_info || {
+        username: 'user',
+        displayName: 'User'
       }
     }));
 
@@ -419,18 +454,27 @@ app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
 app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
   try {
     const { reportId } = req.params;
+    console.log('📊 [API] Fetching report with ID:', reportId);
+    console.log('📊 [API] User ID:', req.user.userId);
     
     // Find the archive in the database
     const archive = await ArchiveDB.findById(reportId);
+    console.log('📊 [API] Archive found:', !!archive);
     
     if (!archive) {
+      console.log('📊 [API] Archive not found for ID:', reportId);
       return res.status(404).json({ error: 'Report not found' });
     }
     
     // Check if user owns this archive
     if (archive.user_id.toString() !== req.user.userId.toString()) {
+      console.log('📊 [API] Access denied - user mismatch');
+      console.log('📊 [API] Archive user ID:', archive.user_id.toString());
+      console.log('📊 [API] Request user ID:', req.user.userId.toString());
       return res.status(403).json({ error: 'Access denied' });
     }
+    
+    console.log('📊 [API] Access granted, fetching from S3...');
     
     // Get the report data from S3
     const s3Response = await s3.getObject({
@@ -440,6 +484,7 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
     
     // Parse the HTML content to extract JSON data
     const htmlContent = s3Response.Body.toString('utf-8');
+    console.log('📊 [API] S3 content length:', htmlContent.length);
     
     // Extract JSON data from the HTML (this is a simplified approach)
     // In a real implementation, you'd want to store the JSON data separately
@@ -449,15 +494,84 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
     if (jsonMatch) {
       try {
         reportData = JSON.parse(jsonMatch[1]);
+        console.log('📊 [API] JSON data extracted successfully');
+        
+        // If the JSON data contains profile information, use it
+        if (reportData.profile) {
+          console.log('📊 [API] Using profile info from JSON data');
+          reportData.profileInfo = {
+            username: reportData.profile.username || 'user',
+            displayName: reportData.profile.displayName || 'User',
+            description: reportData.profile.bio || '',
+            followers_count: reportData.profile.followers || 0,
+            following_count: reportData.profile.following || 0,
+            tweet_count: reportData.tweets ? reportData.tweets.length : 100
+          };
+        } else {
+          // Use profile info from database as fallback
+          console.log('📊 [API] Using profile info from database');
+          reportData.profileInfo = archive.profile_info || {
+            username: 'user',
+            displayName: 'User',
+            description: '',
+            followers_count: 0,
+            following_count: 0,
+            tweet_count: archive.tweet_count || 100
+          };
+        }
+        
+        // Ensure tweets array exists
+        if (!reportData.tweets) {
+          reportData.tweets = [];
+        }
+        
+        // Calculate stats from actual tweets
+        const stats = {
+          totalTweets: reportData.tweets.length,
+          totalLikes: 0,
+          totalRetweets: 0,
+          totalViews: 0,
+          totalReplies: 0
+        };
+        
+        reportData.tweets.forEach(tweet => {
+          if (tweet.metrics) {
+            stats.totalLikes += tweet.metrics.likes || 0;
+            stats.totalRetweets += tweet.metrics.retweets || 0;
+            stats.totalViews += tweet.metrics.views || 0;
+            stats.totalReplies += tweet.metrics.replies || 0;
+          }
+        });
+        
+        reportData.stats = stats;
+        
+        // Set timeline
+        if (reportData.tweets.length > 0) {
+          const dates = reportData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
+          reportData.timeline = {
+            startDate: dates[0].toISOString(),
+            endDate: dates[dates.length - 1].toISOString()
+          };
+        } else {
+          reportData.timeline = {
+            startDate: new Date().toISOString(),
+            endDate: new Date().toISOString()
+          };
+        }
+        
+        reportData.generatedAt = reportData.extractedAt || new Date().toISOString();
+        
       } catch (parseError) {
         console.error('Failed to parse JSON data:', parseError);
-        reportData = generateDefaultReportData(archive.filename);
+        reportData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
       }
     } else {
       // Generate default report data if no JSON found
-      reportData = generateDefaultReportData(archive.filename);
+      console.log('📊 [API] No JSON data found, generating default');
+      reportData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
     }
     
+    console.log('📊 [API] Sending report data');
     res.json(reportData);
     
   } catch (error) {
@@ -498,11 +612,75 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
     if (jsonMatch) {
       try {
         jsonData = JSON.parse(jsonMatch[1]);
+        
+        // If the JSON data contains profile information, use it
+        if (jsonData.profile) {
+          jsonData.profileInfo = {
+            username: jsonData.profile.username || 'user',
+            displayName: jsonData.profile.displayName || 'User',
+            description: jsonData.profile.bio || '',
+            followers_count: jsonData.profile.followers || 0,
+            following_count: jsonData.profile.following || 0,
+            tweet_count: jsonData.tweets ? jsonData.tweets.length : 100
+          };
+        } else {
+          // Use profile info from database as fallback
+          jsonData.profileInfo = archive.profile_info || {
+            username: 'user',
+            displayName: 'User',
+            description: '',
+            followers_count: 0,
+            following_count: 0,
+            tweet_count: archive.tweet_count || 100
+          };
+        }
+        
+        // Ensure tweets array exists
+        if (!jsonData.tweets) {
+          jsonData.tweets = [];
+        }
+        
+        // Calculate stats from actual tweets
+        const stats = {
+          totalTweets: jsonData.tweets.length,
+          totalLikes: 0,
+          totalRetweets: 0,
+          totalViews: 0,
+          totalReplies: 0
+        };
+        
+        jsonData.tweets.forEach(tweet => {
+          if (tweet.metrics) {
+            stats.totalLikes += tweet.metrics.likes || 0;
+            stats.totalRetweets += tweet.metrics.retweets || 0;
+            stats.totalViews += tweet.metrics.views || 0;
+            stats.totalReplies += tweet.metrics.replies || 0;
+          }
+        });
+        
+        jsonData.stats = stats;
+        
+        // Set timeline
+        if (jsonData.tweets.length > 0) {
+          const dates = jsonData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
+          jsonData.timeline = {
+            startDate: dates[0].toISOString(),
+            endDate: dates[dates.length - 1].toISOString()
+          };
+        } else {
+          jsonData.timeline = {
+            startDate: new Date().toISOString(),
+            endDate: new Date().toISOString()
+          };
+        }
+        
+        jsonData.generatedAt = jsonData.extractedAt || new Date().toISOString();
+        
       } catch (parseError) {
-        jsonData = generateDefaultReportData(archive.filename);
+        jsonData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
       }
     } else {
-      jsonData = generateDefaultReportData(archive.filename);
+      jsonData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);
     }
     
     res.setHeader('Content-Type', 'application/json');
@@ -516,19 +694,19 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
 });
 
 // Helper function to generate default report data
-function generateDefaultReportData(filename) {
+function generateDefaultReportData(filename, profileInfo = null, tweetCount = 100) {
   // Extract username from filename (e.g., "PixPerk__tweet_archive (1).html" -> "PixPerk_")
   const usernameMatch = filename.match(/^([^_]+)_/);
   const username = usernameMatch ? usernameMatch[1] : 'user';
   
   return {
-    profileInfo: {
+    profileInfo: profileInfo || {
       username: username,
       displayName: username.charAt(0).toUpperCase() + username.slice(1),
       description: 'Twitter user',
       followers_count: 0,
       following_count: 0,
-      tweet_count: 100
+      tweet_count: tweetCount || 100
     },
     tweets: [
       {
@@ -545,7 +723,7 @@ function generateDefaultReportData(filename) {
       }
     ],
     stats: {
-      totalTweets: 100,
+      totalTweets: tweetCount || 100,
       totalLikes: 0,
       totalRetweets: 0,
       totalViews: 0,

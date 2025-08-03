@@ -84,8 +84,22 @@ const ReportViewer: React.FC = () => {
   const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://extractor.aayushman.dev';
 
   useEffect(() => {
+    console.log('ReportViewer mounted with reportId:', reportId);
+    console.log('Current URL:', window.location.href);
+    
     if (reportId) {
+      console.log('ReportId is valid, fetching data...');
       fetchReportData();
+    } else {
+      console.error('No reportId provided in URL');
+      console.error('URL pathname:', window.location.pathname);
+      console.error('URL search:', window.location.search);
+      toast({
+        title: "Error",
+        description: "No report ID provided in URL",
+        variant: "destructive",
+      });
+      navigate('/dashboard');
     }
   }, [reportId]);
 
@@ -98,6 +112,7 @@ const ReportViewer: React.FC = () => {
   const fetchReportData = async () => {
     try {
       setLoading(true);
+      console.log('Fetching report data for ID:', reportId);
       const token = localStorage.getItem('authToken');
       const response = await axios.get(`${API_BASE}/api/report/${reportId}`, {
         headers: {

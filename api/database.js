@@ -98,6 +98,32 @@ const archiveSchema = new mongoose.Schema({
     content_type: {
         type: String,
         default: 'text/html'
+    },
+    profile_info: {
+        username: {
+            type: String,
+            default: 'user'
+        },
+        displayName: {
+            type: String,
+            default: 'User'
+        },
+        bio: {
+            type: String,
+            default: ''
+        },
+        followers: {
+            type: Number,
+            default: 0
+        },
+        following: {
+            type: Number,
+            default: 0
+        }
+    },
+    tweet_count: {
+        type: Number,
+        default: 100
     }
 }, {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
@@ -263,7 +289,7 @@ const ArchiveDB = {
         try {
             await connectDB();
             
-            const { user_id, filename, s3_key, s3_url, file_size, content_type } = archiveData;
+            const { user_id, filename, s3_key, s3_url, file_size, content_type, profile_info, tweet_count } = archiveData;
             
             const archive = new Archive({
                 user_id,
@@ -271,7 +297,15 @@ const ArchiveDB = {
                 s3_key,
                 s3_url,
                 file_size,
-                content_type
+                content_type,
+                profile_info: profile_info || {
+                    username: 'user',
+                    displayName: 'User',
+                    bio: '',
+                    followers: 0,
+                    following: 0
+                },
+                tweet_count: tweet_count || 100
             });
             
             const savedArchive = await archive.save();
@@ -284,6 +318,8 @@ const ArchiveDB = {
                 s3_url: savedArchive.s3_url,
                 file_size: savedArchive.file_size,
                 content_type: savedArchive.content_type,
+                profile_info: savedArchive.profile_info,
+                tweet_count: savedArchive.tweet_count,
                 created_at: savedArchive.created_at
             };
         } catch (error) {
@@ -310,6 +346,14 @@ const ArchiveDB = {
                 s3_url: archive.s3_url,
                 file_size: archive.file_size,
                 content_type: archive.content_type,
+                profile_info: archive.profile_info || {
+                    username: 'user',
+                    displayName: 'User',
+                    bio: '',
+                    followers: 0,
+                    following: 0
+                },
+                tweet_count: archive.tweet_count || 100,
                 created_at: archive.created_at
             }));
         } catch (error) {
@@ -336,6 +380,14 @@ const ArchiveDB = {
                 s3_url: archive.s3_url,
                 file_size: archive.file_size,
                 content_type: archive.content_type,
+                profile_info: archive.profile_info || {
+                    username: 'user',
+                    displayName: 'User',
+                    bio: '',
+                    followers: 0,
+                    following: 0
+                },
+                tweet_count: archive.tweet_count || 100,
                 created_at: archive.created_at
             };
         } catch (error) {

@@ -43,10 +43,12 @@ const corsOptions = {
     
     const allowedOrigins = [
       'chrome-extension://*',
-      'https://your-domain.com',
-      'https://www.your-domain.com',
+      'https://extractor.aayushman.dev',
+      'https://www.extractor.aayushman.dev',
       'http://localhost:3000',
-      'http://localhost:3001'
+      'http://localhost:3001',
+      'http://localhost:5173', // Vite dev server
+      'http://localhost:4173'  // Vite preview
     ];
     
     // Check if origin matches any pattern
@@ -61,6 +63,7 @@ const corsOptions = {
     if (isAllowed || NODE_ENV === 'development') {
       callback(null, true);
     } else {
+      console.log('CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },

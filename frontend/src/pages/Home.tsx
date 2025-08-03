@@ -1,10 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Download, Zap, Shield, Users, FileText, Globe } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Home: React.FC = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect to dashboard if user is already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard');
+    }
+  }, [user, navigate]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Navigation */}

@@ -120,27 +120,38 @@
         };
 
         try {
+            console.log('🔍 [EXTENSION] Extracting profile info...');
+            
             // Extract username from URL or page
             const urlPath = window.location.pathname;
             profileInfo.username = urlPath.split('/')[1] || '';
+            console.log('🔍 [EXTENSION] Username from URL:', profileInfo.username);
 
             // Display name
             const displayNameElement = document.querySelector('[data-testid="UserName"] span');
             if (displayNameElement) {
                 profileInfo.displayName = displayNameElement.textContent.trim();
+                console.log('🔍 [EXTENSION] Display name found:', profileInfo.displayName);
+            } else {
+                console.warn('⚠️ [EXTENSION] Display name element not found');
             }
 
             // Bio
             const bioElement = document.querySelector('[data-testid="UserDescription"]');
             if (bioElement) {
                 profileInfo.bio = bioElement.textContent.trim();
+                console.log('🔍 [EXTENSION] Bio found:', profileInfo.bio.substring(0, 50) + '...');
+            } else {
+                console.warn('⚠️ [EXTENSION] Bio element not found');
             }
 
             // Profile stats
             const statsElements = document.querySelectorAll('a[href*="/following"], a[href*="/verified_followers"]');
+            console.log('🔍 [EXTENSION] Found stats elements:', statsElements.length);
             statsElements.forEach(element => {
                 const text = element.textContent.toLowerCase();
                 const number = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
+                console.log('🔍 [EXTENSION] Stats element:', text, number);
                 
                 if (text.includes('following')) {
                     profileInfo.following = number;
@@ -153,7 +164,12 @@
             const profileImageElement = document.querySelector('[data-testid="UserAvatar-Container-"] img');
             if (profileImageElement) {
                 profileInfo.profileImage = profileImageElement.src;
+                console.log('🔍 [EXTENSION] Profile image found');
+            } else {
+                console.warn('⚠️ [EXTENSION] Profile image element not found');
             }
+
+            console.log('🔍 [EXTENSION] Final profile info:', profileInfo);
 
         } catch (error) {
             console.warn('⚠️ Error extracting profile info:', error);
@@ -277,7 +293,12 @@
 
     async function uploadToAPI(tweetsData, authToken, apiBase) {
         try {
+            console.log('📤 [EXTENSION] Preparing to upload data...');
+            console.log('📤 [EXTENSION] Profile info:', tweetsData.profile);
+            console.log('📤 [EXTENSION] Tweet count:', tweetsData.tweets.length);
+            
             const jsonContent = JSON.stringify(tweetsData, null, 2);
+            console.log('📤 [EXTENSION] JSON content size:', jsonContent.length, 'bytes');
             
             // Use postMessage to communicate with content script
             return new Promise((resolve, reject) => {
@@ -288,11 +309,13 @@
                     if (event.data.type === 'uploadResponse' && event.data.id === messageId) {
                         window.removeEventListener('message', handleResponse);
                         if (event.data.success) {
+                            console.log('📤 [EXTENSION] Upload successful:', event.data);
                             resolve({
                                 url: event.data.url,
                                 filename: event.data.filename
                             });
                         } else {
+                            console.error('📤 [EXTENSION] Upload failed:', event.data.error);
                             reject(new Error(event.data.error || 'Upload failed'));
                         }
                     }
