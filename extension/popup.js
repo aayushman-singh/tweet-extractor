@@ -18,6 +18,7 @@ async function downloadTweets() {
   const tweetCountSelect = document.getElementById('tweetCount');
   const customTweetCountInput = document.getElementById('customTweetCount');
   const downloadBtn = document.getElementById('downloadTweetsBtn');
+  const uploadToS3Checkbox = document.getElementById('uploadToS3');
   
   // Get the selected count
   let count;
@@ -31,6 +32,8 @@ async function downloadTweets() {
     count = parseInt(tweetCountSelect.value);
   }
   
+  const uploadToS3 = uploadToS3Checkbox.checked;
+  
   try {
     // Disable button and show loading
     downloadBtn.disabled = true;
@@ -43,10 +46,10 @@ async function downloadTweets() {
     // Execute script in the page to trigger download
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: (tweetCount) => {
+      func: (tweetCount, uploadToS3) => {
         // Send message to content script
         document.dispatchEvent(new CustomEvent('requestTweetDownload', {
-          detail: { count: tweetCount }
+          detail: { count: tweetCount, uploadToS3: uploadToS3 }
         }));
         
         // Return a promise that will be resolved when we get the result
@@ -69,13 +72,17 @@ async function downloadTweets() {
           }, 30000);
         });
       },
-      args: [count]
+      args: [count, uploadToS3]
     });
     
     const result = results[0].result;
     
     if (result.success) {
-      showStatus(`✅ Successfully downloaded ${result.count} tweets as HTML archive!`, 'success');
+      if (result.uploadedToS3 && result.url) {
+        showStatus(`✅ Successfully uploaded ${result.count} tweets! URL: ${result.url}`, 'success');
+      } else {
+        showStatus(`✅ Successfully downloaded ${result.count} tweets as HTML archive!`, 'success');
+      }
     } else {
       showStatus(`❌ Error: ${result.error}`, 'error');
     }

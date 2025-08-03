@@ -1,169 +1,186 @@
-# 🚀 JS Script Runner - Chrome Extension
+# 🐦 Tweet Downloader - Chrome Extension & API
 
-A super lightweight Chrome extension that allows you to run JavaScript scripts on any webpage and download the results as HTML files.
+A comprehensive solution for downloading tweets from X/Twitter profiles with rich HTML archives and cloud hosting capabilities.
 
-## Features
-
-- ✨ **Lightweight**: Minimal codebase with no external dependencies
-- 🎯 **Easy to Use**: Simple popup interface with code editor
-- 📥 **Download Results**: Automatically download results as formatted HTML files
-- 🔧 **Built-in Examples**: Quick examples for common use cases
-- 🎨 **Modern UI**: Beautiful gradient design with smooth animations
-- ⚡ **Fast Execution**: Runs scripts directly in the page context
-
-## Installation
-
-### Method 1: Load as Unpacked Extension (Recommended)
-
-1. Download or clone this repository
-2. Open Chrome and go to `chrome://extensions/`
-3. Enable "Developer mode" in the top right
-4. Click "Load unpacked" and select the extension folder
-5. The extension icon should appear in your toolbar
-
-### Method 2: From Chrome Web Store (Coming Soon)
-
-*This extension will be available on the Chrome Web Store soon!*
-
-## Usage
-
-1. **Navigate to any webpage** where you want to run JavaScript
-2. **Click the extension icon** in your toolbar
-3. **Enter your JavaScript code** in the text area
-4. **Click "Run Script"** to execute the code
-5. **Click "Download Result"** to save the output as HTML
-
-### Quick Examples
-
-The extension includes several built-in examples:
-
-- **Page Title**: Get the current page title and URL
-- **All Links**: Extract all links from the page
-- **All Images**: Get information about all images
-- **Custom Data**: Extract comprehensive page data
-
-### Keyboard Shortcuts
-
-- `Ctrl + Enter`: Run the current script
-
-## Example Scripts
-
-### Basic Page Information
-```javascript
-return {
-  title: document.title,
-  url: window.location.href,
-  timestamp: new Date().toISOString()
-};
-```
-
-### Extract All Links
-```javascript
-const links = Array.from(document.querySelectorAll('a')).map(link => ({
-  text: link.textContent.trim(),
-  href: link.href,
-  title: link.title
-}));
-
-return {
-  totalLinks: links.length,
-  links: links.slice(0, 50)
-};
-```
-
-### Get Page Metadata
-```javascript
-const meta = {};
-document.querySelectorAll('meta').forEach(tag => {
-  const name = tag.getAttribute('name') || tag.getAttribute('property');
-  const content = tag.getAttribute('content');
-  if (name && content) {
-    meta[name] = content;
-  }
-});
-
-return meta;
-```
-
-### Using Helper Functions
-```javascript
-// Wait for an element to load
-await jsScriptRunnerHelpers.waitForElement('.dynamic-content');
-
-// Get all text content
-const allText = jsScriptRunnerHelpers.getAllText();
-
-// Get page metadata
-const metadata = jsScriptRunnerHelpers.getPageMetadata();
-
-return {
-  text: allText,
-  metadata: metadata
-};
-```
-
-## Available Helper Functions
-
-The extension provides several helper functions you can use in your scripts:
-
-- `jsScriptRunnerHelpers.waitForElement(selector, timeout)`: Wait for an element to appear
-- `jsScriptRunnerHelpers.scrollToBottom()`: Scroll to the bottom of the page
-- `jsScriptRunnerHelpers.getAllText()`: Get all text content from the page
-- `jsScriptRunnerHelpers.getPageMetadata()`: Extract all meta tags
-
-## File Structure
+## 📁 Project Structure
 
 ```
 x-extension/
-├── manifest.json      # Extension configuration
-├── popup.html         # Main popup interface
-├── popup.js           # Popup logic and UI interactions
-├── content.js         # Content script for page execution
-├── background.js      # Background service worker
+├── extension/          # Chrome Extension files
+│   ├── manifest.json
+│   ├── popup.html
+│   ├── popup.js
+│   ├── content.js
+│   ├── working.js
+│   ├── download-helper.js
+│   ├── background.js
+│   └── README.md
+├── api/                # Backend API for S3 uploads
+│   ├── s3-upload-api.js
+│   ├── package.json
+│   ├── vercel.json
+│   └── README.md
 └── README.md          # This file
 ```
 
-## Permissions
+## 🚀 Quick Start
 
-This extension requires the following permissions:
+### Chrome Extension
 
-- `activeTab`: To access the current tab and run scripts
-- `downloads`: To download result files
+1. **Install the Extension:**
+   ```bash
+   cd extension
+   # Load the extension folder in chrome://extensions/
+   ```
 
-## Development
+2. **Use the Extension:**
+   - Navigate to any X/Twitter profile (e.g., `x.com/username`)
+   - Click the Tweet Downloader extension icon
+   - Select tweet count and output option
+   - Download or upload to cloud
 
-To modify or extend the extension:
+### Backend API (Optional)
 
-1. Make your changes to the source files
-2. Go to `chrome://extensions/`
-3. Click the refresh icon on the extension card
-4. Test your changes
+1. **Deploy to Vercel:**
+   ```bash
+   cd api
+   npm install
+   vercel
+   ```
 
-## Troubleshooting
+2. **Configure Environment Variables:**
+   - `AWS_ACCESS_KEY_ID`
+   - `AWS_SECRET_ACCESS_KEY`
+   - `AWS_REGION`
+   - `S3_BUCKET_NAME`
 
-### Extension Not Working?
-- Make sure you're on a webpage (not a chrome:// page)
-- Check the browser console for any error messages
-- Try refreshing the extension in `chrome://extensions/`
+## ✨ Features
 
-### Script Not Executing?
-- Check that your JavaScript syntax is correct
-- Make sure you're returning a value from your script
-- Try one of the built-in examples first
+### Chrome Extension
+- 🐦 **Tweet Download** - Extract tweets from any X/Twitter profile
+- 📊 **Flexible Count** - Download 10, 100, 500, 1000, 10000, or custom amount
+- 🌐 **Cloud Upload** - Upload to custom domain or download locally
+- 📱 **Rich HTML Output** - Interactive archives with sorting and filtering
+- 🔍 **Search & Filter** - Search through tweet content
+- 📈 **Multiple Sort Options** - By date, likes, retweets, views, engagement
+- 📄 **Export Options** - JSON, CSV, and HTML formats
 
-### Download Not Working?
-- Check that you've run a script first
-- Make sure your browser allows downloads
-- Check the downloads folder in Chrome
+### Backend API
+- 🌐 **S3 Upload** - Upload HTML files to AWS S3
+- 🔒 **Security** - CORS configured for Chrome extensions
+- 📁 **Public Access** - Generated reports accessible via custom URLs
+- 🚀 **Serverless** - Deploy to Vercel, Netlify, or AWS Lambda
+- 📊 **Monitoring** - Health check and recent uploads endpoints
 
-## Contributing
+## 🛠️ Development
 
-Feel free to submit issues, feature requests, or pull requests to improve this extension!
+### Extension Development
+```bash
+cd extension
+# Make changes to files
+# Refresh extension in chrome://extensions/
+# Test on Twitter/X profile pages
+```
 
-## License
+### API Development
+```bash
+cd api
+npm install
+npm run dev
+# API runs on http://localhost:3000
+```
 
-This project is open source and available under the MIT License.
+## 📋 Requirements
 
----
+### Extension
+- Chrome/Chromium browser (Manifest V3)
+- Active internet connection
+- Access to X/Twitter website
 
-**Happy scripting! 🚀** 
+### API
+- Node.js 16+
+- AWS S3 bucket
+- AWS credentials
+- Domain for hosting (optional)
+
+## 🔧 Configuration
+
+### Extension Configuration
+Update `working.js` to change the API endpoint:
+```javascript
+const API_BASE_URL = 'https://your-domain.com';
+```
+
+### API Configuration
+Set environment variables:
+```env
+AWS_ACCESS_KEY_ID=your_key
+AWS_SECRET_ACCESS_KEY=your_secret
+AWS_REGION=us-east-1
+S3_BUCKET_NAME=your-bucket
+```
+
+## 📊 Output Examples
+
+### Generated URLs
+- `https://extractor.aayushman.dev/report1704123456.html`
+- Interactive HTML with sorting and filtering
+- JSON/CSV export options within the HTML
+
+### File Structure
+```
+report1704123456.html
+├── Tweet statistics
+├── Timeline visualization
+├── Sort & filter controls
+├── Interactive tweet list
+└── Export buttons (JSON/CSV)
+```
+
+## 🚀 Deployment
+
+### Extension
+1. Load unpacked in Chrome developer mode
+2. Or package for Chrome Web Store
+
+### API
+1. **Vercel (Recommended):**
+   ```bash
+   cd api && vercel
+   ```
+
+2. **Netlify:**
+   ```bash
+   cd api && netlify deploy
+   ```
+
+3. **AWS Lambda:**
+   ```bash
+   cd api && serverless deploy
+   ```
+
+## 🔒 Security
+
+- **Extension**: Runs only on X/Twitter domains
+- **API**: CORS restricted to extension origins
+- **S3**: Public read access for generated reports only
+- **Credentials**: Environment-based AWS configuration
+
+## 📝 License
+
+MIT License - see LICENSE.txt for details
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch
+3. Make changes in appropriate folder (`extension/` or `api/`)
+4. Test thoroughly
+5. Submit pull request
+
+## 📞 Support
+
+For issues or questions:
+- Create an issue in this repository
+- Check the README files in `extension/` or `api/` folders
+- Review the example HTML output in the repository

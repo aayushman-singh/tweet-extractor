@@ -1,0 +1,21 @@
+{
+  "name": "tweet-downloader-s3-api",
+  "version": "1.0.0",
+  "description": "S3 upload API for Tweet Downloader Chrome Extension",
+  "main": "s3-upload-api.js",
+  "scripts": {
+    "start": "node s3-upload-api.js",
+    "dev": "nodemon s3-upload-api.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "aws-sdk": "^2.1490.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

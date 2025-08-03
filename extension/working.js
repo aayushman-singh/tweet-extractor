@@ -337,8 +337,41 @@ class XTweetScraper {
     console.log(`💾 Exported ${tweets.length} tweets to ${filename}`);
   }
 
-  // Generate and download HTML report
-  exportToHTML(tweets, username = "User") {
+  // Upload HTML to S3 bucket
+  async uploadToS3(htmlContent, filename) {
+    try {
+      // S3 upload configuration
+      const API_BASE_URL = 'https://extractor.aayushman.dev'; // Your API domain
+      
+      // Upload via your API endpoint
+      const response = await fetch(`${API_BASE_URL}/api/upload-to-s3`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename: filename,
+          content: htmlContent,
+          contentType: 'text/html'
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log(`✅ HTML uploaded successfully: ${result.url}`);
+        return { success: true, url: result.url };
+      } else {
+        const errorText = await response.text();
+        throw new Error(`Failed to upload to S3: ${errorText}`);
+      }
+    } catch (error) {
+      console.error('❌ S3 upload failed:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  // Generate and download/upload HTML report
+  exportToHTML(tweets, username = "User", uploadToS3 = false) {
     const oldest = this.getOldestTweets(tweets, 20);
     const newest = this.getNewestTweets(tweets, 20);
 
@@ -726,15 +759,45 @@ class XTweetScraper {
 </body>
 </html>`;
 
-    const dataBlob = new Blob([html], { type: "text/html" });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${username}_tweet_archive.html`;
-    link.click();
-    URL.revokeObjectURL(url);
-
-    console.log(`🎨 Generated HTML archive with ${tweets.length} tweets!`);
+    if (uploadToS3) {
+      // Upload to S3 and return URL
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+      const filename = `report${Date.now()}.html`; // Simple filename like report4534535.html
+      
+      const uploadResult = await this.uploadToS3(html, filename);
+      
+      if (uploadResult.success) {
+        console.log(`🎨 Generated and uploaded HTML archive with ${tweets.length} tweets!`);
+        console.log(`🌐 View at: ${uploadResult.url}`);
+        
+        // Also copy URL to clipboard
+        try {
+          await navigator.clipboard.writeText(uploadResult.url);
+          console.log(`📋 URL copied to clipboard!`);
+        } catch (e) {
+          console.log(`📋 Could not copy to clipboard: ${e.message}`);
+        }
+        
+        return uploadResult.url;
+      } else {
+        console.error(`❌ Upload failed: ${uploadResult.error}`);
+        // Fallback to local download
+        uploadToS3 = false;
+      }
+    }
+    
+    if (!uploadToS3) {
+      // Local download
+      const dataBlob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${username}_tweet_archive.html`;
+      link.click();
+      URL.revokeObjectURL(url);
+      
+      console.log(`🎨 Generated HTML archive with ${tweets.length} tweets!`);
+    }
   }
 
   // Helper function to escape HTML
@@ -873,7 +936,7 @@ class XTweetScraper {
   }
 
   // Download tweets function that can be called from popup
-  async downloadTweets(count = 100) {
+  async downloadTweets(count = 100, uploadToS3 = false) {
     try {
       console.log(`🚀 Starting download of ${count} tweets...`);
       
@@ -897,16 +960,18 @@ class XTweetScraper {
       
       console.log(`✅ Successfully fetched ${limitedTweets.length} tweets (requested: ${count})`);
       
-      // Export to HTML file
+      // Export to HTML file or upload to S3
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const filename = `${username}_tweet_archive_${limitedTweets.length}_${timestamp}.html`;
-      this.exportToHTML(limitedTweets, username);
+      const exportResult = await this.exportToHTML(limitedTweets, username, uploadToS3);
       
       return {
         success: true,
         count: limitedTweets.length,
         filename: filename,
-        tweets: limitedTweets
+        tweets: limitedTweets,
+        uploadedToS3: uploadToS3,
+        url: uploadToS3 ? exportResult : null
       };
       
     } catch (error) {
