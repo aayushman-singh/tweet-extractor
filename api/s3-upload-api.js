@@ -561,10 +561,12 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
     }
     
     console.log('📊 [API] Access granted, fetching from S3...');
+    console.log('📊 [API] S3 Bucket:', process.env.S3_BUCKET_NAME);
+    console.log('📊 [API] S3 Key:', archive.s3_key);
     
     // Get the report data from S3
     const s3Response = await s3.getObject({
-      Bucket: process.env.AWS_S3_BUCKET,
+      Bucket: process.env.S3_BUCKET_NAME,
       Key: archive.s3_key
     }).promise();
     
@@ -723,7 +725,7 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
     
     // Get the report data from S3
     const s3Response = await s3.getObject({
-      Bucket: process.env.AWS_S3_BUCKET,
+      Bucket: process.env.S3_BUCKET_NAME,
       Key: archive.s3_key
     }).promise();
     

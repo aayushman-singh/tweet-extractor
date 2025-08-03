@@ -371,36 +371,37 @@ const Dashboard: React.FC = () => {
                      )}
                      
                      <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
-                        onClick={() => downloadArchive(archive)}
-                        className="flex-1"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Download
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => {
-                          // Navigate to the React report viewer
-                          console.log('Navigating to report with ID:', archive._id);
-                          console.log('Archive object:', archive);
-                          navigate(`/report/${archive._id}`);
-                        }}
-                        title="View Report"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handleDeleteArchive(archive._id)}
-                        title="Delete Archive"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
+                       <Button 
+                         size="sm" 
+                         onClick={() => downloadArchive(archive)}
+                       >
+                         <Download className="w-4 h-4 mr-2" />
+                         Download
+                       </Button>
+                       <Button 
+                         size="sm" 
+                         variant="outline"
+                         onClick={() => {
+                           // Navigate to the React report viewer
+                           console.log('Navigating to report with ID:', archive._id);
+                           console.log('Archive object:', archive);
+                           navigate(`/report/${archive._id}`);
+                         }}
+                         title="View Report"
+                         className="flex-1"
+                       >
+                         <Eye className="w-4 h-4 mr-2" />
+                         View
+                       </Button>
+                       <Button 
+                         size="sm" 
+                         variant="outline"
+                         onClick={() => handleDeleteArchive(archive._id)}
+                         title="Delete Archive"
+                       >
+                         <Trash2 className="w-4 h-4" />
+                       </Button>
+                     </div>
                   </CardContent>
                 </Card>
               ))}
