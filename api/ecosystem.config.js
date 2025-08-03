@@ -52,11 +52,11 @@ module.exports = {
   // Deployment configuration (optional)
   deploy: {
     production: {
-      user: 'ubuntu',
-      host: ['your-ec2-instance-ip'],
-      ref: 'origin/main',
-      repo: 'https://github.com/your-username/tweet-extractor.git',
-      path: '/home/ubuntu/tweet-extractor',
+      user: 'ec2-user',
+      host: ['3.110.132.100'],
+      ref: 'origin/master',
+      repo: 'https://github.com/aayushman-singh/tweet-extractor.git',
+      path: '/home/ec2-user/tweet-extractor/api',
       'pre-deploy-local': '',
       'post-deploy': 'cd api && npm install --production && pm2 reload ecosystem.config.js --env production',
       'pre-setup': '',
