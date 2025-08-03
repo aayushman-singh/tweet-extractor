@@ -312,6 +312,7 @@ const ArchiveDB = {
             
             return {
                 id: savedArchive._id,
+                _id: savedArchive._id, // Also include _id for compatibility
                 user_id: savedArchive.user_id,
                 filename: savedArchive.filename,
                 s3_key: savedArchive.s3_key,
@@ -338,8 +339,15 @@ const ArchiveDB = {
                 .skip(offset)
                 .lean(); // Return plain JavaScript objects instead of Mongoose documents
             
+            console.log('🔍 [DB] Raw archives from database:', archives.length);
+            if (archives.length > 0) {
+                console.log('🔍 [DB] First archive keys:', Object.keys(archives[0]));
+                console.log('🔍 [DB] First archive _id:', archives[0]._id);
+            }
+            
             return archives.map(archive => ({
                 id: archive._id,
+                _id: archive._id, // Also include _id for compatibility
                 user_id: archive.user_id,
                 filename: archive.filename,
                 s3_key: archive.s3_key,
@@ -372,8 +380,12 @@ const ArchiveDB = {
                 return null;
             }
             
+            console.log('🔍 [DB] Found archive by ID:', archiveId);
+            console.log('🔍 [DB] Archive _id:', archive._id);
+            
             return {
                 id: archive._id,
+                _id: archive._id, // Also include _id for compatibility
                 user_id: archive.user_id,
                 filename: archive.filename,
                 s3_key: archive.s3_key,
@@ -425,6 +437,30 @@ const ArchiveDB = {
                 total_archives: stats.total_archives || 0,
                 total_size: stats.total_size || 0,
                 last_archive_date: stats.last_archive_date || null
+            };
+        } catch (error) {
+            throw { error: 'Database error: ' + error.message };
+        }
+    },
+
+    // Delete archive by ID
+    deleteById: async (archiveId) => {
+        try {
+            await connectDB();
+            
+            const result = await Archive.findByIdAndDelete(archiveId);
+            
+            if (!result) {
+                throw { error: 'Archive not found' };
+            }
+            
+            return {
+                success: true,
+                deletedArchive: {
+                    id: result._id,
+                    filename: result.filename,
+                    s3_key: result.s3_key
+                }
             };
         } catch (error) {
             throw { error: 'Database error: ' + error.message };

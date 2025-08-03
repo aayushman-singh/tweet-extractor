@@ -321,7 +321,24 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
     if (isJson) {
       try {
         const jsonData = JSON.parse(content);
-        if (jsonData.profile) {
+        console.log('📤 [API] Parsed JSON data, checking for profile info...');
+        console.log('📤 [API] JSON keys:', Object.keys(jsonData));
+        
+        if (jsonData.metadata) {
+          // Use metadata format
+          console.log('📤 [API] Found metadata section:', jsonData.metadata);
+          profileInfo = {
+            username: jsonData.metadata.username || 'user',
+            displayName: jsonData.metadata.username || 'User',
+            bio: '',
+            followers: 0,
+            following: 0
+          };
+          tweetCount = jsonData.metadata.total_tweets || (jsonData.tweets ? jsonData.tweets.length : 100);
+          console.log('📤 [API] Extracted profile info from metadata:', profileInfo);
+        } else if (jsonData.profile) {
+          // Use profile format (fallback)
+          console.log('📤 [API] Found profile section:', jsonData.profile);
           profileInfo = {
             username: jsonData.profile.username || 'user',
             displayName: jsonData.profile.displayName || 'User',
@@ -329,9 +346,10 @@ app.post('/api/upload-to-s3', authenticateToken, async (req, res) => {
             followers: jsonData.profile.followers || 0,
             following: jsonData.profile.following || 0
           };
-        }
-        if (jsonData.tweets && Array.isArray(jsonData.tweets)) {
-          tweetCount = jsonData.tweets.length;
+          tweetCount = jsonData.tweets ? jsonData.tweets.length : 100;
+          console.log('📤 [API] Extracted profile info from profile:', profileInfo);
+        } else {
+          console.log('📤 [API] No metadata or profile section found, using defaults');
         }
       } catch (parseError) {
         console.warn('⚠️ Could not parse JSON content for profile info:', parseError);
@@ -413,16 +431,84 @@ app.get('/api/database-info', async (req, res) => {
   }
 });
 
+// Delete archive endpoint
+app.delete('/api/archive/:archiveId', authenticateToken, async (req, res) => {
+  try {
+    const { archiveId } = req.params;
+    console.log('🗑️ [API] Deleting archive with ID:', archiveId);
+    
+    // Find the archive in the database
+    const archive = await ArchiveDB.findById(archiveId);
+    
+    if (!archive) {
+      console.log('🗑️ [API] Archive not found for ID:', archiveId);
+      return res.status(404).json({ error: 'Archive not found' });
+    }
+    
+    // Check if user owns this archive
+    if (archive.user_id.toString() !== req.user.userId.toString()) {
+      console.log('🗑️ [API] Access denied - user mismatch');
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    
+    console.log('🗑️ [API] Access granted, deleting from S3 and database...');
+    
+    // Delete from S3
+    try {
+      await s3.deleteObject({
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: archive.s3_key
+      }).promise();
+      console.log('🗑️ [API] Successfully deleted from S3');
+    } catch (s3Error) {
+      console.warn('⚠️ [API] S3 deletion failed (file might not exist):', s3Error);
+      // Continue with database deletion even if S3 deletion fails
+    }
+    
+    // Delete from database
+    try {
+      await ArchiveDB.deleteById(archiveId);
+      console.log('🗑️ [API] Successfully deleted from database');
+    } catch (dbError) {
+      console.error('❌ [API] Database deletion failed:', dbError);
+      return res.status(500).json({ error: 'Failed to delete archive from database' });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Archive deleted successfully'
+    });
+    
+  } catch (error) {
+    console.error('❌ Error deleting archive:', error);
+    res.status(500).json({ error: 'Failed to delete the archive' });
+  }
+});
+
 // List user's recent uploads
 app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit) || 10, 50); // Max 50 items
     const offset = parseInt(req.query.offset) || 0;
 
+    console.log('📋 [API] Fetching archives for user:', req.user.userId);
+    console.log('📋 [API] Limit:', limit, 'Offset:', offset);
+
     const archives = await ArchiveDB.findByUserId(req.user.userId, limit, offset);
     
+    console.log('📋 [API] Found archives:', archives.length);
+    console.log('📋 [API] First archive structure:', archives[0] ? Object.keys(archives[0]) : 'No archives');
+    archives.forEach((archive, index) => {
+      console.log(`📋 [API] Archive ${index + 1}:`, {
+        id: archive.id,
+        _id: archive._id,
+        filename: archive.filename,
+        created_at: archive.created_at
+      });
+    });
+    
     const archivesList = archives.map(archive => ({
-      _id: archive._id,
+      _id: archive.id,
       filename: archive.filename,
       originalName: archive.filename,
       size: archive.file_size,
@@ -496,8 +582,31 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
         reportData = JSON.parse(jsonMatch[1]);
         console.log('📊 [API] JSON data extracted successfully');
         
-        // If the JSON data contains profile information, use it
-        if (reportData.profile) {
+        // If the JSON data contains metadata information, use it
+        if (reportData.metadata) {
+          console.log('📊 [API] Using metadata from JSON data');
+          reportData.profileInfo = {
+            username: reportData.metadata.username || 'user',
+            displayName: reportData.metadata.username || 'User', // Use username as display name if no separate display name
+            description: '',
+            followers_count: 0,
+            following_count: 0,
+            tweet_count: reportData.metadata.total_tweets || (reportData.tweets ? reportData.tweets.length : 100)
+          };
+          
+          // Set timeline from metadata if available
+          if (reportData.metadata.date_range) {
+            reportData.timeline = {
+              startDate: reportData.metadata.date_range.oldest,
+              endDate: reportData.metadata.date_range.newest
+            };
+          }
+          
+          // Set generatedAt from metadata
+          reportData.generatedAt = reportData.metadata.extracted_at || new Date().toISOString();
+          
+        } else if (reportData.profile) {
+          // Fallback to profile object if metadata doesn't exist
           console.log('📊 [API] Using profile info from JSON data');
           reportData.profileInfo = {
             username: reportData.profile.username || 'user',
@@ -540,26 +649,41 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
             stats.totalRetweets += tweet.metrics.retweets || 0;
             stats.totalViews += tweet.metrics.views || 0;
             stats.totalReplies += tweet.metrics.replies || 0;
+          } else if (tweet.favorite_count !== undefined) {
+            // Handle the format from your example
+            stats.totalLikes += tweet.favorite_count || 0;
+            stats.totalRetweets += tweet.retweet_count || 0;
           }
         });
         
-        reportData.stats = stats;
-        
-        // Set timeline
-        if (reportData.tweets.length > 0) {
-          const dates = reportData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
-          reportData.timeline = {
-            startDate: dates[0].toISOString(),
-            endDate: dates[dates.length - 1].toISOString()
-          };
-        } else {
-          reportData.timeline = {
-            startDate: new Date().toISOString(),
-            endDate: new Date().toISOString()
-          };
+        // If metadata has engagement info, use it
+        if (reportData.metadata && reportData.metadata.total_engagement) {
+          stats.totalLikes = reportData.metadata.total_engagement.likes || stats.totalLikes;
+          stats.totalRetweets = reportData.metadata.total_engagement.retweets || stats.totalRetweets;
         }
         
-        reportData.generatedAt = reportData.extractedAt || new Date().toISOString();
+        reportData.stats = stats;
+        
+        // Set timeline if not already set from metadata
+        if (!reportData.timeline) {
+          if (reportData.tweets.length > 0) {
+            const dates = reportData.tweets.map(t => new Date(t.created_at || t.timestamp)).sort();
+            reportData.timeline = {
+              startDate: dates[0].toISOString(),
+              endDate: dates[dates.length - 1].toISOString()
+            };
+          } else {
+            reportData.timeline = {
+              startDate: new Date().toISOString(),
+              endDate: new Date().toISOString()
+            };
+          }
+        }
+        
+        // Set generatedAt if not already set
+        if (!reportData.generatedAt) {
+          reportData.generatedAt = new Date().toISOString();
+        }
         
       } catch (parseError) {
         console.error('Failed to parse JSON data:', parseError);
@@ -613,8 +737,31 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
       try {
         jsonData = JSON.parse(jsonMatch[1]);
         
-        // If the JSON data contains profile information, use it
-        if (jsonData.profile) {
+        // If the JSON data contains metadata information, use it
+        if (jsonData.metadata) {
+          console.log('📊 [API] Using metadata from JSON data for download');
+          jsonData.profileInfo = {
+            username: jsonData.metadata.username || 'user',
+            displayName: jsonData.metadata.username || 'User', // Use username as display name if no separate display name
+            description: '',
+            followers_count: 0,
+            following_count: 0,
+            tweet_count: jsonData.metadata.total_tweets || (jsonData.tweets ? jsonData.tweets.length : 100)
+          };
+          
+          // Set timeline from metadata if available
+          if (jsonData.metadata.date_range) {
+            jsonData.timeline = {
+              startDate: jsonData.metadata.date_range.oldest,
+              endDate: jsonData.metadata.date_range.newest
+            };
+          }
+          
+          // Set generatedAt from metadata
+          jsonData.generatedAt = jsonData.metadata.extracted_at || new Date().toISOString();
+          
+        } else if (jsonData.profile) {
+          // Fallback to profile object if metadata doesn't exist
           jsonData.profileInfo = {
             username: jsonData.profile.username || 'user',
             displayName: jsonData.profile.displayName || 'User',
@@ -655,26 +802,41 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
             stats.totalRetweets += tweet.metrics.retweets || 0;
             stats.totalViews += tweet.metrics.views || 0;
             stats.totalReplies += tweet.metrics.replies || 0;
+          } else if (tweet.favorite_count !== undefined) {
+            // Handle the format from your example
+            stats.totalLikes += tweet.favorite_count || 0;
+            stats.totalRetweets += tweet.retweet_count || 0;
           }
         });
         
-        jsonData.stats = stats;
-        
-        // Set timeline
-        if (jsonData.tweets.length > 0) {
-          const dates = jsonData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
-          jsonData.timeline = {
-            startDate: dates[0].toISOString(),
-            endDate: dates[dates.length - 1].toISOString()
-          };
-        } else {
-          jsonData.timeline = {
-            startDate: new Date().toISOString(),
-            endDate: new Date().toISOString()
-          };
+        // If metadata has engagement info, use it
+        if (jsonData.metadata && jsonData.metadata.total_engagement) {
+          stats.totalLikes = jsonData.metadata.total_engagement.likes || stats.totalLikes;
+          stats.totalRetweets = jsonData.metadata.total_engagement.retweets || stats.totalRetweets;
         }
         
-        jsonData.generatedAt = jsonData.extractedAt || new Date().toISOString();
+        jsonData.stats = stats;
+        
+        // Set timeline if not already set from metadata
+        if (!jsonData.timeline) {
+          if (jsonData.tweets.length > 0) {
+            const dates = jsonData.tweets.map(t => new Date(t.timestamp || t.created_at)).sort();
+            jsonData.timeline = {
+              startDate: dates[0].toISOString(),
+              endDate: dates[dates.length - 1].toISOString()
+            };
+          } else {
+            jsonData.timeline = {
+              startDate: new Date().toISOString(),
+              endDate: new Date().toISOString()
+            };
+          }
+        }
+        
+        // Set generatedAt if not already set
+        if (!jsonData.generatedAt) {
+          jsonData.generatedAt = new Date().toISOString();
+        }
         
       } catch (parseError) {
         jsonData = generateDefaultReportData(archive.filename, archive.profile_info, archive.tweet_count);

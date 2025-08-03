@@ -83,6 +83,33 @@ const ReportViewer: React.FC = () => {
 
   const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://extractor.aayushman.dev';
 
+  // Helper functions to handle different tweet data formats
+  const getLikeCount = (tweet: any) => {
+    if (tweet.public_metrics) return tweet.public_metrics.like_count || 0;
+    if (tweet.favorite_count !== undefined) return tweet.favorite_count || 0;
+    if (tweet.metrics) return tweet.metrics.likes || 0;
+    return 0;
+  };
+  
+  const getRetweetCount = (tweet: any) => {
+    if (tweet.public_metrics) return tweet.public_metrics.retweet_count || 0;
+    if (tweet.retweet_count !== undefined) return tweet.retweet_count || 0;
+    if (tweet.metrics) return tweet.metrics.retweets || 0;
+    return 0;
+  };
+  
+  const getViewCount = (tweet: any) => {
+    if (tweet.public_metrics) return tweet.public_metrics.impression_count || 0;
+    if (tweet.metrics) return tweet.metrics.views || 0;
+    return 0;
+  };
+  
+  const getReplyCount = (tweet: any) => {
+    if (tweet.public_metrics) return tweet.public_metrics.reply_count || 0;
+    if (tweet.metrics) return tweet.metrics.replies || 0;
+    return 0;
+  };
+
   useEffect(() => {
     console.log('ReportViewer mounted with reportId:', reportId);
     console.log('Current URL:', window.location.href);
@@ -148,20 +175,21 @@ const ReportViewer: React.FC = () => {
 
     // Apply sorting
     filtered.sort((a, b) => {
+      // Handle different tweet data formats
       switch (sortBy) {
         case 'newest':
           return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
         case 'oldest':
           return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
         case 'likes':
-          return b.public_metrics.like_count - a.public_metrics.like_count;
+          return getLikeCount(b) - getLikeCount(a);
         case 'retweets':
-          return b.public_metrics.retweet_count - a.public_metrics.retweet_count;
+          return getRetweetCount(b) - getRetweetCount(a);
         case 'views':
-          return b.public_metrics.impression_count - a.public_metrics.impression_count;
+          return getViewCount(b) - getViewCount(a);
         case 'engagement':
-          const engagementA = a.public_metrics.like_count + a.public_metrics.retweet_count + a.public_metrics.reply_count;
-          const engagementB = b.public_metrics.like_count + b.public_metrics.retweet_count + b.public_metrics.reply_count;
+          const engagementA = getLikeCount(a) + getRetweetCount(a) + getReplyCount(a);
+          const engagementB = getLikeCount(b) + getRetweetCount(b) + getReplyCount(b);
           return engagementB - engagementA;
         default:
           return 0;
@@ -433,19 +461,19 @@ const ReportViewer: React.FC = () => {
                 <div className="flex items-center space-x-6 text-sm text-gray-500">
                   <div className="flex items-center space-x-1">
                     <Eye className="w-4 h-4" />
-                    <span>{formatNumber(tweet.public_metrics.impression_count)}</span>
+                    <span>{formatNumber(getViewCount(tweet))}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Heart className="w-4 h-4" />
-                    <span>{formatNumber(tweet.public_metrics.like_count)}</span>
+                    <span>{formatNumber(getLikeCount(tweet))}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Repeat className="w-4 h-4" />
-                    <span>{formatNumber(tweet.public_metrics.retweet_count)}</span>
+                    <span>{formatNumber(getRetweetCount(tweet))}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <MessageCircle className="w-4 h-4" />
-                    <span>{formatNumber(tweet.public_metrics.reply_count)}</span>
+                    <span>{formatNumber(getReplyCount(tweet))}</span>
                   </div>
                 </div>
               </CardContent>

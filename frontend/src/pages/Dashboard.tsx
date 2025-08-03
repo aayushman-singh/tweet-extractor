@@ -110,6 +110,38 @@ const Dashboard: React.FC = () => {
     });
   };
 
+  const handleDeleteArchive = async (archiveId: string) => {
+    // Add confirmation dialog
+    const isConfirmed = window.confirm('Are you sure you want to delete this archive? This action cannot be undone.');
+    if (!isConfirmed) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('authToken');
+      await axios.delete(`${API_BASE}/api/archive/${archiveId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      // Remove the archive from the local state
+      setArchives(archives.filter(archive => archive._id !== archiveId));
+
+      toast({
+        title: "Archive Deleted",
+        description: "Archive has been successfully deleted",
+      });
+    } catch (error) {
+      console.error('Failed to delete archive:', error);
+      toast({
+        title: "Delete Failed",
+        description: "Failed to delete the archive",
+        variant: "destructive",
+      });
+    }
+  };
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -359,6 +391,14 @@ const Dashboard: React.FC = () => {
                         title="View Report"
                       >
                         <Eye className="w-4 h-4" />
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => handleDeleteArchive(archive._id)}
+                        title="Delete Archive"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
                   </CardContent>
