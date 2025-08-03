@@ -1,16 +1,20 @@
 {
   "manifest_version": 3,
-  "name": "Tweet Downloader",
-  "version": "1.0",
-  "description": "Download tweets from Twitter/X profile pages",
+  "name": "X Archive Extractor",
+  "version": "2.0",
+  "description": "Extract and archive tweets from X/Twitter with user authentication and cloud storage",
   "permissions": [
     "activeTab",
     "downloads",
-    "scripting"
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://extractor.aayushman.dev/*"
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Tweet Downloader"
+    "default_title": "X Archive Extractor"
   },
   "content_scripts": [
     {
@@ -23,7 +27,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["working.js", "download-helper.js"],
+      "resources": ["working.js", "download-helper.js", "json-extractor.js"],
       "matches": ["<all_urls>"]
     }
   ]

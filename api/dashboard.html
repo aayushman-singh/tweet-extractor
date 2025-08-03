@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - X Archive Extractor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .navbar {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1da1f2;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1da1f2, #0d47a1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff5252;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #1da1f2;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .recent-archives {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .recent-archives h2 {
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .refresh-btn {
+            background: #1da1f2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #0d8bd9;
+        }
+
+        .archive-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s ease;
+        }
+
+        .archive-item:hover {
+            background-color: #f8f9ff;
+        }
+
+        .archive-item:last-child {
+            border-bottom: none;
+        }
+
+        .archive-info {
+            flex: 1;
+        }
+
+        .archive-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .archive-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .archive-size {
+            color: #999;
+            font-size: 0.9rem;
+            margin-right: 15px;
+        }
+
+        .archive-type {
+            background: #1da1f2;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-right: 10px;
+        }
+
+        .view-btn {
+            background: #1da1f2;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .view-btn:hover {
+            background: #0d8bd9;
+        }
+
+        .render-btn {
+            background: #17bf63;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .render-btn:hover {
+            background: #0fa866;
+        }
+
+        /* Modal styles for viewing JSON archives */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .close-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tweet-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .tweet-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .tweet-author {
+            font-weight: 600;
+            color: #1da1f2;
+        }
+
+        .tweet-date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .tweet-text {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .tweet-metrics {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .profile-info {
+            background: linear-gradient(135deg, #1da1f2, #0d47a1);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1da1f2;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error {
+            background: #ffe6e6;
+            color: #d63384;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #999;
+        }
+
+        .empty-state p {
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .cta-btn {
+            background: linear-gradient(45deg, #1da1f2, #0d47a1);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1da1f2;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+            
+            .welcome-section h1 {
+                font-size: 2rem;
+            }
+            
+            .stat-card, .recent-archives {
+                padding: 20px;
+            }
+            
+            .archive-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .user-menu {
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">🗂️ X Archive Extractor</div>
+            <div class="user-menu">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <span id="userEmail">Loading...</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1>Welcome to Your Dashboard</h1>
+            <p>Manage and view your archived X/Twitter data</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">📁</div>
+                <h3 id="totalArchives">-</h3>
+                <p>Total Archives</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon">💾</div>
+                <h3 id="totalSize">-</h3>
+                <p>Total Size</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📅</div>
+                <h3 id="lastArchive">-</h3>
+                <p>Last Archive</p>
+            </div>
+        </div>
+
+        <!-- Recent Archives -->
+        <div class="recent-archives">
+            <h2>
+                Recent Archives
+                <button class="refresh-btn" onclick="loadArchives()">
+                    <span class="refresh-text">Refresh</span>
+                    <div class="spinner" style="display: none;"></div>
+                </button>
+            </h2>
+            <div id="archivesList">
+                <div class="loading">Loading your archives...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Archive Viewer Modal -->
+    <div id="archiveModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Archive Viewer</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalContent">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading archive...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let authToken = localStorage.getItem('authToken');
+        let currentUser = null;
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!authToken) {
+                window.location.href = '/login';
+                return;
+            }
+
+            await loadProfile();
+            await loadArchives();
+        });
+
+        // Load user profile
+        async function loadProfile() {
+            try {
+                const response = await fetch(`${API_BASE}/api/auth/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Failed to load profile');
+                }
+
+                const data = await response.json();
+                currentUser = data.user;
+
+                // Update UI
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userAvatar').textContent = currentUser.email.charAt(0).toUpperCase();
+
+                // Update statistics
+                document.getElementById('totalArchives').textContent = data.stats.total_archives;
+                document.getElementById('totalSize').textContent = formatBytes(data.stats.total_size);
+                document.getElementById('lastArchive').textContent = data.stats.last_archive_date 
+                    ? new Date(data.stats.last_archive_date).toLocaleDateString()
+                    : 'None';
+
+            } catch (error) {
+                console.error('Profile load error:', error);
+                showError('Failed to load profile information');
+            }
+        }
+
+        // Load user archives
+        async function loadArchives() {
+            const refreshBtn = document.querySelector('.refresh-btn');
+            const refreshText = refreshBtn.querySelector('.refresh-text');
+            const spinner = refreshBtn.querySelector('.spinner');
+            const archivesList = document.getElementById('archivesList');
+
+            // Show loading state
+            refreshText.style.display = 'none';
+            spinner.style.display = 'inline-block';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/recent-uploads?limit=20`, {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        logout();
+                        return;
+                    }
+                    throw new Error('Failed to load archives');
+                }
+
+                const data = await response.json();
+
+                if (data.files && data.files.length > 0) {
+                    archivesList.innerHTML = '';
+                    
+                    data.files.forEach(file => {
+                        const item = document.createElement('div');
+                        item.className = 'archive-item';
+                        
+                        // Determine file type
+                        const isJson = file.filename.endsWith('.json') || file.contentType === 'application/json';
+                        const fileType = isJson ? 'JSON' : 'HTML';
+                        
+                        item.innerHTML = `
+                            <div class="archive-info">
+                                <div class="archive-name">
+                                    ${file.filename}
+                                    <span class="archive-type">${fileType}</span>
+                                </div>
+                                <div class="archive-date">${new Date(file.lastModified).toLocaleString()}</div>
+                            </div>
+                            <div class="archive-size">${formatBytes(file.size)}</div>
+                            <div>
+                                ${isJson ? 
+                                    `<button class="render-btn" onclick="renderArchive('${file.url}', '${file.filename}')">📊 Render</button>` :
+                                    ''
+                                }
+                                <a href="${file.url}" target="_blank" class="view-btn">📄 Raw</a>
+                            </div>
+                        `;
+                        archivesList.appendChild(item);
+                    });
+                } else {
+                    archivesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📦</div>
+                            <h3>No Archives Yet</h3>
+                            <p>You haven't created any archives yet. Install the browser extension and start extracting your X/Twitter data.</p>
+                            <a href="#" class="cta-btn" onclick="showExtensionInfo()">Download Extension</a>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Archives load error:', error);
+                archivesList.innerHTML = '<div class="error">Failed to load archives. Please try again.</div>';
+            } finally {
+                // Reset button state
+                refreshText.style.display = 'inline';
+                spinner.style.display = 'none';
+            }
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+
+        // Show error message
+        function showError(message) {
+            // You can implement a toast notification system here
+            console.error(message);
+        }
+
+        // Format bytes utility
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Archive rendering functions
+        async function renderArchive(url, filename) {
+            const modal = document.getElementById('archiveModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Show modal with loading state
+            modalTitle.textContent = `Rendering: ${filename}`;
+            modalContent.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Fetching and rendering archive...</p>
+                </div>
+            `;
+            modal.style.display = 'block';
+            
+            try {
+                // Fetch JSON data from S3
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch archive: ${response.status}`);
+                }
+                
+                const archiveData = await response.json();
+                
+                // Render the archive
+                modalContent.innerHTML = renderArchiveContent(archiveData);
+                
+            } catch (error) {
+                console.error('Error rendering archive:', error);
+                modalContent.innerHTML = `
+                    <div class="error">
+                        <h3>Failed to load archive</h3>
+                        <p>${error.message}</p>
+                        <button onclick="closeModal()" class="view-btn">Close</button>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderArchiveContent(data) {
+            let html = '';
+            
+            // Profile information
+            if (data.profile) {
+                html += `
+                    <div class="profile-info">
+                        <h3>📊 Profile: @${data.profile.username || 'Unknown'}</h3>
+                        <p><strong>Display Name:</strong> ${data.profile.displayName || 'N/A'}</p>
+                        ${data.profile.bio ? `<p><strong>Bio:</strong> ${data.profile.bio}</p>` : ''}
+                        <div class="profile-stats">
+                            <span><strong>Following:</strong> ${data.profile.following || 0}</span>
+                            <span><strong>Followers:</strong> ${data.profile.followers || 0}</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Archive metadata
+            html += `
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h4>📈 Archive Information</h4>
+                    <p><strong>Total Tweets:</strong> ${data.tweets ? data.tweets.length : 0}</p>
+                    <p><strong>Extracted:</strong> ${data.extractedAt ? new Date(data.extractedAt).toLocaleString() : 'Unknown'}</p>
+                    <p><strong>Source:</strong> ${data.extractedFrom || 'Unknown'}</p>
+                </div>
+            `;
+            
+            // Tweets
+            if (data.tweets && data.tweets.length > 0) {
+                html += '<h4>🐦 Tweets</h4>';
+                
+                data.tweets.forEach((tweet, index) => {
+                    html += `
+                        <div class="tweet-item">
+                            <div class="tweet-header">
+                                <span class="tweet-author">@${tweet.author?.username || 'Unknown'}</span>
+                                <span class="tweet-date">${tweet.timestamp ? new Date(tweet.timestamp).toLocaleString() : 'Unknown date'}</span>
+                            </div>
+                            <div class="tweet-text">${tweet.text || 'No content'}</div>
+                            ${tweet.metrics ? `
+                                <div class="tweet-metrics">
+                                    <span>💬 ${tweet.metrics.replies || 0}</span>
+                                    <span>🔄 ${tweet.metrics.retweets || 0}</span>
+                                    <span>❤️ ${tweet.metrics.likes || 0}</span>
+                                    ${tweet.metrics.views ? `<span>👁️ ${tweet.metrics.views}</span>` : ''}
+                                </div>
+                            ` : ''}
+                            ${tweet.hashtags && tweet.hashtags.length > 0 ? `
+                                <div style="margin-top: 8px;">
+                                    <strong>Hashtags:</strong> ${tweet.hashtags.join(', ')}
+                                </div>
+                            ` : ''}
+                            ${tweet.mentions && tweet.mentions.length > 0 ? `
+                                <div style="margin-top: 4px;">
+                                    <strong>Mentions:</strong> ${tweet.mentions.join(', ')}
+                                </div>
+                            ` : ''}
+                            ${tweet.media && tweet.media.length > 0 ? `
+                                <div style="margin-top: 8px;">
+                                    <strong>Media:</strong> ${tweet.media.length} item(s)
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            } else {
+                html += '<p>No tweets found in this archive.</p>';
+            }
+            
+            return html;
+        }
+        
+        function closeModal() {
+            document.getElementById('archiveModal').style.display = 'none';
+        }
+        
+        function showExtensionInfo() {
+            alert('Browser extension download will be available soon! This will allow you to extract tweets directly from X/Twitter pages.');
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('archiveModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Auto-refresh archives every 30 seconds
+        setInterval(async () => {
+            if (authToken) {
+                await loadProfile();
+            }
+        }, 30000);
+    </script>
+</body>
+</html>

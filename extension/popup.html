@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <style>
     body {
-      width: 350px;
+      width: 380px;
       padding: 20px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
@@ -25,6 +25,89 @@
       font-size: 24px;
       text-align: center;
       font-weight: 300;
+    }
+
+    .auth-container {
+      text-align: center;
+    }
+
+    .auth-form {
+      margin-bottom: 15px;
+    }
+
+    .auth-form input {
+      width: 100%;
+      padding: 10px 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .auth-form input:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+    }
+
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .auth-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .auth-btn.primary {
+      background: #17bf63;
+      color: white;
+    }
+
+    .auth-btn.secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .user-email {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .logout-btn {
+      background: rgba(244, 67, 54, 0.2);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .extraction-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 15px;
     }
     
     label {
@@ -102,36 +185,68 @@
       background: rgba(29, 161, 242, 0.2);
       border: 1px solid rgba(29, 161, 242, 0.3);
     }
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🐦 Tweet Downloader</h1>
+    <h1>🗂️ X Archive Extractor</h1>
     
-    <label for="tweetCount">Number of Tweets:</label>
-    <div class="tweet-input-group">
-      <select id="tweetCount">
-        <option value="10">10</option>
-        <option value="100" selected>100</option>
-        <option value="500">500</option>
-        <option value="1000">1000</option>
-        <option value="10000">10000</option>
-        <option value="custom">Custom</option>
-      </select>
-      <input type="number" id="customTweetCount" placeholder="Enter custom number" min="1" max="50000" style="display: none;">
+    <!-- Authentication Section -->
+    <div id="authSection" class="auth-container">
+      <div id="loginForm" class="auth-form">
+        <input type="email" id="loginEmail" placeholder="Email or Phone" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <div class="auth-buttons">
+          <button id="loginBtn" class="auth-btn primary">Login</button>
+          <button id="showSignupBtn" class="auth-btn secondary">Sign Up</button>
+        </div>
+      </div>
+      
+      <div id="signupForm" class="auth-form hidden">
+        <input type="email" id="signupEmail" placeholder="Email Address" required>
+        <input type="tel" id="signupPhone" placeholder="Phone (Optional)">
+        <input type="password" id="signupPassword" placeholder="Password (8+ chars)" required>
+        <div class="auth-buttons">
+          <button id="signupBtn" class="auth-btn primary">Create Account</button>
+          <button id="showLoginBtn" class="auth-btn secondary">Back to Login</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Info Section (shown when logged in) -->
+    <div id="userSection" class="user-info hidden">
+      <div class="user-email" id="userEmail">user@example.com</div>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
     </div>
     
-    <div style="margin-bottom: 15px;">
-      <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-        <input type="checkbox" id="uploadToS3" style="margin: 0;">
-        <span>🌐 Upload to extractor.aayushman.dev</span>
-      </label>
+    <!-- Tweet Extraction Section (shown when logged in) -->
+    <div id="extractionSection" class="extraction-section hidden">
+      <label for="tweetCount">Number of Tweets:</label>
+      <div class="tweet-input-group">
+        <select id="tweetCount">
+          <option value="10">10</option>
+          <option value="100" selected>100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+          <option value="10000">10000</option>
+          <option value="custom">Custom</option>
+        </select>
+        <input type="number" id="customTweetCount" placeholder="Enter custom number" min="1" max="50000" style="display: none;">
+      </div>
+      
+      <button id="extractTweetsBtn" class="download-tweets-btn">📤 Extract to JSON Archive</button>
+      
+      <div style="margin-top: 10px; text-align: center; font-size: 12px; opacity: 0.8;">
+        Archives will be saved to your dashboard at<br>
+        <strong>extractor.aayushman.dev</strong>
+      </div>
     </div>
-    
-    <button id="downloadTweetsBtn" class="download-tweets-btn">📥 Download HTML Archive</button>
     
     <div id="status" class="status info">
-      Navigate to a Twitter/X profile page to download tweets
+      Please login to start extracting tweets
     </div>
   </div>
   

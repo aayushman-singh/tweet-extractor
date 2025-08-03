@@ -9,7 +9,7 @@ AWS_ACCESS_KEY_ID=your_aws_access_key_here
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key_here
 AWS_REGION=us-east-1
 S3_BUCKET_NAME=your-bucket-name
-PORT=3000
+PORT=8000
 ```
 
 ## Vercel Deployment
