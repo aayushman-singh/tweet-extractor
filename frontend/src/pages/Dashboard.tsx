@@ -69,6 +69,11 @@ const Dashboard: React.FC = () => {
           Authorization: `Bearer ${token}`
         }
       });
+      console.log('🔍 [DASHBOARD] Received archives data:', response.data);
+      console.log('🔍 [DASHBOARD] Archives array:', response.data.archives);
+      if (response.data.archives && response.data.archives.length > 0) {
+        console.log('🔍 [DASHBOARD] First archive profileInfo:', response.data.archives[0].profileInfo);
+      }
       setArchives(response.data.archives || []);
       setLastUpdated(new Date());
     } catch (error) {
@@ -341,6 +346,13 @@ const Dashboard: React.FC = () => {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(() => { 
+                console.log('🔍 [DASHBOARD] Rendering archives:', archives);
+                archives.forEach((archive, index) => {
+                  console.log(`🔍 [DASHBOARD] Archive ${index} profileInfo:`, archive.profileInfo);
+                });
+                return null;
+              })()}
               {archives.map((archive) => (
                 <Card key={archive._id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>

@@ -503,23 +503,29 @@ app.get('/api/recent-uploads', authenticateToken, async (req, res) => {
         id: archive.id,
         _id: archive._id,
         filename: archive.filename,
-        created_at: archive.created_at
+        created_at: archive.created_at,
+        profile_info: archive.profile_info,
+        profile_info_type: typeof archive.profile_info
       });
     });
     
-    const archivesList = archives.map(archive => ({
-      _id: archive.id,
-      filename: archive.filename,
-      originalName: archive.filename,
-      size: archive.file_size,
-      uploadDate: archive.created_at,
-      s3Url: archive.s3_url,
-      tweetCount: archive.tweet_count || 100,
-      profileInfo: archive.profile_info || {
+    const archivesList = archives.map(archive => {
+      const profileInfo = archive.profile_info || {
         username: 'user',
         displayName: 'User'
-      }
-    }));
+      };
+      console.log(`📋 [API] Archive ${archive.id} profileInfo:`, profileInfo);
+      return {
+        _id: archive.id,
+        filename: archive.filename,
+        originalName: archive.filename,
+        size: archive.file_size,
+        uploadDate: archive.created_at,
+        s3Url: archive.s3_url,
+        tweetCount: archive.tweet_count || 100,
+        profileInfo: profileInfo
+      };
+    });
 
     res.json({ 
       archives: archivesList,
