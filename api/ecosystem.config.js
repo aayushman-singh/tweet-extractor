@@ -27,12 +27,12 @@ module.exports = {
     // Environment variables
     env: {
       NODE_ENV: 'production',
-      PORT: 3000
+      PORT: 8000
     },
     
     env_development: {
       NODE_ENV: 'development',
-      PORT: 3000,
+      PORT: 8000,
       watch: true,
       ignore_watch: ['node_modules', 'logs']
     },
