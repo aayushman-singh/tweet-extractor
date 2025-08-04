@@ -35,7 +35,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://extractor.aayushman.dev';
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || 'https://api-extractor.aayushman.dev';
 
   useEffect(() => {
     // Check for existing token on app load

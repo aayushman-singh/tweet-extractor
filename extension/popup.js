@@ -1,8 +1,6 @@
-// API Configuration
-// This will be set based on the environment
-// For production: https://extractor.aayushman.dev
-// For EC2: http://172.31.24.102 (or your API_BASE_URL)
-const API_BASE = 'https://extractor.aayushman.dev'; // Production API URL
+// 🌐 API Configuration
+// For production: https://api-extractor.aayushman.dev
+const API_BASE = 'https://api-extractor.aayushman.dev'; // Production API URL
 // Fallback for local development
 const LOCAL_API_BASE = 'http://localhost:8000';
 

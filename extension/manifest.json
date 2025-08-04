@@ -11,9 +11,9 @@
   },
   "permissions": [
     "activeTab",
+    "storage",
     "downloads",
-    "scripting",
-    "storage"
+    "https://api-extractor.aayushman.dev/*"
   ],
   "host_permissions": [
     "https://extractor.aayushman.dev/*"
