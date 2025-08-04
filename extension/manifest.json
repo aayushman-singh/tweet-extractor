@@ -3,6 +3,12 @@
   "name": "X Archive Extractor",
   "version": "2.0",
   "description": "Extract and archive tweets from X/Twitter with user authentication and cloud storage",
+  "icons": {
+    "16": "extractor.png",
+    "32": "extractor.png",
+    "48": "extractor.png",
+    "128": "extractor.png"
+  },
   "permissions": [
     "activeTab",
     "downloads",
@@ -14,7 +20,13 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "X Archive Extractor"
+    "default_title": "X Archive Extractor",
+    "default_icon": {
+      "16": "extractor.png",
+      "32": "extractor.png",
+      "48": "extractor.png",
+      "128": "extractor.png"
+    }
   },
   "content_scripts": [
     {

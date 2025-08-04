@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   FileText, 
   Download, 
-  Calendar, 
   User, 
-  ArrowLeft, 
-  RefreshCw,
+  ArrowLeft,
   Heart,
   MessageCircle,
   Repeat,
-  Eye,
-  Share2
+  Eye
 } from 'lucide-react';
 import axios from 'axios';
 
