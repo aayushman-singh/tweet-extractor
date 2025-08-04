@@ -22,11 +22,9 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-white" />
-              </div>
+              <img src="/extractor.png" alt="X Archive Extractor" className="w-8 h-8 rounded-lg" />
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Tweet Extractor
+                X Archive Extractor
               </span>
             </div>
             <div className="flex items-center space-x-4">
@@ -75,7 +73,7 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Tweet Extractor?
+              Why Choose X Archive Extractor?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Powerful features designed to make tweet extraction simple and efficient
@@ -165,7 +163,7 @@ const Home: React.FC = () => {
             Ready to Extract Your Tweets?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join thousands of users who trust Tweet Extractor for their data needs
+            Join thousands of users who trust X Archive Extractor for their data needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/signup">
@@ -187,16 +185,14 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold">Tweet Extractor</span>
+              <img src="/extractor.png" alt="X Archive Extractor" className="w-8 h-8 rounded-lg" />
+              <span className="text-xl font-bold">X Archive Extractor</span>
             </div>
             <p className="text-gray-400 mb-4">
               Powerful tweet extraction made simple
             </p>
             <div className="flex justify-center space-x-6 text-sm text-gray-400 mb-4">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
               <a href="#" className="hover:text-white transition-colors">Support</a>
             </div>

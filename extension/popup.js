@@ -28,8 +28,19 @@ function showStatus(message, type = 'success') {
 // Update status message based on current state
 function updateStatusMessage() {
   const status = document.getElementById('status');
-  status.textContent = 'Please login to extract and upload tweets to cloud storage';
-  status.className = 'status info';
+  
+  // Check if user is logged in
+  chrome.storage.local.get([STORAGE_KEYS.AUTH_TOKEN, STORAGE_KEYS.USER_DATA], (result) => {
+    if (result.authToken && result.userData) {
+      // User is logged in - show ready message
+      status.textContent = `Welcome back! Ready to extract tweets for ${result.userData.email}`;
+      status.className = 'status success';
+    } else {
+      // User is not logged in - show login message
+      status.textContent = 'Please login to extract and upload tweets to cloud storage';
+      status.className = 'status info';
+    }
+  });
 }
 
 // Authentication functions
@@ -160,6 +171,7 @@ function updateUI() {
       extractionSection.classList.add('hidden'); // Hide extraction section without auth
     }
     
+    // Update status message based on authentication state
     updateStatusMessage();
   });
 }
