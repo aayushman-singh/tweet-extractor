@@ -430,7 +430,9 @@ class XTweetScraper {
           },
           total_engagement: {
             likes: tweets.reduce((sum, t) => sum + t.favorite_count, 0),
-            retweets: tweets.reduce((sum, t) => sum + t.retweet_count, 0)
+            retweets: tweets.reduce((sum, t) => sum + t.retweet_count, 0),
+            replies: tweets.reduce((sum, t) => sum + (t.reply_count || 0), 0),
+            views: tweets.reduce((sum, t) => sum + (t.view_count || 0), 0)
           }
         },
         tweets: tweets.map(tweet => ({
@@ -438,7 +440,11 @@ class XTweetScraper {
           text: tweet.text,
           created_at: tweet.created_at.toISOString(),
           retweet_count: tweet.retweet_count,
-          favorite_count: tweet.favorite_count
+          favorite_count: tweet.favorite_count,
+          reply_count: tweet.reply_count,
+          view_count: tweet.view_count,
+          quote_count: tweet.quote_count,
+          bookmark_count: tweet.bookmark_count
         }))
       };
       

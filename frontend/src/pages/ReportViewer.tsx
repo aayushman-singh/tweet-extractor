@@ -23,13 +23,20 @@ interface Tweet {
   id: string;
   text: string;
   created_at: string;
-  public_metrics: {
+  public_metrics?: {
     retweet_count: number;
     reply_count: number;
     like_count: number;
     quote_count: number;
     impression_count: number;
   };
+  // Direct properties from extension
+  retweet_count?: number;
+  favorite_count?: number;
+  reply_count?: number;
+  view_count?: number;
+  quote_count?: number;
+  bookmark_count?: number;
   entities?: {
     urls?: Array<{
       url: string;
@@ -101,12 +108,14 @@ const ReportViewer: React.FC = () => {
   const getViewCount = (tweet: any) => {
     if (tweet.public_metrics) return tweet.public_metrics.impression_count || 0;
     if (tweet.metrics) return tweet.metrics.views || 0;
+    if (tweet.view_count !== undefined) return tweet.view_count || 0;
     return 0;
   };
   
   const getReplyCount = (tweet: any) => {
     if (tweet.public_metrics) return tweet.public_metrics.reply_count || 0;
     if (tweet.metrics) return tweet.metrics.replies || 0;
+    if (tweet.reply_count !== undefined) return tweet.reply_count || 0;
     return 0;
   };
 

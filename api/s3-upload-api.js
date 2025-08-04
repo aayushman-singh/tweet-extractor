@@ -671,6 +671,8 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
         // Handle the format from your example
         stats.totalLikes += tweet.favorite_count || 0;
         stats.totalRetweets += tweet.retweet_count || 0;
+        stats.totalViews += tweet.view_count || 0;
+        stats.totalReplies += tweet.reply_count || 0;
       }
     });
     
@@ -678,6 +680,8 @@ app.get('/api/report/:reportId', authenticateToken, async (req, res) => {
     if (reportData.metadata && reportData.metadata.total_engagement) {
       stats.totalLikes = reportData.metadata.total_engagement.likes || stats.totalLikes;
       stats.totalRetweets = reportData.metadata.total_engagement.retweets || stats.totalRetweets;
+      stats.totalReplies = reportData.metadata.total_engagement.replies || stats.totalReplies;
+      stats.totalViews = reportData.metadata.total_engagement.views || stats.totalViews;
     }
     
     reportData.stats = stats;
@@ -838,6 +842,8 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
         // Handle the format from your example
         stats.totalLikes += tweet.favorite_count || 0;
         stats.totalRetweets += tweet.retweet_count || 0;
+        stats.totalViews += tweet.view_count || 0;
+        stats.totalReplies += tweet.reply_count || 0;
       }
     });
     
@@ -845,6 +851,8 @@ app.get('/api/report/:reportId/download', authenticateToken, async (req, res) =>
     if (jsonData.metadata && jsonData.metadata.total_engagement) {
       stats.totalLikes = jsonData.metadata.total_engagement.likes || stats.totalLikes;
       stats.totalRetweets = jsonData.metadata.total_engagement.retweets || stats.totalRetweets;
+      stats.totalReplies = jsonData.metadata.total_engagement.replies || stats.totalReplies;
+      stats.totalViews = jsonData.metadata.total_engagement.views || stats.totalViews;
     }
     
     jsonData.stats = stats;

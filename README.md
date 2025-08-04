@@ -184,3 +184,123 @@ For issues or questions:
 - Create an issue in this repository
 - Check the README files in `extension/` or `api/` folders
 - Review the example HTML output in the repository
+
+## 📊 API Response Data Model
+
+The extension processes Twitter/X API responses with the following data structure:
+
+```javascript
+Data: {
+  User: {
+    __typename: "User",
+    id: String,
+    rest_id: String,
+    core: {
+      created_at: String,
+      name: String,
+      screen_name: String
+    },
+    avatar: {
+      image_url: String
+    },
+    legacy: {
+      description: String,
+      entities: {
+        description: {
+          urls: [
+            {
+              url: String,
+              expanded_url: String,
+              display_url: String
+            }
+          ]
+        },
+        url: {
+          urls: [
+            {
+              url: String,
+              expanded_url: String,
+              display_url: String
+            }
+          ]
+        }
+      },
+      followers_count: Number,
+      friends_count: Number,
+      statuses_count: Number,
+      pinned_tweet_ids_str: [String],
+      profile_banner_url: String,
+      url: String
+    },
+    location: {
+      location: String
+    },
+    verification: {
+      verified: Boolean
+    }
+  },
+  Tweet: {
+    __typename: "Tweet",
+    rest_id: String,
+    core: {
+      user_results: {
+        result: User  // Embedded User object
+      }
+    },
+    legacy: {
+      created_at: String,
+      full_text: String,
+      entities: {  //Often other Tweets or Users
+        hashtags: [],
+        urls: [],
+        user_mentions: []
+      },
+      favorite_count: Number,
+      retweet_count: Number,
+      reply_count: Number,
+      bookmark_count: Number,
+      user_id_str: String,
+      id_str: String
+    },
+    views: {
+      count: String
+    },
+    source: String
+  },
+  Timeline: {
+    instructions: [
+      {
+        type: "TimelineClearCache" | "TimelinePinEntry" | "TimelineAddEntries",
+        entry: {
+          entryId: String,
+          sortIndex: String,
+          content: {
+            itemContent: {
+              tweet_results: {
+                result: Tweet  // Embedded Tweet object
+              }
+            },
+             socialContext: {  //optional
+                type: String,
+                contextType: String,
+                text: String
+              }
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+### Key Fields Extracted
+
+The extension specifically extracts the following engagement metrics from the API response:
+
+- **`favorite_count`** - Number of likes
+- **`retweet_count`** - Number of retweets  
+- **`reply_count`** - Number of replies
+- **`bookmark_count`** - Number of bookmarks
+- **`views.count`** - Number of views (from the `views` object)
+
+These fields are processed and included in the exported JSON data, which is then stored in S3 and displayed in the frontend reports.
