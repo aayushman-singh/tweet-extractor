@@ -12,11 +12,7 @@
   "permissions": [
     "activeTab",
     "storage",
-    "downloads",
     "https://api-extractor.aayushman.dev/*"
-  ],
-  "host_permissions": [
-    "https://extractor.aayushman.dev/*"
   ],
   "action": {
     "default_popup": "popup.html",
