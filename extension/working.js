@@ -345,42 +345,44 @@ class XTweetScraper {
       console.log('📤 [UPLOAD] Auth token present:', !!authToken);
       console.log('📤 [UPLOAD] Data size:', JSON.stringify(data).length, 'bytes');
       
-      // Send upload request to content script
+      // Send upload request via custom event to popup
       const response = await new Promise((resolve, reject) => {
-        console.log('📤 [UPLOAD] Setting up message listener...');
+        console.log('📤 [UPLOAD] Setting up response listener...');
         
-        // Set up response listener
+        // Set up response listener for the custom event
         const handleResponse = (event) => {
-          console.log('📤 [UPLOAD] Received message:', event.data);
-          if (event.data && event.data.type === 'uploadResponse') {
+          console.log('📤 [UPLOAD] Received response event:', event.detail);
+          if (event.detail && event.detail.type === 'uploadResponse') {
             console.log('📤 [UPLOAD] Processing upload response...');
-            window.removeEventListener('message', handleResponse);
-            if (event.data.success) {
-              console.log('📤 [UPLOAD] Upload response success:', event.data);
-              resolve(event.data);
+            document.removeEventListener('uploadResponse', handleResponse);
+            if (event.detail.success) {
+              console.log('📤 [UPLOAD] Upload response success:', event.detail);
+              resolve(event.detail);
             } else {
-              console.log('📤 [UPLOAD] Upload response error:', event.data.error);
-              reject(new Error(event.data.error || 'Upload failed'));
+              console.log('📤 [UPLOAD] Upload response error:', event.detail.error);
+              reject(new Error(event.detail.error || 'Upload failed'));
             }
           }
         };
         
-        window.addEventListener('message', handleResponse);
-        console.log('📤 [UPLOAD] Message listener attached');
+        document.addEventListener('uploadResponse', handleResponse);
+        console.log('📤 [UPLOAD] Response listener attached');
         
-        // Send upload request
-        console.log('📤 [UPLOAD] Sending upload request to content script...');
-        window.postMessage({
-          type: 'uploadRequest',
-          data: data,
-          authToken: authToken
-        }, '*');
-        console.log('📤 [UPLOAD] Upload request sent');
+        // Send upload request via custom event
+        console.log('📤 [UPLOAD] Sending upload request via custom event...');
+        document.dispatchEvent(new CustomEvent('uploadRequest', {
+          detail: {
+            type: 'uploadRequest',
+            data: data,
+            authToken: authToken
+          }
+        }));
+        console.log('📤 [UPLOAD] Upload request sent via custom event');
         
-        // Timeout after 60 seconds (increased from 30)
+        // Timeout after 60 seconds
         setTimeout(() => {
           console.log('📤 [UPLOAD] Upload timeout reached');
-          window.removeEventListener('message', handleResponse);
+          document.removeEventListener('uploadResponse', handleResponse);
           reject(new Error('Upload timeout'));
         }, 60000);
       });

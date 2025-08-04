@@ -216,29 +216,96 @@ async function downloadTweets() {
     // Execute script in the page to trigger extraction with S3 upload
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: (tweetCount, authToken) => {
-        // Send message to content script using new event name
-        document.dispatchEvent(new CustomEvent('startTweetExtraction', {
-          detail: { 
-            count: tweetCount,
-            authToken: authToken,
-            uploadToS3: true
+      files: ['working.js']
+    });
+    
+    // Inject a bridge script to handle upload requests
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: () => {
+        // Set up upload request handler
+        document.addEventListener('uploadRequest', async (event) => {
+          if (event.detail && event.detail.type === 'uploadRequest') {
+            console.log('📤 [BRIDGE] Received upload request from working.js');
+            
+            try {
+              // Forward the request to the popup via chrome.runtime.sendMessage
+              const response = await chrome.runtime.sendMessage({
+                action: 'uploadToAPI',
+                data: event.detail.data,
+                authToken: event.detail.authToken
+              });
+              
+              console.log('📤 [BRIDGE] Received response from background:', response);
+              
+              // Send response back to working.js via custom event
+              document.dispatchEvent(new CustomEvent('uploadResponse', {
+                detail: {
+                  type: 'uploadResponse',
+                  success: response.success,
+                  url: response.url,
+                  filename: response.filename,
+                  error: response.error
+                }
+              }));
+              
+            } catch (error) {
+              console.error('❌ [BRIDGE] Error handling upload request:', error);
+              
+              // Send error response back to working.js
+              document.dispatchEvent(new CustomEvent('uploadResponse', {
+                detail: {
+                  type: 'uploadResponse',
+                  success: false,
+                  error: error.message || 'Upload failed'
+                }
+              }));
+            }
           }
-        }));
+        });
         
+        console.log('📤 [BRIDGE] Upload request handler set up');
+      }
+    });
+    
+    // Now execute the extraction logic
+    const extractionResults = await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: (tweetCount, authToken) => {
         // Return a promise that will be resolved when we get the result
         return new Promise((resolve) => {
           const handleResult = (event) => {
-            if (event.detail && event.detail.action === 'extractionResult') {
-              document.removeEventListener('tweetExtractionComplete', handleResult);
-              resolve(event.detail.result);
+            if (event.detail && event.detail.success !== undefined) {
+              document.removeEventListener('downloadTweetsResult', handleResult);
+              resolve(event.detail);
             }
           };
-          document.addEventListener('tweetExtractionComplete', handleResult);
+          document.addEventListener('downloadTweetsResult', handleResult);
+          
+          // Wait for the script to initialize
+          const checkScraper = () => {
+            if (window.tweetScraper) {
+              console.log('🎯 Triggering extraction...');
+              // Trigger the extraction using the event system
+              document.dispatchEvent(new CustomEvent('startTweetDownload', {
+                detail: { 
+                  count: tweetCount,
+                  uploadToS3: true,
+                  authToken: authToken
+                }
+              }));
+            } else {
+              console.log('⏳ Waiting for scraper to initialize...');
+              setTimeout(checkScraper, 500);
+            }
+          };
+          
+          // Start checking for scraper
+          setTimeout(checkScraper, 1000);
           
           // Timeout after 30 seconds
           setTimeout(() => {
-            document.removeEventListener('tweetExtractionComplete', handleResult);
+            document.removeEventListener('downloadTweetsResult', handleResult);
             resolve({
               success: false,
               error: 'Extraction timed out'
@@ -249,7 +316,7 @@ async function downloadTweets() {
       args: [count, authToken]
     });
     
-    const result = results[0].result;
+    const result = extractionResults[0].result;
     
     if (result.success) {
       showStatus(`✅ Successfully extracted ${result.count} tweets and uploaded to cloud storage!`, 'success');

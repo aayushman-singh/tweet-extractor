@@ -12,6 +12,9 @@
   "permissions": [
     "activeTab",
     "storage",
+    "scripting"
+  ],
+  "host_permissions": [
     "https://api-extractor.aayushman.dev/*"
   ],
   "action": {
@@ -24,19 +27,7 @@
       "128": "extractor.png"
     }
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
-    }
-  ],
   "background": {
     "service_worker": "background.js"
-  },
-  "web_accessible_resources": [
-    {
-      "resources": ["working.js", "download-helper.js"],
-      "matches": ["<all_urls>"]
-    }
-  ]
+  }
 } 

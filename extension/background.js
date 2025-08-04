@@ -3,13 +3,7 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log('🐦 Tweet Downloader extension installed');
 });
 
-// Handle any background tasks if needed
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // Handle any background messages here
-  return true;
-});
-
-// S3 Upload functionality (re-added)
+// S3 Upload functionality
 async function handleAPIUpload(data, authToken) {
   try {
     console.log('📤 [BACKGROUND] Starting API upload...');
@@ -65,7 +59,7 @@ async function handleAPIUpload(data, authToken) {
   }
 }
 
-// Handle upload requests from content scripts
+// Handle all background messages
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'uploadToAPI') {
     console.log('📤 [BACKGROUND] Received upload request from content script');
