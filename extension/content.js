@@ -94,21 +94,6 @@ function injectWorkingScript() {
       };
       document.head.appendChild(script);
     }
-    
-    // Also inject the download helper script
-    if (document.querySelector('script[src*="download-helper.js"]')) {
-      console.log('✅ Download helper script already injected');
-    } else {
-      const helperScript = document.createElement('script');
-      helperScript.src = chrome.runtime.getURL('download-helper.js');
-      helperScript.onload = function() {
-        console.log('✅ Download helper script loaded successfully');
-      };
-      helperScript.onerror = function() {
-        console.error('❌ Failed to load download helper script');
-      };
-      document.head.appendChild(helperScript);
-    }
   }
 }
 
