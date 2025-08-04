@@ -188,10 +188,13 @@ app.post('/api/auth/register', async (req, res) => {
 
 app.post('/api/auth/login', async (req, res) => {
   try {
-    const { emailOrPhone, password } = req.body;
+    const { emailOrPhone, email, password } = req.body;
+
+    // Support both emailOrPhone and email fields
+    const emailOrPhoneValue = emailOrPhone || email;
 
     // Validation
-    if (!emailOrPhone || !password) {
+    if (!emailOrPhoneValue || !password) {
       return res.status(400).json({ 
         error: 'Email/phone and password are required' 
       });
@@ -201,7 +204,7 @@ app.post('/api/auth/login', async (req, res) => {
     await connectDB();
 
     // Find user
-    const user = await UserDB.findByEmailOrPhone(emailOrPhone.toLowerCase().trim());
+    const user = await UserDB.findByEmailOrPhone(emailOrPhoneValue.toLowerCase().trim());
     if (!user) {
       return res.status(401).json({ 
         error: 'Invalid credentials' 
