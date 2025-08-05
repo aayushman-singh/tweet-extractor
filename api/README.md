@@ -1,4 +1,4 @@
-# Tweet Downloader S3 Upload API
+# Tweet Extractor API
 
 Backend API for uploading HTML tweet archives to AWS S3, enabling cloud-hosted reports accessible via custom domain.
 
@@ -10,6 +10,8 @@ Backend API for uploading HTML tweet archives to AWS S3, enabling cloud-hosted r
 - 🚀 Serverless deployment ready (Vercel, Netlify, AWS Lambda)
 - 📊 Health check and recent uploads endpoints
 - 🔧 Environment-based configuration
+- 🔐 User authentication and authorization
+- 📊 Report management and analytics
 
 ## Quick Deploy to Vercel
 
@@ -29,6 +31,8 @@ Backend API for uploading HTML tweet archives to AWS S3, enabling cloud-hosted r
    - `AWS_SECRET_ACCESS_KEY` - Your AWS secret key
    - `AWS_REGION` - AWS region (e.g., us-east-1)
    - `S3_BUCKET_NAME` - Your S3 bucket name
+   - `JWT_SECRET` - Secret key for JWT tokens
+   - `MONGODB_URI` - MongoDB connection string (optional)
 
 ## Environment Setup
 
@@ -39,6 +43,8 @@ AWS_ACCESS_KEY_ID=your_aws_access_key_here
 AWS_SECRET_ACCESS_KEY=your_aws_secret_key_here
 AWS_REGION=us-east-1
 S3_BUCKET_NAME=your-bucket-name
+JWT_SECRET=your_jwt_secret_here
+MONGODB_URI=mongodb://localhost:27017/tweet-extractor
 PORT=3000
 ```
 
@@ -76,7 +82,57 @@ PORT=3000
 
 ## API Endpoints
 
-### POST `/api/upload-to-s3`
+### Authentication
+
+#### POST `/api/auth/register`
+Register a new user.
+
+**Request:**
+```json
+{
+  "username": "user@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "token": "jwt_token_here",
+  "user": {
+    "id": "user_id",
+    "username": "user@example.com"
+  }
+}
+```
+
+#### POST `/api/auth/login`
+Login user.
+
+**Request:**
+```json
+{
+  "username": "user@example.com",
+  "password": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "token": "jwt_token_here",
+  "user": {
+    "id": "user_id",
+    "username": "user@example.com"
+  }
+}
+```
+
+### Reports
+
+#### POST `/api/upload-to-s3`
 Upload HTML content to S3.
 
 **Request:**
@@ -98,7 +154,33 @@ Upload HTML content to S3.
 }
 ```
 
-### GET `/api/health`
+#### GET `/api/reports`
+Get user's reports (requires authentication).
+
+**Response:**
+```json
+{
+  "reports": [
+    {
+      "id": "report_id",
+      "filename": "report1704123456.html",
+      "size": 157234,
+      "createdAt": "2024-01-01T12:00:00.000Z",
+      "url": "https://bucket.s3.region.amazonaws.com/report1704123456.html"
+    }
+  ]
+}
+```
+
+#### GET `/api/report/:id/download`
+Download a specific report (requires authentication).
+
+**Response:**
+File download with appropriate headers.
+
+### System
+
+#### GET `/api/health`
 Health check endpoint.
 
 **Response:**
@@ -109,7 +191,7 @@ Health check endpoint.
 }
 ```
 
-### GET `/api/recent-uploads`
+#### GET `/api/recent-uploads`
 List recent uploads.
 
 **Response:**
@@ -168,7 +250,7 @@ npm start
 
 ## Files
 
-- **`s3-upload-api.js`** - Main Express.js server
+- **`server.js`** - Main Express.js server
 - **`package.json`** - Dependencies and scripts
 - **`vercel.json`** - Vercel deployment configuration
 
@@ -179,11 +261,28 @@ npm start
 - Content type validation
 - Environment-based AWS credentials
 - Public read-only access to uploaded files
+- JWT-based authentication
+- Password hashing with bcrypt
 
 ## Domain Setup
 
-Point your custom domain (e.g., `extractor.aayushman.dev`) to your deployment:
+Point your custom domain to your deployment:
 
 1. Add CNAME record pointing to your deployment URL
 2. Configure SSL certificate
 3. Update `API_BASE_URL` in the extension to your domain
+
+## Database (Optional)
+
+The API can optionally use MongoDB for user management and report tracking:
+
+1. Set up MongoDB instance
+2. Configure `MONGODB_URI` environment variable
+3. Reports and user data will be stored in the database
+
+## Monitoring
+
+- Health check endpoint for uptime monitoring
+- Error logging and tracking
+- Performance metrics
+- User activity analytics

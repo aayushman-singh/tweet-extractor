@@ -22,6 +22,6 @@ export default defineConfig({
     },
   },
   define: {
-    'process.env.VITE_API_BASE_URL': JSON.stringify(process.env.VITE_API_BASE_URL || 'https://api-extractor.aayushman.dev')
+    'process.env.VITE_API_BASE_URL': JSON.stringify(process.env.VITE_API_BASE_URL || 'https://your-api-domain.com')
   }
 }) 

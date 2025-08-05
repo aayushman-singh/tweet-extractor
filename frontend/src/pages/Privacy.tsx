@@ -104,7 +104,7 @@ const Privacy: React.FC = () => {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900">host_permissions: https://api-extractor.aayushman.dev/</h4>
+                    <h4 className="font-semibold text-gray-900">host_permissions: https://your-api-domain.com/</h4>
                     <ul className="list-disc pl-6 text-sm text-gray-700">
                       <li>Purpose: Communicate with our backend API</li>
                       <li>Usage: User authentication and S3 uploads</li>
@@ -168,8 +168,8 @@ const Privacy: React.FC = () => {
               <h2 className="text-2xl font-semibold text-gray-900 mb-4">Contact Information</h2>
               <p className="text-gray-700 mb-3">For privacy-related questions or concerns:</p>
               <ul className="list-none pl-6 mb-4 text-gray-700">
-                <li>Email: privacy@extractor.aayushman.dev</li>
-                <li>Website: https://extractor.aayushman.dev</li>
+                <li>Email: privacy@your-domain.com</li>
+                <li>Website: https://your-domain.com</li>
               </ul>
             </section>
 

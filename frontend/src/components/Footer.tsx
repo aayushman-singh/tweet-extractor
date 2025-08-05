@@ -12,6 +12,7 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-4">
+
                          <a
                href="https://buymeacoffee.com/aayushmansingh"
                target="_blank"
@@ -33,6 +34,7 @@ const Footer: React.FC = () => {
             
             <a
               href="https://github.com/aayushman-singh"
+
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-gray-600 hover:text-gray-900 transition-colors"

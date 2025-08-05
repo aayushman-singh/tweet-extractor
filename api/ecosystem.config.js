@@ -57,7 +57,7 @@ module.exports = {
       user: "ec2-user",
       host: ["13.203.72.69 "],
       ref: "origin/master",
-      repo: "https://github.com/aayushman-singh/tweet-extractor.git",
+      repo: "https://github.com/your-username/tweet-extractor.git",
       path: "/home/ec2-user/tweet-extractor/api",
       "pre-deploy-local": "",
       "post-deploy":
