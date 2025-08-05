@@ -6,7 +6,7 @@ A comprehensive solution for extracting and archiving tweets from X/Twitter prof
 
 If you find this project helpful, consider supporting its development:
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/aayushmansingh)
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/aayushmansingh)
 
 Your support helps keep this project maintained and free for everyone! ☕
 
