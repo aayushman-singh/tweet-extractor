@@ -1,6 +1,6 @@
 // 🌐 API Configuration
-// For production: https://api-extractor.aayushman.dev
-const API_BASE = 'https://api-extractor.aayushman.dev'; // Production API URL
+// For production: https://your-api-domain.com
+const API_BASE = 'https://your-api-domain.com'; // Production API URL
 // Fallback for local development
 const LOCAL_API_BASE = 'http://localhost:8000';
 

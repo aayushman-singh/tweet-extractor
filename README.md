@@ -1,11 +1,11 @@
-# 🐦 Tweet Downloader - Chrome Extension & API
+# 🐦 Tweet Extractor - Chrome Extension & API
 
-A comprehensive solution for downloading tweets from X/Twitter profiles with rich HTML archives and cloud hosting capabilities.
+A comprehensive solution for extracting and archiving tweets from X/Twitter profiles with rich HTML archives and cloud hosting capabilities.
 
 ## 📁 Project Structure
 
 ```
-x-extension/
+tweet-extractor/
 ├── extension/          # Chrome Extension files
 │   ├── manifest.json
 │   ├── popup.html
@@ -16,48 +16,100 @@ x-extension/
 │   ├── background.js
 │   └── README.md
 ├── api/                # Backend API for S3 uploads
-│   ├── s3-upload-api.js
+│   ├── server.js
 │   ├── package.json
-│   ├── vercel.json
+│   └── README.md
+├── frontend/           # React/TypeScript frontend
+│   ├── src/
+│   ├── package.json
 │   └── README.md
 └── README.md          # This file
 ```
 
-## 🚀 Quick Start
+## 🚀 Quick Setup Guide
 
-### Chrome Extension
+### Prerequisites
+- **Node.js 16+** installed on your system
+- **Chrome/Chromium browser** for the extension
+- **Git** for cloning the repository
+- **AWS Account** (optional, for cloud storage)
 
-1. **Install the Extension:**
-   ```bash
-   cd extension
-   # Load the extension folder in chrome://extensions/
-   ```
+### 1. Clone and Setup
+```bash
+# Clone the repository
+git clone https://github.com/aayushman-singh/tweet-extractor.git
+cd tweet-extractor
 
-2. **Use the Extension:**
-   - Navigate to any X/Twitter profile (e.g., `x.com/username`)
-   - Click the Tweet Downloader extension icon
-   - Select tweet count and output option
-   - Download or upload to cloud
+# Install dependencies for all components
+cd api && npm install && cd ..
+cd frontend && npm install && cd ..
+```
 
-### Backend API (Optional)
+### 2. Environment Configuration
 
-1. **Deploy to Vercel:**
-   ```bash
-   cd api
-   npm install
-   vercel
-   ```
+#### API Setup
+```bash
+cd api
+cp .env.example .env
+# Edit .env with your AWS credentials and other settings
+```
 
-2. **Configure Environment Variables:**
-   - `AWS_ACCESS_KEY_ID`
-   - `AWS_SECRET_ACCESS_KEY`
-   - `AWS_REGION`
-   - `S3_BUCKET_NAME`
+Required environment variables:
+- `AWS_ACCESS_KEY_ID` - Your AWS access key
+- `AWS_SECRET_ACCESS_KEY` - Your AWS secret key
+- `AWS_REGION` - AWS region (e.g., us-east-1)
+- `S3_BUCKET_NAME` - Your S3 bucket name
+- `JWT_SECRET` - Secret key for JWT tokens
+- `MONGODB_URI` - MongoDB connection string (optional)
+
+#### Frontend Setup
+```bash
+cd frontend
+cp .env.example .env
+# Edit .env with your API domain
+```
+
+Required environment variables:
+- `VITE_API_BASE_URL` - Your deployed API URL
+
+### 3. Deploy Components
+
+#### Deploy API (Backend)
+```bash
+cd api
+npm start  
+```
+
+#### Deploy Frontend
+```bash
+cd frontend
+npm run dev
+```
+
+### 4. Configure Extension
+1. Update API endpoint in extension files:
+   - `extension/working.js` - Update `apiBase` parameter
+   - `extension/popup.js` - Update `API_BASE` URL
+   - `extension/manifest.json` - Update `host_permissions`
+
+2. Load extension in Chrome:
+   - Open `chrome://extensions/`
+   - Enable "Developer mode"
+   - Click "Load unpacked"
+   - Select the `extension/` folder
+
+### 5. Test the Setup
+1. Navigate to any Twitter/X profile
+2. Click the Tweet Extractor extension icon
+3. Select tweet count and extraction options
+4. Verify upload to your configured cloud storage
+
+
 
 ## ✨ Features
 
 ### Chrome Extension
-- 🐦 **Tweet Download** - Extract tweets from any X/Twitter profile
+- 🐦 **Tweet Extraction** - Extract tweets from any X/Twitter profile
 - 📊 **Flexible Count** - Download 10, 100, 500, 1000, 10000, or custom amount
 - 🌐 **Cloud Upload** - Upload to custom domain or download locally
 - 📱 **Rich HTML Output** - Interactive archives with sorting and filtering
@@ -72,23 +124,11 @@ x-extension/
 - 🚀 **Serverless** - Deploy to Vercel, Netlify, or AWS Lambda
 - 📊 **Monitoring** - Health check and recent uploads endpoints
 
-## 🛠️ Development
-
-### Extension Development
-```bash
-cd extension
-# Make changes to files
-# Refresh extension in chrome://extensions/
-# Test on Twitter/X profile pages
-```
-
-### API Development
-```bash
-cd api
-npm install
-npm run dev
-# API runs on http://localhost:3000
-```
+### Frontend
+- 🔐 **User Authentication** - Secure login and registration
+- 📊 **Dashboard** - View and manage your tweet archives
+- 📱 **Responsive Design** - Works on desktop and mobile
+- 🎨 **Modern UI** - Built with React and Tailwind CSS
 
 ## 📋 Requirements
 
@@ -102,6 +142,11 @@ npm run dev
 - AWS S3 bucket
 - AWS credentials
 - Domain for hosting (optional)
+
+### Frontend
+- Node.js 16+
+- Modern web browser
+- API endpoint configured
 
 ## 🔧 Configuration
 
@@ -120,10 +165,16 @@ AWS_REGION=us-east-1
 S3_BUCKET_NAME=your-bucket
 ```
 
+### Frontend Configuration
+Create `.env` file:
+```env
+VITE_API_BASE_URL=https://your-api-domain.com
+```
+
 ## 📊 Output Examples
 
 ### Generated URLs
-- `https://extractor.aayushman.dev/report1704123456.html`
+- `https://your-domain.com/report1704123456.html`
 - Interactive HTML with sorting and filtering
 - JSON/CSV export options within the HTML
 
@@ -144,9 +195,9 @@ report1704123456.html
 2. Or package for Chrome Web Store
 
 ### API
-1. **Vercel (Recommended):**
+1. **AWS (Recommended):**
    ```bash
-   cd api && vercel
+   cd api && serverless deploy
    ```
 
 2. **Netlify:**
@@ -156,7 +207,18 @@ report1704123456.html
 
 3. **AWS Lambda:**
    ```bash
-   cd api && serverless deploy
+   cd api && vercel
+   ```
+
+### Frontend
+1. **Vercel (Recommended):**
+   ```bash
+   cd frontend && vercel
+   ```
+
+2. **Netlify:**
+   ```bash
+   cd frontend && netlify deploy --prod --dir=dist
    ```
 
 ## 🔒 Security
@@ -165,6 +227,7 @@ report1704123456.html
 - **API**: CORS restricted to extension origins
 - **S3**: Public read access for generated reports only
 - **Credentials**: Environment-based AWS configuration
+- **Frontend**: JWT-based authentication
 
 ## 📝 License
 
@@ -174,7 +237,7 @@ MIT License - see LICENSE.txt for details
 
 1. Fork the repository
 2. Create feature branch
-3. Make changes in appropriate folder (`extension/` or `api/`)
+3. Make changes in appropriate folder (`extension/`, `api/`, or `frontend/`)
 4. Test thoroughly
 5. Submit pull request
 
@@ -182,8 +245,7 @@ MIT License - see LICENSE.txt for details
 
 For issues or questions:
 - Create an issue in this repository
-- Check the README files in `extension/` or `api/` folders
-- Review the example HTML output in the repository
+- Check the README files in `extension/`, `api/`, or `frontend/` folders
 
 ## 📊 API Response Data Model
 

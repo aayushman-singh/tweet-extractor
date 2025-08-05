@@ -338,7 +338,7 @@ class XTweetScraper {
   }
 
   // Upload to S3 via API
-  async uploadToS3(data, authToken, apiBase = 'https://api-extractor.aayushman.dev') {
+  async uploadToS3(data, authToken, apiBase = 'https://your-api-domain.com') {
     try {
       console.log('📤 [UPLOAD] Starting S3 upload process...');
       console.log('📤 [UPLOAD] API Base:', apiBase);
@@ -398,7 +398,7 @@ class XTweetScraper {
   }
 
   // Export tweets to JSON format
-  async exportToJSON(tweets, username = "User", uploadToS3 = false, authToken = null, apiBase = 'https://api-extractor.aayushman.dev') {
+  async exportToJSON(tweets, username = "User", uploadToS3 = false, authToken = null, apiBase = 'https://your-api-domain.com') {
     try {
       console.log('📝 Exporting tweets to JSON format...');
       
@@ -1016,7 +1016,7 @@ class XTweetScraper {
   }
 
   // Download tweets function that can be called from popup
-  async downloadTweets(count = 100, uploadToS3 = false, authToken = null, apiBase = 'https://api-extractor.aayushman.dev') {
+  async downloadTweets(count = 100, uploadToS3 = false, authToken = null, apiBase = 'https://your-api-domain.com') {
     try {
       console.log(`🚀 Starting download of ${count} tweets...`);
       
