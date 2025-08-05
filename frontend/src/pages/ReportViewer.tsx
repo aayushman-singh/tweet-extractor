@@ -85,7 +85,7 @@ const ReportViewer: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
 
-  const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://api-extractor.aayushman.dev';
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://your-api-domain.com';
 
   // Helper functions to handle different tweet data formats
   const getLikeCount = (tweet: any) => {

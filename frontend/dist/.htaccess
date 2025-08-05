@@ -1,9 +1,0 @@
-RewriteEngine On
-RewriteBase /
-
-# Handle client-side routing
-# If the request is not for a file, directory, or link, serve index.html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-l
-RewriteRule . /index.html [L] 
