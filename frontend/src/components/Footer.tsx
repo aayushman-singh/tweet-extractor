@@ -12,18 +12,29 @@ const Footer: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-4">
-                               <a
-                     href="https://buymeacoffee.com/aayushmansingh"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black text-sm font-medium rounded-lg hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md"
-                   >
-                     <span className="mr-2">☕</span>
-                     Buy me a coffee
-                   </a>
+
+                         <a
+               href="https://buymeacoffee.com/aayushmansingh"
+               target="_blank"
+               rel="noopener noreferrer"
+               className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black text-sm font-medium rounded-lg hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 shadow-sm hover:shadow-md"
+             >
+               <span className="mr-2">☕</span>
+               Buy me a coffee
+             </a>
             
             <a
-              href="https://github.com/your-username/tweet-extractor"
+              href="https://aayushman.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              aayushman.dev
+            </a>
+            
+            <a
+              href="https://github.com/aayushman-singh"
+
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-gray-600 hover:text-gray-900 transition-colors"

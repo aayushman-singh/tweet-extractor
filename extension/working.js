@@ -165,8 +165,11 @@ class XTweetScraper {
     return { tweets, nextCursor };
   }
 
-  // Fetch tweets for a specific user and cursor
-  async fetchTweets(userId, cursor = null, count = 20) {
+  // Fetch tweets for a specific user and cursor with retry logic for rate limiting
+  async fetchTweets(userId, cursor = null, count = 20, retryCount = 0) {
+    const maxRetries = 5;
+    const baseDelay = 2000; // 2 seconds base delay
+    
     const variables = {
       userId: userId,
       count: count,
@@ -205,7 +208,7 @@ class XTweetScraper {
       console.log(
         `🚀 Fetching tweets for user ${userId}${
           cursor ? ` (cursor: ${cursor.substring(0, 20)}...)` : ""
-        }`
+        }${retryCount > 0 ? ` (retry ${retryCount}/${maxRetries})` : ""}`
       );
 
       const response = await fetch(url.toString(), {
@@ -213,6 +216,20 @@ class XTweetScraper {
         headers: headers,
         credentials: "include",
       });
+
+      if (response.status === 429) {
+        // Rate limited - implement exponential backoff
+        const delay = baseDelay * Math.pow(2, retryCount) + Math.random() * 1000; // Add jitter
+        console.log(`⏳ Rate limited (429). Waiting ${Math.round(delay)}ms before retry ${retryCount + 1}/${maxRetries}...`);
+        
+        if (retryCount < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return await this.fetchTweets(userId, cursor, count, retryCount + 1);
+        } else {
+          console.error("❌ Max retries reached for rate limiting");
+          return null;
+        }
+      }
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -228,19 +245,35 @@ class XTweetScraper {
       return this.extractTweetsFromResponse(data);
     } catch (error) {
       console.error("Error fetching tweets:", error);
+      
+      // If it's a network error and we haven't exceeded retries, try again
+      if (retryCount < maxRetries && (error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
+        const delay = baseDelay * Math.pow(2, retryCount) + Math.random() * 1000;
+        console.log(`🌐 Network error. Waiting ${Math.round(delay)}ms before retry ${retryCount + 1}/${maxRetries}...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        return await this.fetchTweets(userId, cursor, count, retryCount + 1);
+      }
+      
       return null;
     }
   }
 
   // Fetch tweets until we reach the target count or run out of tweets
-  async fetchAllTweets(userId, targetCount = 100, delayMs = 500) {
+  async fetchAllTweets(userId, targetCount = 100, delayMs = 1000) { // Increased default delay to 1 second
     let allTweets = [];
     let cursor = null;
     let page = 0;
     let consecutiveEmptyPages = 0;
-    const maxConsecutiveErrors = 3;
+    let consecutiveErrors = 0;
+    const maxConsecutiveErrors = 10; // Increased from 5
+    const maxConsecutiveEmptyPages = 15; // Increased from 10
 
     console.log(`📊 Starting to fetch ${targetCount} tweets for user ID: ${userId}`);
+    console.log(`🔧 Debug: Max consecutive empty pages: ${maxConsecutiveEmptyPages}`);
+    console.log(`🔧 Debug: Max consecutive errors: ${maxConsecutiveErrors}`);
+    console.log(`🔧 Debug: Tweets per page: 40`);
+    console.log(`🔧 Debug: Expected pages for ${targetCount} tweets: ~${Math.ceil(targetCount / 40)}`);
+    console.log(`🔧 Debug: Delay between requests: ${delayMs}ms`);
 
     while (allTweets.length < targetCount) {
       const result = await this.fetchTweets(userId, cursor, 40); // Fetch 40 tweets per page
@@ -248,20 +281,31 @@ class XTweetScraper {
 
       if (!result) {
         console.log("❌ Error occurred during fetch");
+        consecutiveErrors++;
         consecutiveEmptyPages++;
-        if (consecutiveEmptyPages >= maxConsecutiveErrors) {
-          console.log("❌ Too many errors, stopping");
+        
+        if (consecutiveErrors >= maxConsecutiveErrors) {
+          console.log("❌ Too many consecutive errors, stopping");
           break;
         }
+        
+        // Add extra delay after errors
+        const errorDelay = delayMs * 2;
+        console.log(`⏳ Error occurred, waiting ${errorDelay}ms before next attempt...`);
+        await new Promise((resolve) => setTimeout(resolve, errorDelay));
+        continue; // Skip the normal delay and try again
       } else if (result.tweets.length === 0) {
         console.log("❌ No more tweets found in this page");
         consecutiveEmptyPages++;
-        if (consecutiveEmptyPages >= 2) {
-          console.log("✅ Reached end of available tweets");
+        consecutiveErrors = 0; // Reset error counter on successful response
+        
+        if (consecutiveEmptyPages >= maxConsecutiveEmptyPages) {
+          console.log("✅ Reached end of available tweets (after many empty pages)");
           break;
         }
       } else {
         consecutiveEmptyPages = 0; // Reset error counter
+        consecutiveErrors = 0; // Reset error counter
         allTweets.push(...result.tweets);
         cursor = result.nextCursor;
         
@@ -281,16 +325,18 @@ class XTweetScraper {
         break;
       }
 
-      // Safety check to prevent infinite loops (max 50 pages = 2000 tweets)
-      if (page >= 50) {
-        console.log("⚠️ Reached maximum page limit (50 pages), stopping");
+      // Safety check to prevent infinite loops (increased from 100 to 150 pages = 6000 tweets)
+      if (page >= 150) {
+        console.log("⚠️ Reached maximum page limit (150 pages), stopping");
         break;
       }
 
-      // Rate limiting delay
+      // Rate limiting delay with jitter
       if (cursor) {
-        console.log(`⏳ Waiting ${delayMs}ms before next request...`);
-        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        const jitter = Math.random() * 500; // Add up to 500ms jitter
+        const totalDelay = delayMs + jitter;
+        console.log(`⏳ Waiting ${Math.round(totalDelay)}ms before next request...`);
+        await new Promise((resolve) => setTimeout(resolve, totalDelay));
       }
     }
 

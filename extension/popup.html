@@ -203,6 +203,10 @@
     .hidden {
       display: none !important;
     }
+    
+    #customInputGroup {
+      margin-top: 8px;
+    }
   </style>
 </head>
 <body>
@@ -252,29 +256,39 @@
           <option value="10000">10000</option>
           <option value="custom">Custom</option>
         </select>
-        <input type="number" id="customTweetCount" placeholder="Enter custom number" min="1" max="50000" style="display: none;">
       </div>
       
-      <button id="extractTweetsBtn" class="download-tweets-btn">📥 Extract to JSON Archive</button>
+
+      
+      <div class="tweet-input-group" id="customInputGroup" style="display: none;">
+        <input type="number" id="customTweetCount" placeholder="Enter custom number" min="1" max="50000">
+      </div>
+      
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <button id="extractTweetsBtn" class="download-tweets-btn">📥 Extract to JSON Archive</button>
+        <button id="resetBtn" class="reset-btn" style="padding: 8px 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; cursor: pointer; font-size: 12px;" title="Reset extraction state if stuck">🔄</button>
+      </div>
       
       <div style="margin-top: 10px; text-align: center; font-size: 12px; opacity: 0.8;">
-        JSON archives will be uploaded to cloud storage
+        JSON archives will be uploaded to extractor.aayushman.dev
       </div>
     </div>
     
-    <div id="status" class="status info">
-      Please login to extract and upload tweets to cloud storage
-    </div>
-    
-    <!-- Support Section -->
-    <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2); text-align: center;">
-      <div style="font-size: 12px; margin-bottom: 8px; opacity: 0.8;">Support this project</div>
-             <a href="https://buymeacoffee.com/aayushmansingh" target="_blank" style="display: inline-block; background: linear-gradient(45deg, #FFDD00, #FFD700); color: black; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; transition: all 0.3s ease;">
+
+         <div id="status" class="status info">
+       Please login to extract and upload tweets to cloud storage
+     </div>
+     
+     <!-- Support Section -->
+     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2); text-align: center;">
+       <div style="font-size: 12px; margin-bottom: 8px; opacity: 0.8;">Support this project</div>
+       <a href="https://buymeacoffee.com/aayushmansingh" target="_blank" style="display: inline-block; background: linear-gradient(45deg, #FFDD00, #FFD700); color: black; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; transition: all 0.3s ease;">
          ☕ Buy me a coffee
        </a>
-    </div>
-  </div>
-  
-  <script src="popup.js"></script>
+     </div>
+   </div>
+   
+   <script src="popup.js"></script>
+
 </body>
 </html> 

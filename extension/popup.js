@@ -8,7 +8,9 @@ const LOCAL_API_BASE = 'http://localhost:8000';
 const STORAGE_KEYS = {
   AUTH_TOKEN: 'authToken',
   USER_DATA: 'userData',
-  API_BASE: 'apiBase'
+  API_BASE: 'apiBase',
+  EXTRACTION_STATUS: 'extractionStatus',
+  EXTRACTION_START_TIME: 'extractionStartTime'
 };
 
 // Show status message
@@ -25,16 +27,64 @@ function showStatus(message, type = 'success') {
   }
 }
 
+// Save extraction state
+function saveExtractionState(status, count = null) {
+  chrome.storage.local.set({
+    [STORAGE_KEYS.EXTRACTION_STATUS]: status,
+    [STORAGE_KEYS.EXTRACTION_START_TIME]: status === 'extracting' ? Date.now() : null
+  });
+}
+
+// Clear extraction state
+function clearExtractionState() {
+  chrome.storage.local.remove([STORAGE_KEYS.EXTRACTION_STATUS, STORAGE_KEYS.EXTRACTION_START_TIME]);
+}
+
+// Manual reset function for stuck extractions
+function resetExtractionState() {
+  clearExtractionState();
+  const downloadBtn = document.getElementById('extractTweetsBtn');
+  if (downloadBtn) {
+    downloadBtn.disabled = false;
+    downloadBtn.textContent = '📥 Extract to JSON Archive';
+  }
+  showStatus('Extraction state reset. Ready to extract tweets.', 'info');
+}
+
 // Update status message based on current state
 function updateStatusMessage() {
   const status = document.getElementById('status');
   
-  // Check if user is logged in
-  chrome.storage.local.get([STORAGE_KEYS.AUTH_TOKEN, STORAGE_KEYS.USER_DATA], (result) => {
-    if (result.authToken && result.userData) {
+  // Check if user is logged in and extraction status
+  chrome.storage.local.get([
+    STORAGE_KEYS.AUTH_TOKEN, 
+    STORAGE_KEYS.USER_DATA, 
+    STORAGE_KEYS.EXTRACTION_STATUS,
+    STORAGE_KEYS.EXTRACTION_START_TIME
+  ], (result) => {
+    if (result.extractionStatus === 'extracting') {
+      // Show extraction in progress
+      const elapsed = result.extractionStartTime ? Math.floor((Date.now() - result.extractionStartTime) / 1000) : 0;
+      status.textContent = `⏳ Extraction in progress... (${elapsed}s elapsed)`;
+      status.className = 'status info';
+      
+      // Update button state
+      const downloadBtn = document.getElementById('downloadBtn');
+      if (downloadBtn) {
+        downloadBtn.disabled = true;
+        downloadBtn.textContent = '⏳ Extracting...';
+      }
+    } else if (result.authToken && result.userData) {
       // User is logged in - show ready message
       status.textContent = `Welcome back! Ready to extract tweets for ${result.userData.email}`;
       status.className = 'status success';
+      
+      // Reset button state
+      const downloadBtn = document.getElementById('downloadBtn');
+      if (downloadBtn) {
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = '📥 Extract to JSON Archive';
+      }
     } else {
       // User is not logged in - show login message
       status.textContent = 'Please login to extract and upload tweets to cloud storage';
@@ -214,10 +264,23 @@ async function downloadTweets() {
   }
   
   try {
+    // Save extraction state
+    saveExtractionState('extracting', count);
+    
     // Disable button and show loading
     downloadBtn.disabled = true;
     downloadBtn.textContent = '⏳ Extracting...';
-    showStatus(`Starting extraction of ${count} tweets as JSON archive...`, 'info');
+    showStatus(`Starting extraction of ${count} tweets as JSON archive... This may take several minutes for large extractions.`, 'info');
+    
+    // Set up periodic status updates to show the process is still running
+    const statusInterval = setInterval(() => {
+      showStatus(`Extracting ${count} tweets... Still working, please wait.`, 'info');
+    }, 15000); // Update every 15 seconds
+    
+    // Set up periodic elapsed time updates
+    const elapsedInterval = setInterval(() => {
+      updateStatusMessage(); // This will update the elapsed time
+    }, 1000); // Update every second
     
     // Get the active tab
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -331,11 +394,20 @@ async function downloadTweets() {
     const result = extractionResults[0].result;
     
     if (result.success) {
+      clearInterval(statusInterval);
+      clearInterval(elapsedInterval);
+      clearExtractionState();
       showStatus(`✅ Successfully extracted ${result.count} tweets and uploaded to cloud storage!`, 'success');
     } else {
+      clearInterval(statusInterval);
+      clearInterval(elapsedInterval);
+      clearExtractionState();
       showStatus(`❌ Error: ${result.error}`, 'error');
     }
   } catch (error) {
+    clearInterval(statusInterval);
+    clearInterval(elapsedInterval);
+    clearExtractionState();
     showStatus(`❌ Error: ${error.message}`, 'error');
   } finally {
     // Re-enable button
@@ -424,13 +496,13 @@ async function downloadTweets() {
 // Handle custom tweet count input visibility
 function handleTweetCountChange() {
   const tweetCountSelect = document.getElementById('tweetCount');
-  const customTweetCountInput = document.getElementById('customTweetCount');
+  const customInputGroup = document.getElementById('customInputGroup');
   
   if (tweetCountSelect.value === 'custom') {
-    customTweetCountInput.style.display = 'block';
-    customTweetCountInput.focus();
+    customInputGroup.style.display = 'block';
+    document.getElementById('customTweetCount').focus();
   } else {
-    customTweetCountInput.style.display = 'none';
+    customInputGroup.style.display = 'none';
   }
 }
 
@@ -449,6 +521,22 @@ function showLoginForm() {
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize UI
   updateUI();
+  
+  // Check for ongoing extraction and restore state
+  chrome.storage.local.get([STORAGE_KEYS.EXTRACTION_STATUS, STORAGE_KEYS.EXTRACTION_START_TIME], (result) => {
+    if (result.extractionStatus === 'extracting') {
+      // Check if extraction has been running for more than 10 minutes (likely stuck)
+      const elapsed = result.extractionStartTime ? (Date.now() - result.extractionStartTime) / 1000 / 60 : 0;
+      if (elapsed > 10) {
+        console.log('⚠️ Extraction appears to be stuck, clearing state...');
+        clearExtractionState();
+        showStatus('Previous extraction may have completed. Please try again if needed.', 'info');
+      } else {
+        console.log('🔄 Restoring extraction state...');
+        updateStatusMessage(); // This will show the extraction in progress
+      }
+    }
+  });
 
   // Authentication event listeners
   document.getElementById('loginBtn').addEventListener('click', async () => {
@@ -487,6 +575,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Download event listeners
   document.getElementById('extractTweetsBtn').addEventListener('click', downloadTweets);
+  document.getElementById('resetBtn').addEventListener('click', resetExtractionState);
   document.getElementById('tweetCount').addEventListener('change', handleTweetCountChange);
 
   // Handle Enter key in forms

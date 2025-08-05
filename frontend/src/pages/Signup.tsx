@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Mail, Lock, Eye, EyeOff, Phone, FileText } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Phone } from 'lucide-react';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
