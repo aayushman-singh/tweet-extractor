@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { Toaster } from './components/ui/toaster'
+import Footer from './components/Footer'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
@@ -13,31 +14,34 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/report/:reportId"
-              element={
-                <ProtectedRoute>
-                  <ReportViewer />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
+        <div className="App min-h-screen flex flex-col">
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/report/:reportId"
+                element={
+                  <ProtectedRoute>
+                    <ReportViewer />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+          <Footer />
+          <Toaster />
         </div>
-        <Toaster />
       </Router>
     </AuthProvider>
   )

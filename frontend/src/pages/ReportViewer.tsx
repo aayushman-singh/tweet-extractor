@@ -508,47 +508,7 @@ const ReportViewer: React.FC = () => {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <img src="/extractor.png" alt="X Archive Extractor" className="w-8 h-8 rounded-lg" />
-              <span className="text-xl font-bold">X Archive Extractor</span>
-            </div>
-            <p className="text-gray-400 mb-4">
-              Powerful tweet extraction made simple
-            </p>
-            <div className="flex justify-center space-x-6 text-sm text-gray-400 mb-4">
-              <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-white transition-colors">Support</a>
-            </div>
-            <div className="border-t border-gray-800 pt-4">
-              <p className="text-gray-400 text-sm">
-                Built with ❤️ by{' '}
-                <a 
-                  href="https://github.com/aayushman-singh" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
-                >
-                  Aayushman Singh
-                </a>
-                {' '}•{' '}
-                <a 
-                  href="https://aayushman.dev" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-400 hover:text-blue-300 transition-colors font-medium"
-                >
-                  aayushman.dev
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </footer>
+
     </div>
   );
 };
