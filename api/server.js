@@ -100,8 +100,7 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// Mount API routes (assumes s3-upload-api.js exports an Express router)
-// If it doesn't, we'll need to refactor it
+
 try {
   app.use('/', apiRoutes);
 } catch (error) {
