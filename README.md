@@ -1,4 +1,4 @@
-# ![Tweet Extractor](extractor.png) Tweet Extractor - Chrome Extension & API
+# <img src="extractor.png" alt="Tweet Extractor" width="32" height="32" /> Tweet Extractor - Chrome Extension & API
 
 A comprehensive solution for extracting and archiving tweets from X/Twitter profiles with rich HTML archives and cloud hosting capabilities.
 
