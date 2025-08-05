@@ -43,8 +43,8 @@ const corsOptions = {
     
     const allowedOrigins = [
       'chrome-extension://*',
-      'https://extractor.aayushman.dev',
-      'https://www.extractor.aayushman.dev',
+        'https://your-frontend-domain.com',
+  'https://www.your-frontend-domain.com',
       'http://localhost:3000',
       'http://localhost:5173', // Vite dev server
       'http://localhost:4173'  // Vite preview
