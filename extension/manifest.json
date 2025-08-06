@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "X Archive Extractor",
-  "version": "3.0",
-  "description": "Extract and archive tweets from X/Twitter with user authentication and cloud storage",
+  "version": "4.0",
+  "description": "Extract and archive tweets from X/Twitter",
   "icons": {
     "16": "extractor.png",
     "32": "extractor.png",
