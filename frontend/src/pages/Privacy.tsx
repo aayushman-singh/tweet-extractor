@@ -104,7 +104,7 @@ const Privacy: React.FC = () => {
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-900">host_permissions: https://your-api-domain.com/</h4>
+                    <h4 className="font-semibold text-gray-900">host_permissions: https://api-extractor.aayushman.dev/</h4>
                     <ul className="list-disc pl-6 text-sm text-gray-700">
                       <li>Purpose: Communicate with our backend API</li>
                       <li>Usage: User authentication and S3 uploads</li>

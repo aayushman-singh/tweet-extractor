@@ -40,7 +40,7 @@ const Dashboard: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://your-api-domain.com';
+  const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://api-extractor.aayushman.dev';
 
   useEffect(() => {
     fetchArchives();
@@ -178,7 +178,7 @@ const Dashboard: React.FC = () => {
   const downloadArchive = async (archive: Archive) => {
     try {
       const token = localStorage.getItem('authToken');
-      const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://your-api-domain.com';
+      const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://api-extractor.aayushman.dev';
       
       // Use the API endpoint instead of direct S3 access to avoid CORS issues
       const response = await axios.get(`${API_BASE}/api/report/${archive._id}/download`, {

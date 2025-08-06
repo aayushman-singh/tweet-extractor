@@ -42,12 +42,10 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     const allowedOrigins = [
-      'chrome-extension://*',
-        'https://your-frontend-domain.com',
-  'https://www.your-frontend-domain.com',
-      'http://localhost:3000',
-      'http://localhost:5173', // Vite dev server
-      'http://localhost:4173'  // Vite preview
+      "chrome-extension://*",
+      "https://extractor.aayushman.dev", // Frontend domain
+      "https://www.extractor.aayushman.dev", // Frontend domain with www
+      "https://api-extractor.aayushman.dev" // API
     ];
     
     // Check if origin matches any pattern
