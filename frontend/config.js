@@ -5,7 +5,7 @@
 // For production: https://your-api-domain.com
 // For local development: http://localhost:8000
 
-window.API_BASE_URL = 'https://your-api-domain.com'; // Production API URL
+window.API_BASE_URL = 'https://api-extractor.aayushman.dev'; // Production API URL
 
 // Alternative: Use environment detection
 // if (window.location.hostname === 'localhost') {

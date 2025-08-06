@@ -418,4 +418,7 @@ FodyWeavers.xsd
 *.msp
 extension.zip
 *.pem
+
 /.vercel
+*.stackdump
+

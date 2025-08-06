@@ -2,6 +2,32 @@
 
 A comprehensive solution for extracting and archiving tweets from X/Twitter profiles with rich HTML archives and cloud hosting capabilities.
 
+## 🎯 Quick Start for Users
+
+**Want to use this app right now? No technical setup required!**
+
+### 📦 Pre-packaged Extension
+- Download `x_archive_extractor.zip` from the releases
+- Extract and load it as an unpacked extension in Chrome
+- Start extracting tweets immediately!
+
+### 🌐 Web Interface
+- Visit [extractor.aayushman.dev](https://extractor.aayushman.dev) for the full web interface
+- No installation required - works in any browser
+- Upload and manage your tweet archives online
+
+### 📱 How to Use
+1. **Install the extension** or **visit the website**
+2. **Navigate to any Twitter/X profile** you want to extract
+3. **Click the extract button** and choose how many tweets to download
+4. **Download your archive** as JSON or view it online
+
+That's it! No coding, no deployment, no technical knowledge required.
+
+---
+
+*For developers who want to deploy their own instance, see the technical setup guide below.*
+
 ## ☕ Support This Project
 
 If you find this project helpful, consider supporting its development:
