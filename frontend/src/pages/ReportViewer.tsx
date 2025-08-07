@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import DateRangeFilter from '@/components/DateRangeFilter';
 import { 
   FileText, 
   Download, 
@@ -84,6 +85,18 @@ const ReportViewer: React.FC = () => {
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'likes' | 'retweets' | 'views' | 'engagement'>('newest');
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
+  const [dateRange, setDateRange] = useState<{ startDate: Date | null; endDate: Date | null }>({
+    startDate: null,
+    endDate: null
+  });
+
+  // Parse URL parameters for date range
+  const [searchParams, setSearchParams] = useSearchParams();
+  const urlStartDate = searchParams.get('startDate');
+  const urlEndDate = searchParams.get('endDate');
+  
+  const initialStartDate = urlStartDate ? new Date(urlStartDate) : null;
+  const initialEndDate = urlEndDate ? new Date(urlEndDate) : null;
 
   const API_BASE = (import.meta as any).env?.VITE_API_BASE_URL || 'https://api-extractor.aayushman.dev';
 
@@ -141,7 +154,15 @@ const ReportViewer: React.FC = () => {
       console.log('🔍 [FRONTEND] useEffect triggered, reportData changed:', reportData);
       filterAndSortTweets();
     }
-  }, [reportData, sortBy, searchQuery]);
+  }, [reportData, sortBy, searchQuery, dateRange]);
+
+  // Initialize date range from URL parameters
+  useEffect(() => {
+    setDateRange({
+      startDate: initialStartDate,
+      endDate: initialEndDate
+    });
+  }, [initialStartDate, initialEndDate]);
 
   const fetchReportData = async () => {
     try {
@@ -159,6 +180,57 @@ const ReportViewer: React.FC = () => {
       console.log('🔍 [FRONTEND] Profile info type:', typeof response.data.profileInfo);
       console.log('🔍 [FRONTEND] Profile info username:', response.data.profileInfo?.username);
       console.log('🔍 [FRONTEND] Stats:', response.data.stats);
+      console.log('🔍 [FRONTEND] Timeline:', response.data.timeline);
+      
+      // Log some sample tweet dates to understand the date range
+      if (response.data.tweets && response.data.tweets.length > 0) {
+        const sampleTweets = response.data.tweets.slice(0, 5);
+        console.log('🔍 [FRONTEND] Sample tweet dates:', sampleTweets.map((tweet: Tweet) => ({
+          id: tweet.id,
+          created_at: tweet.created_at,
+          text: tweet.text.substring(0, 30) + '...'
+        })));
+        
+        // Calculate actual date range from tweets
+        const tweetDates = response.data.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
+        const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
+        const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
+        
+        console.log('🔍 [FRONTEND] Actual tweet date range:', {
+          earliest: earliestTweet.toISOString(),
+          latest: latestTweet.toISOString(),
+          totalTweets: response.data.tweets.length
+        });
+        
+                 console.log('🔍 [FRONTEND] Timeline vs Actual:', {
+           timelineStart: response.data.timeline.startDate,
+           timelineEnd: response.data.timeline.endDate,
+           actualStart: earliestTweet.toISOString(),
+           actualEnd: latestTweet.toISOString()
+         });
+         
+         // Check for tweets outside the timeline range
+         const timelineStart = new Date(response.data.timeline.startDate);
+         const timelineEnd = new Date(response.data.timeline.endDate);
+         
+         const tweetsOutsideTimeline = response.data.tweets.filter((tweet: Tweet) => {
+           const tweetDate = new Date(tweet.created_at);
+           return tweetDate < timelineStart || tweetDate > timelineEnd;
+         });
+         
+         if (tweetsOutsideTimeline.length > 0) {
+           console.log('🔍 [FRONTEND] Tweets outside timeline range:', {
+             count: tweetsOutsideTimeline.length,
+             timelineStart: timelineStart.toISOString(),
+             timelineEnd: timelineEnd.toISOString(),
+             sampleTweets: tweetsOutsideTimeline.slice(0, 3).map((tweet: Tweet) => ({
+               id: tweet.id,
+               created_at: tweet.created_at,
+               text: tweet.text.substring(0, 50) + '...'
+             }))
+           });
+         }
+      }
       
       setReportData(response.data);
     } catch (error) {
@@ -183,9 +255,45 @@ const ReportViewer: React.FC = () => {
 
     // Apply search filter
     if (searchQuery) {
-      filtered = filtered.filter(tweet => 
+      filtered = filtered.filter((tweet: Tweet) => 
         tweet.text.toLowerCase().includes(searchQuery.toLowerCase())
       );
+    }
+
+    // Apply date range filter
+    if (dateRange.startDate || dateRange.endDate) {
+      console.log('🔍 [DATE FILTER] Applying date filter:', {
+        startDate: dateRange.startDate,
+        endDate: dateRange.endDate,
+        tweetsBeforeFilter: filtered.length
+      });
+      
+      filtered = filtered.filter((tweet: Tweet) => {
+        const tweetDate = new Date(tweet.created_at);
+        
+        if (dateRange.startDate && dateRange.endDate) {
+          const isInRange = tweetDate >= dateRange.startDate && tweetDate <= dateRange.endDate;
+          if (!isInRange) {
+            console.log('🔍 [DATE FILTER] Excluding tweet:', {
+              tweetDate: tweetDate.toISOString(),
+              tweetText: tweet.text.substring(0, 50) + '...',
+              startDate: dateRange.startDate.toISOString(),
+              endDate: dateRange.endDate.toISOString()
+            });
+          }
+          return isInRange;
+        } else if (dateRange.startDate) {
+          return tweetDate >= dateRange.startDate;
+        } else if (dateRange.endDate) {
+          return tweetDate <= dateRange.endDate;
+        }
+        
+        return true;
+      });
+      
+      console.log('🔍 [DATE FILTER] After date filter:', {
+        tweetsAfterFilter: filtered.length
+      });
     }
 
     // Apply sorting
@@ -212,6 +320,24 @@ const ReportViewer: React.FC = () => {
     });
 
     setFilteredTweets(filtered);
+  };
+
+  const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
+    setDateRange({ startDate, endDate });
+    
+    // Update URL parameters
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (startDate) {
+      newSearchParams.set('startDate', startDate.toISOString());
+    } else {
+      newSearchParams.delete('startDate');
+    }
+    if (endDate) {
+      newSearchParams.set('endDate', endDate.toISOString());
+    } else {
+      newSearchParams.delete('endDate');
+    }
+    setSearchParams(newSearchParams);
   };
 
   const formatDate = (dateString: string) => {
@@ -400,17 +526,49 @@ const ReportViewer: React.FC = () => {
             </Card>
           </div>
 
-          {/* Timeline */}
-          <Card className="mb-8">
-            <CardContent className="p-6">
-              <div className="text-center">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">📅 Timeline Span</h3>
-                <p className="text-gray-600">
-                  {formatDate(reportData.timeline.startDate)} → {formatDate(reportData.timeline.endDate)}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+                     {/* Timeline */}
+           <Card className="mb-8">
+             <CardContent className="p-6">
+               <div className="text-center">
+                 <h3 className="text-lg font-semibold text-gray-900 mb-2">📅 Timeline Span</h3>
+                 <p className="text-gray-600">
+                   {formatDate(reportData.timeline.startDate)} → {formatDate(reportData.timeline.endDate)}
+                 </p>
+                 {(() => {
+                   // Check if there are tweets outside the timeline range
+                   const timelineStart = new Date(reportData.timeline.startDate);
+                   const timelineEnd = new Date(reportData.timeline.endDate);
+                   const tweetDates = reportData.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
+                   const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
+                   const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
+                   
+                   const hasMismatch = earliestTweet < timelineStart || latestTweet > timelineEnd;
+                   
+                   if (hasMismatch) {
+                     return (
+                       <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                         <p className="text-sm text-yellow-800">
+                           ⚠️ <strong>Note:</strong> This archive contains tweets from{' '}
+                           {formatDate(earliestTweet.toISOString())} to{' '}
+                           {formatDate(latestTweet.toISOString())}, which extends beyond the timeline span.
+                         </p>
+                       </div>
+                     );
+                   }
+                   return null;
+                 })()}
+               </div>
+             </CardContent>
+           </Card>
+        </div>
+
+        {/* Date Range Filter */}
+        <div className="mb-6">
+          <DateRangeFilter 
+            onDateRangeChange={handleDateRangeChange}
+            initialStartDate={initialStartDate}
+            initialEndDate={initialEndDate}
+          />
         </div>
 
         {/* Controls */}
@@ -442,6 +600,11 @@ const ReportViewer: React.FC = () => {
           </div>
           <div className="text-sm text-gray-600">
             Showing {filteredTweets.length} of {reportData.tweets.length} tweets
+            {dateRange.startDate || dateRange.endDate ? (
+              <span className="ml-2 text-blue-600">
+                • Filtered by date range
+              </span>
+            ) : null}
           </div>
         </div>
 
