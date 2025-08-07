@@ -15,7 +15,7 @@
     "scripting"
   ],
           "host_permissions": [
-          "http://api-extractor.aayushman.dev/*"
+          "https://api-extractor.aayushman.dev/*"
         ],
   "action": {
     "default_popup": "popup.html",

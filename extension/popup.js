@@ -1,5 +1,6 @@
 // 🌐 API Configuration
-const API_BASE = "http://api-extractor.aayushman.dev";
+
+const API_BASE = "https://api-extractor.aayushman.dev";
 
 // Storage keys
 const STORAGE_KEYS = {
