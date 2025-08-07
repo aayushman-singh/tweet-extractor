@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar, X, Filter, Clock, Check } from 'lucide-react';
+import { X, Filter, Check } from 'lucide-react';
 
 interface DateRangeFilterProps {
   onDateRangeChange: (startDate: Date | null, endDate: Date | null) => void;
@@ -22,7 +22,6 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
   const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
   const [appliedStartDate, setAppliedStartDate] = useState<Date | null>(initialStartDate);
   const [appliedEndDate, setAppliedEndDate] = useState<Date | null>(initialEndDate);
-  const [isOpen, setIsOpen] = useState(false);
 
   // Update internal state when props change (for URL sync)
   useEffect(() => {
@@ -171,7 +170,7 @@ const DateRangeFilter: React.FC<DateRangeFilterProps> = ({
                 selectsEnd
                 startDate={startDate}
                 endDate={endDate}
-                minDate={startDate}
+                minDate={startDate || undefined}
                 maxDate={new Date()}
                 placeholderText="Select end date"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
