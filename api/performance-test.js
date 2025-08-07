@@ -7,7 +7,7 @@
 
 const fetch = require('node-fetch');
 
-const API_BASE = process.env.API_BASE || 'http://localhost:8000';
+const API_BASE = process.env.API_BASE || 'https://api-extractor.aayushman.dev';
 const TEST_EMAIL = 'test@example.com';
 const TEST_PASSWORD = 'testpassword123';
 

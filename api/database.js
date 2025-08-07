@@ -65,8 +65,6 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        unique: true,
-        sparse: true, // Allow null values but ensure uniqueness when present
         trim: true
     },
     password_hash: {
@@ -184,40 +182,14 @@ const UserDB = {
             
             const { email, phone, password_hash } = userData;
             
-            // Use findOneAndUpdate with upsert: false to check existence and create atomically
-            // This reduces the number of database queries from 2 to 1
-            const user = await User.findOneAndUpdate(
-                {
-                    $or: [
-                        { email: email.toLowerCase() },
-                        ...(phone ? [{ phone: phone }] : [])
-                    ]
-                },
-                {
-                    $setOnInsert: {
-                        email: email.toLowerCase(),
-                        phone: phone || null,
-                        password_hash
-                    }
-                },
-                {
-                    upsert: false, // Don't create if exists
-                    new: true, // Return the document
-                    runValidators: true
-                }
-            );
+            // Check if user with this email already exists
+            const existingUser = await User.findOne({ email: email.toLowerCase() });
             
-            if (user) {
-                // User already exists
-                if (user.email === email.toLowerCase()) {
-                    throw { field: 'email', error: 'Email already exists' };
-                }
-                if (phone && user.phone === phone) {
-                    throw { field: 'phone', error: 'Phone number already exists' };
-                }
+            if (existingUser) {
+                throw { field: 'email', error: 'Email already exists' };
             }
             
-            // Create new user since no existing user was found
+            // Create new user
             const newUser = new User({
                 email: email.toLowerCase(),
                 phone: phone || null,
@@ -234,7 +206,7 @@ const UserDB = {
             };
         } catch (error) {
             if (error.code === 11000) {
-                // MongoDB duplicate key error
+                // MongoDB duplicate key error (should only be for email now)
                 const field = Object.keys(error.keyPattern)[0];
                 throw {
                     field: field,

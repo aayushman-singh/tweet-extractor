@@ -175,6 +175,9 @@ app.post('/api/auth/register', async (req, res) => {
   } catch (error) {
     const totalTime = Date.now() - startTime;
     console.error('❌ [REGISTER] Registration failed after', totalTime, 'ms:', error);
+    console.error('❌ [REGISTER] Error type:', typeof error);
+    console.error('❌ [REGISTER] Error message:', error?.message);
+    console.error('❌ [REGISTER] Error stack:', error?.stack);
     
     // Provide more specific error messages
     if (error.code === 11000) {
@@ -194,7 +197,7 @@ app.post('/api/auth/register', async (req, res) => {
       });
     }
     
-    if (error.message && error.message.includes('MONGODB_URI')) {
+    if (error && error.message && typeof error.message === 'string' && error.message.includes('MONGODB_URI')) {
       return res.status(500).json({ 
         success: false,
         error: 'Database configuration error. Please contact support.' 
@@ -273,7 +276,11 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
   } catch (error) {
-    if (error.message && error.message.includes('MONGODB_URI')) {
+    console.error('❌ [LOGIN] Login error:', error);
+    console.error('❌ [LOGIN] Error type:', typeof error);
+    console.error('❌ [LOGIN] Error message:', error?.message);
+    
+    if (error && error.message && typeof error.message === 'string' && error.message.includes('MONGODB_URI')) {
       return res.status(500).json({ 
         success: false,
         error: 'Database configuration error. Please contact support.' 

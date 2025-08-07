@@ -20,7 +20,7 @@ async function handleAPIUpload(data, authToken) {
     console.log('📤 [BACKGROUND] Request body prepared, size:', JSON.stringify(requestBody).length, 'bytes');
     console.log('📤 [BACKGROUND] Making fetch request to API...');
     
-            const response = await fetch('https://api-extractor.aayushman.dev/api/upload-to-s3', {
+            const response = await fetch('http://api-extractor.aayushman.dev/api/upload-to-s3', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
