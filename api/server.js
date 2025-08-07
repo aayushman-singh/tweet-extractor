@@ -38,6 +38,9 @@ app.use(compression({
   }
 }));
 
+// Trust proxy for rate limiting behind load balancers
+app.set('trust proxy', 1);
+
 // Rate limiting with more generous limits for auth endpoints
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -45,6 +48,8 @@ const authLimiter = rateLimit({
   message: 'Too many authentication requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  // Disable X-Forwarded-For header validation since we're behind a proxy
+  skip: (req) => req.headers['x-forwarded-for'] && !app.get('trust proxy'),
 });
 
 const generalLimiter = rateLimit({
@@ -53,6 +58,8 @@ const generalLimiter = rateLimit({
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  // Disable X-Forwarded-For header validation since we're behind a proxy
+  skip: (req) => req.headers['x-forwarded-for'] && !app.get('trust proxy'),
 });
 
 // Apply different rate limits to different endpoints

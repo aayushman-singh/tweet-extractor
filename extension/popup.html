@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <style>
-    body {
-      width: 380px;
-      padding: 20px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
-      margin: 0;
-      color: white;
-    }
+         body {
+       width: 380px;
+       padding: 20px;
+       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+       background: #f8f9fa;
+       margin: 0;
+       color: #333;
+     }
     
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+         .container {
+       background: white;
+       border-radius: 12px;
+       padding: 20px;
+       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+       border: 1px solid #e9ecef;
+     }
     
     .header {
       display: flex;
@@ -35,12 +35,13 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
     
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 600;
-      text-align: center;
-    }
+         h1 {
+       margin: 0;
+       font-size: 20px;
+       font-weight: 600;
+       text-align: center;
+       color: #212529;
+     }
 
     .auth-container {
       text-align: center;
@@ -50,22 +51,23 @@
       margin-bottom: 15px;
     }
 
-    .auth-form input {
-      width: 100%;
-      padding: 10px 12px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
+         .auth-form input {
+       width: 100%;
+       padding: 10px 12px;
+       margin: 8px 0;
+       border: 1px solid #dee2e6;
+       border-radius: 6px;
+       background: white;
+       color: #333;
+       font-size: 14px;
+       box-sizing: border-box;
+     }
 
-    .auth-form input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-    }
+     .auth-form input:focus {
+       outline: none;
+       border-color: #6c757d;
+       box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
+     }
 
     .auth-buttons {
       display: flex;
@@ -83,47 +85,48 @@
       transition: all 0.3s ease;
     }
 
-    .auth-btn.primary {
-      background: #17bf63;
-      color: white;
-    }
+         .auth-btn.primary {
+       background: #212529;
+       color: white;
+     }
 
-    .auth-btn.secondary {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
+     .auth-btn.secondary {
+       background: #6c757d;
+       color: white;
+     }
 
     .auth-btn:hover {
       transform: translateY(-1px);
     }
 
-    .user-info {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
+         .user-info {
+       background: #f8f9fa;
+       padding: 12px;
+       border-radius: 6px;
+       margin-bottom: 15px;
+       text-align: center;
+       border: 1px solid #e9ecef;
+     }
 
     .user-email {
       font-size: 14px;
       margin-bottom: 8px;
     }
 
-    .logout-btn {
-      background: rgba(244, 67, 54, 0.2);
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-    }
+         .logout-btn {
+       background: #dc3545;
+       color: white;
+       border: none;
+       padding: 6px 12px;
+       border-radius: 4px;
+       cursor: pointer;
+       font-size: 12px;
+     }
 
-    .extraction-section {
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      padding-top: 15px;
-    }
+         .extraction-section {
+       border-top: 1px solid #dee2e6;
+       padding-top: 15px;
+     }
     
     label {
       display: block;
@@ -137,22 +140,23 @@
       margin-bottom: 15px;
     }
     
-    .tweet-input-group select,
-    .tweet-input-group input {
-      flex: 1;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      font-size: 14px;
-    }
-    
-    .tweet-input-group select:focus,
-    .tweet-input-group input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-    }
+         .tweet-input-group select,
+     .tweet-input-group input {
+       flex: 1;
+       padding: 8px 12px;
+       border: 1px solid #dee2e6;
+       border-radius: 6px;
+       background: white;
+       color: #333;
+       font-size: 14px;
+     }
+     
+     .tweet-input-group select:focus,
+     .tweet-input-group input:focus {
+       outline: none;
+       border-color: #6c757d;
+       box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
+     }
     
     .download-tweets-btn {
       width: 100%;
