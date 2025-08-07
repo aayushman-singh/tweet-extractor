@@ -422,3 +422,4 @@ extension.zip
 /.vercel
 *.stackdump
 
+api/package-lock.json

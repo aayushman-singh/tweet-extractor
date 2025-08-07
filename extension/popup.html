@@ -3,22 +3,22 @@
 <head>
   <meta charset="utf-8">
   <style>
-    body {
-      width: 380px;
-      padding: 20px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
-      margin: 0;
-      color: white;
-    }
+         body {
+       width: 380px;
+       padding: 20px;
+       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+       background: #f8f9fa;
+       margin: 0;
+       color: #333;
+     }
     
-    .container {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+         .container {
+       background: white;
+       border-radius: 12px;
+       padding: 20px;
+       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+       border: 1px solid #e9ecef;
+     }
     
     .header {
       display: flex;
@@ -35,12 +35,13 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
     
-    h1 {
-      margin: 0;
-      font-size: 20px;
-      font-weight: 600;
-      text-align: center;
-    }
+         h1 {
+       margin: 0;
+       font-size: 20px;
+       font-weight: 600;
+       text-align: center;
+       color: #212529;
+     }
 
     .auth-container {
       text-align: center;
@@ -50,22 +51,23 @@
       margin-bottom: 15px;
     }
 
-    .auth-form input {
-      width: 100%;
-      padding: 10px 12px;
-      margin: 8px 0;
-      border: none;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
+         .auth-form input {
+       width: 100%;
+       padding: 10px 12px;
+       margin: 8px 0;
+       border: 1px solid #dee2e6;
+       border-radius: 6px;
+       background: white;
+       color: #333;
+       font-size: 14px;
+       box-sizing: border-box;
+     }
 
-    .auth-form input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-    }
+     .auth-form input:focus {
+       outline: none;
+       border-color: #6c757d;
+       box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
+     }
 
     .auth-buttons {
       display: flex;
@@ -83,47 +85,48 @@
       transition: all 0.3s ease;
     }
 
-    .auth-btn.primary {
-      background: #17bf63;
-      color: white;
-    }
+         .auth-btn.primary {
+       background: #212529;
+       color: white;
+     }
 
-    .auth-btn.secondary {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-    }
+     .auth-btn.secondary {
+       background: #6c757d;
+       color: white;
+     }
 
     .auth-btn:hover {
       transform: translateY(-1px);
     }
 
-    .user-info {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 12px;
-      border-radius: 6px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
+         .user-info {
+       background: #f8f9fa;
+       padding: 12px;
+       border-radius: 6px;
+       margin-bottom: 15px;
+       text-align: center;
+       border: 1px solid #e9ecef;
+     }
 
     .user-email {
       font-size: 14px;
       margin-bottom: 8px;
     }
 
-    .logout-btn {
-      background: rgba(244, 67, 54, 0.2);
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-    }
+         .logout-btn {
+       background: #dc3545;
+       color: white;
+       border: none;
+       padding: 6px 12px;
+       border-radius: 4px;
+       cursor: pointer;
+       font-size: 12px;
+     }
 
-    .extraction-section {
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-      padding-top: 15px;
-    }
+         .extraction-section {
+       border-top: 1px solid #dee2e6;
+       padding-top: 15px;
+     }
     
     label {
       display: block;
@@ -137,45 +140,46 @@
       margin-bottom: 15px;
     }
     
-    .tweet-input-group select,
-    .tweet-input-group input {
-      flex: 1;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      font-size: 14px;
-    }
+         .tweet-input-group select,
+     .tweet-input-group input {
+       flex: 1;
+       padding: 8px 12px;
+       border: 1px solid #dee2e6;
+       border-radius: 6px;
+       background: white;
+       color: #333;
+       font-size: 14px;
+     }
+     
+     .tweet-input-group select:focus,
+     .tweet-input-group input:focus {
+       outline: none;
+       border-color: #6c757d;
+       box-shadow: 0 0 0 2px rgba(108, 117, 125, 0.2);
+     }
     
-    .tweet-input-group select:focus,
-    .tweet-input-group input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
-    }
-    
-    .download-tweets-btn {
-      width: 100%;
-      background: linear-gradient(45deg, #17bf63, #0fa866);
-      color: white;
-      font-weight: 600;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .download-tweets-btn:hover {
-      background: linear-gradient(45deg, #0fa866, #17bf63);
-      transform: translateY(-2px);
-    }
-    
-    .download-tweets-btn:disabled {
-      background: rgba(255, 255, 255, 0.2);
-      cursor: not-allowed;
-      transform: none;
-    }
+         .download-tweets-btn {
+       width: 100%;
+       background: #212529;
+       color: white;
+       font-weight: 600;
+       padding: 12px 20px;
+       border: none;
+       border-radius: 8px;
+       cursor: pointer;
+       transition: all 0.3s ease;
+     }
+     
+     .download-tweets-btn:hover {
+       background: #343a40;
+       transform: translateY(-2px);
+     }
+     
+     .download-tweets-btn:disabled {
+       background: #6c757d;
+       cursor: not-allowed;
+       transform: none;
+     }
     
     .status {
       margin-top: 15px;
@@ -186,20 +190,23 @@
       min-height: 20px;
     }
     
-    .success {
-      background: rgba(23, 191, 99, 0.2);
-      border: 1px solid rgba(23, 191, 99, 0.3);
-    }
-    
-    .error {
-      background: rgba(244, 67, 54, 0.2);
-      border: 1px solid rgba(244, 67, 54, 0.3);
-    }
-    
-    .info {
-      background: rgba(29, 161, 242, 0.2);
-      border: 1px solid rgba(29, 161, 242, 0.3);
-    }
+         .success {
+       background: #d4edda;
+       border: 1px solid #c3e6cb;
+       color: #155724;
+     }
+     
+     .error {
+       background: #f8d7da;
+       border: 1px solid #f5c6cb;
+       color: #721c24;
+     }
+     
+     .info {
+       background: #d1ecf1;
+       border: 1px solid #bee5eb;
+       color: #0c5460;
+     }
     .hidden {
       display: none !important;
     }
@@ -223,8 +230,11 @@
         <input type="password" id="loginPassword" placeholder="Password" required>
         <div class="auth-buttons">
           <button id="loginBtn" class="auth-btn primary">Login</button>
-          <button id="showSignupBtn" class="auth-btn secondary">Sign Up</button>
         </div>
+                 <div style="margin-top: 10px; text-align: center;">
+           <span style="font-size: 14px; color: #6c757d;">Don't have an account? </span>
+           <a href="#" id="showSignupBtn" style="color: #212529; text-decoration: none; font-weight: 600; font-size: 14px;">Sign up</a>
+         </div>
       </div>
       
       <div id="signupForm" class="auth-form hidden">
@@ -233,8 +243,11 @@
         <input type="password" id="signupPassword" placeholder="Password (8+ chars)" required>
         <div class="auth-buttons">
           <button id="signupBtn" class="auth-btn primary">Create Account</button>
-          <button id="showLoginBtn" class="auth-btn secondary">Back to Login</button>
         </div>
+                 <div style="margin-top: 10px; text-align: center;">
+           <span style="font-size: 14px; color: #6c757d;">Already have an account? </span>
+           <a href="#" id="showLoginBtn" style="color: #212529; text-decoration: none; font-weight: 600; font-size: 14px;">Login</a>
+         </div>
       </div>
     </div>
 
@@ -266,12 +279,12 @@
       
       <div style="display: flex; gap: 10px; align-items: center;">
         <button id="extractTweetsBtn" class="download-tweets-btn">📥 Extract to JSON Archive</button>
-        <button id="resetBtn" class="reset-btn" style="padding: 8px 12px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: white; border-radius: 6px; cursor: pointer; font-size: 12px;" title="Reset extraction state if stuck">🔄</button>
+                 <button id="resetBtn" class="reset-btn" style="padding: 8px 12px; background: #6c757d; border: 1px solid #6c757d; color: white; border-radius: 6px; cursor: pointer; font-size: 12px;" title="Reset extraction state if stuck">🔄</button>
       </div>
       
-      <div style="margin-top: 10px; text-align: center; font-size: 12px; opacity: 0.8;">
-        Archives will be available on extractor.aayushman.dev
-      </div>
+             <div style="margin-top: 10px; text-align: center; font-size: 12px; color: #6c757d;">
+         Archives will be available on extractor.aayushman.dev
+       </div>
     </div>
     
 
@@ -279,13 +292,13 @@
        Please login to extract and upload tweets to cloud storage
      </div>
      
-     <!-- Support Section -->
-     <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.2); text-align: center;">
-       <div style="font-size: 12px; margin-bottom: 8px; opacity: 0.8;">Support this project</div>
-       <a href="https://buymeacoffee.com/aayushmansingh" target="_blank" style="display: inline-block; background: linear-gradient(45deg, #FFDD00, #FFD700); color: black; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; transition: all 0.3s ease;">
-         ☕ Buy me a coffee
-       </a>
-     </div>
+           <!-- Support Section -->
+      <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #dee2e6; text-align: center;">
+        <div style="font-size: 12px; margin-bottom: 8px; color: #6c757d;">Support this project</div>
+        <a href="https://buymeacoffee.com/aayushmansingh" target="_blank" style="display: inline-block; background: #212529; color: white; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; transition: all 0.3s ease;">
+          ☕ Buy me a coffee
+        </a>
+      </div>
    </div>
    
    <script src="popup.js"></script>

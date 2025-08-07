@@ -25,15 +25,46 @@ app.use(helmet({
 }));
 
 // Compression middleware
-app.use(compression());
+app.use(compression({
+  level: 6, // Balanced compression level
+  threshold: 1024, // Only compress responses larger than 1KB
+  filter: (req, res) => {
+    // Don't compress if client doesn't support it
+    if (req.headers['x-no-compression']) {
+      return false;
+    }
+    // Use compression for all other requests
+    return compression.filter(req, res);
+  }
+}));
 
-// Rate limiting
-const limiter = rateLimit({
+// Trust proxy for rate limiting behind load balancers
+app.set('trust proxy', 1);
+
+// Rate limiting with more generous limits for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50, // limit each IP to 50 requests per windowMs for auth endpoints
+  message: 'Too many authentication requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Disable X-Forwarded-For header validation since we're behind a proxy
+  skip: (req) => req.headers['x-forwarded-for'] && !app.get('trust proxy'),
+});
+
+const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  message: 'Too many requests from this IP, please try again later.',
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Disable X-Forwarded-For header validation since we're behind a proxy
+  skip: (req) => req.headers['x-forwarded-for'] && !app.get('trust proxy'),
 });
-app.use('/api/', limiter);
+
+// Apply different rate limits to different endpoints
+app.use('/api/auth/', authLimiter);
+app.use('/api/', generalLimiter);
 
 // CORS configuration
 const corsOptions = {

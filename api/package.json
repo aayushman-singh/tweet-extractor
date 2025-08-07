@@ -11,7 +11,9 @@
     "pm2:stop": "pm2 stop tweet-extractor-api",
     "pm2:restart": "pm2 restart tweet-extractor-api",
     "pm2:logs": "pm2 logs tweet-extractor-api",
-    "test": "node test-endpoints.js"
+    "test": "node test-endpoints.js",
+    "test:register": "node test-registration.js",
+    "test:performance": "node performance-test.js"
   },
   "dependencies": {
     "express": "^4.18.2",
@@ -23,7 +25,8 @@
     "helmet": "^7.1.0",
     "compression": "^1.7.4",
     "express-rate-limit": "^7.1.5",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "node-fetch": "^2.7.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

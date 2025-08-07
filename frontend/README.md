@@ -98,10 +98,34 @@ User authentication page with form validation.
 User registration page with password requirements.
 
 ### Dashboard (`/dashboard`)
+Main dashboard for managing tweet archives:
+
+- **Archive Management**: View, download, and delete archives
+- **Statistics**: Real-time counts and file sizes
+- **Responsive Grid**: Archive cards with metadata and actions
+- **Quick Actions**: Navigate to individual report viewers
+
 Protected page showing user's tweet archives with management options.
 
 ### Report Viewer (`/report/:id`)
-Protected page for viewing individual tweet archives with interactive features.
+Protected page for viewing individual tweet archives with advanced filtering capabilities:
+
+- **Date Range Filter**: Filter tweets by creation date with:
+  - Quick preset buttons (Today, Yesterday, Last 7 Days, Last 30 Days, Last 3 Months)
+  - Custom date range picker with start and end dates
+  - Apply/Clear buttons for better control
+  - URL-based state management for shareable filters
+  - Real-time tweet count updates based on filtered results
+
+**URL Sharing**: Date filters are automatically saved in the URL, making them shareable:
+- Example: `/report/123?startDate=2024-01-01T00:00:00.000Z&endDate=2024-01-31T23:59:59.999Z`
+- Users can bookmark filtered views
+- Direct links to specific date ranges work seamlessly
+
+- **Text Search**: Search tweets by content
+- **Sorting Options**: Sort by newest, oldest, likes, retweets, views, or engagement
+- **Tweet Analytics**: View metrics for each tweet
+- **Export Options**: Download the filtered report
 
 ### Privacy (`/privacy`)
 Privacy policy and data handling information.

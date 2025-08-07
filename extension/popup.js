@@ -1,8 +1,6 @@
 // 🌐 API Configuration
-// For production: https://tweet-extractor-api.vercel.app
-const API_BASE = 'https://api-extractor.aayushman.dev'; // Production API URL
-// Fallback for local development
-const LOCAL_API_BASE = 'http://localhost:8000';
+
+const API_BASE = "https://api-extractor.aayushman.dev";
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -95,67 +93,49 @@ function updateStatusMessage() {
 
 // Authentication functions
 async function login(email, password) {
-  // Try main API first, then fallback to local if available
-  const apiUrls = [API_BASE, LOCAL_API_BASE];
-  
-  for (let i = 0; i < apiUrls.length; i++) {
-    const currentApiBase = apiUrls[i];
+  try {
+    console.log(`🔄 Attempting login with API: ${API_BASE}`);
     
-    try {
-      console.log(`🔄 Attempting login with API: ${currentApiBase}`);
-      
-      const response = await fetch(`${currentApiBase}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          emailOrPhone: email,
-          password: password
-        })
-      });
+    const response = await fetch(`${API_BASE}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        emailOrPhone: email,
+        password: password
+      })
+    });
 
-      if (!response.ok) {
-        // If it's a 404 and we have more APIs to try, continue
-        if (response.status === 404 && i < apiUrls.length - 1) {
-          console.log(`📡 API ${currentApiBase} returned 404, trying next...`);
-          continue;
-        }
-        
-        const data = await response.json().catch(() => ({ error: 'Server error' }));
-        showStatus(`❌ ${data.error || 'Login failed'}`, 'error');
-        return false;
-      }
-
-      const data = await response.json();
-
-      // Store token and user data
-      await chrome.storage.local.set({
-        [STORAGE_KEYS.AUTH_TOKEN]: data.token,
-        [STORAGE_KEYS.USER_DATA]: data.user,
-        [STORAGE_KEYS.API_BASE]: currentApiBase // Store which API worked
-      });
-      
-      showStatus('✅ Login successful!', 'success');
-      updateUI();
-      return true;
-
-    } catch (error) {
-      console.error(`❌ Login error with ${currentApiBase}:`, error);
-      
-      // If this is the last API to try, show the error
-      if (i === apiUrls.length - 1) {
-        if (error.message.includes('Failed to fetch')) {
-          showStatus('❌ Cannot connect to server. Please check if the API is running or try local development mode.', 'error');
-        } else {
-          showStatus(`❌ Login failed: ${error.message}`, 'error');
-        }
-        return false;
-      }
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({ error: 'Server error' }));
+      showStatus(`❌ ${data.error || 'Login failed'}`, 'error');
+      return false;
     }
+
+    const data = await response.json();
+
+    // Store token and user data
+    await chrome.storage.local.set({
+      [STORAGE_KEYS.AUTH_TOKEN]: data.token,
+      [STORAGE_KEYS.USER_DATA]: data.user,
+      [STORAGE_KEYS.API_BASE]: API_BASE
+    });
+    
+    showStatus('✅ Login successful!', 'success');
+    updateUI();
+    return true;
+
+  } catch (error) {
+    console.error(`❌ Login error:`, error);
+    
+    if (error.message.includes('Failed to fetch')) {
+      showStatus('❌ Cannot connect to server. Please check if the API is running.', 'error');
+    } else {
+      showStatus(`❌ Login failed: ${error.message}`, 'error');
+    }
+    return false;
   }
-  
-  return false;
 }
 
 async function signup(email, phone, password) {

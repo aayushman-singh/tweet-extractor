@@ -74,6 +74,8 @@ const optionalAuth = (req, res, next) => {
 
 // Authentication endpoints
 app.post('/api/auth/register', async (req, res) => {
+  const startTime = Date.now();
+  
   try {
     const { email, phone, password } = req.body;
 
@@ -112,21 +114,36 @@ app.post('/api/auth/register', async (req, res) => {
       }
     }
 
+    console.log('⏱️ [REGISTER] Starting registration for:', email);
+    const dbStartTime = Date.now();
+
     // Ensure database connection
     await connectDB();
+    
+    const dbConnectTime = Date.now() - dbStartTime;
+    console.log('⏱️ [REGISTER] Database connection time:', dbConnectTime, 'ms');
 
-    // Hash password
-    const saltRounds = 12;
+    // Hash password with reduced salt rounds for better performance
+    const hashStartTime = Date.now();
+    const saltRounds = 8; // Reduced from 12 to 8 for better performance while maintaining security
     const password_hash = await bcrypt.hash(password, saltRounds);
+    
+    const hashTime = Date.now() - hashStartTime;
+    console.log('⏱️ [REGISTER] Password hashing time:', hashTime, 'ms');
 
     // Create user
+    const userStartTime = Date.now();
     const user = await UserDB.create({
       email: email.toLowerCase().trim(),
       phone: phone ? phone.trim() : null,
       password_hash
     });
+    
+    const userCreateTime = Date.now() - userStartTime;
+    console.log('⏱️ [REGISTER] User creation time:', userCreateTime, 'ms');
 
     // Generate JWT token
+    const tokenStartTime = Date.now();
     const token = jwt.sign(
       { 
         userId: user.id, 
@@ -136,6 +153,12 @@ app.post('/api/auth/register', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '30d' }
     );
+    
+    const tokenTime = Date.now() - tokenStartTime;
+    console.log('⏱️ [REGISTER] JWT generation time:', tokenTime, 'ms');
+
+    const totalTime = Date.now() - startTime;
+    console.log('⏱️ [REGISTER] Total registration time:', totalTime, 'ms');
 
     res.status(201).json({
       success: true,
@@ -150,6 +173,12 @@ app.post('/api/auth/register', async (req, res) => {
     });
 
   } catch (error) {
+    const totalTime = Date.now() - startTime;
+    console.error('❌ [REGISTER] Registration failed after', totalTime, 'ms:', error);
+    console.error('❌ [REGISTER] Error type:', typeof error);
+    console.error('❌ [REGISTER] Error message:', error?.message);
+    console.error('❌ [REGISTER] Error stack:', error?.stack);
+    
     // Provide more specific error messages
     if (error.code === 11000) {
       // Duplicate key error
@@ -168,7 +197,7 @@ app.post('/api/auth/register', async (req, res) => {
       });
     }
     
-    if (error.message.includes('MONGODB_URI')) {
+    if (error && error.message && typeof error.message === 'string' && error.message.includes('MONGODB_URI')) {
       return res.status(500).json({ 
         success: false,
         error: 'Database configuration error. Please contact support.' 
@@ -247,7 +276,11 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
   } catch (error) {
-    if (error.message.includes('MONGODB_URI')) {
+    console.error('❌ [LOGIN] Login error:', error);
+    console.error('❌ [LOGIN] Error type:', typeof error);
+    console.error('❌ [LOGIN] Error message:', error?.message);
+    
+    if (error && error.message && typeof error.message === 'string' && error.message.includes('MONGODB_URI')) {
       return res.status(500).json({ 
         success: false,
         error: 'Database configuration error. Please contact support.' 

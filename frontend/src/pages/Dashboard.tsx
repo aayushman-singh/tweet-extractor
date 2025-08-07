@@ -175,6 +175,8 @@ const Dashboard: React.FC = () => {
     }
   };
 
+
+
   const downloadArchive = async (archive: Archive) => {
     try {
       const token = localStorage.getItem('authToken');
@@ -299,7 +301,7 @@ const Dashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {formatFileSize(archives.reduce((acc, archive) => acc + archive.size, 0))}
+                  {formatFileSize(archives.reduce((acc: number, archive: Archive) => acc + archive.size, 0))}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Combined archive size
@@ -332,26 +334,33 @@ const Dashboard: React.FC = () => {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
                 <FileText className="w-16 h-16 text-gray-400 mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No archives yet</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  {archives.length === 0 ? 'No archives yet' : 'No archives match your filter'}
+                </h3>
                 <p className="text-gray-600 text-center mb-4">
-                  Use the browser extension to extract your first tweet archive
+                  {archives.length === 0 
+                    ? 'Use the browser extension to extract your first tweet archive'
+                    : 'Try adjusting your date range filter to see more archives'
+                  }
                 </p>
-                <Button>
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Get Extension
-                </Button>
+                {archives.length === 0 && (
+                  <Button>
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Get Extension
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {(() => { 
                 console.log('🔍 [DASHBOARD] Rendering archives:', archives);
-                archives.forEach((archive, index) => {
+                archives.forEach((archive: Archive, index: number) => {
                   console.log(`🔍 [DASHBOARD] Archive ${index} profileInfo:`, archive.profileInfo);
                 });
                 return null;
               })()}
-              {archives.map((archive) => (
+              {archives.map((archive: Archive) => (
                 <Card key={archive._id} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                                          <div className="flex items-center justify-between">
@@ -419,8 +428,6 @@ const Dashboard: React.FC = () => {
           )}
         </div>
       </div>
-
-
     </div>
   );
 };

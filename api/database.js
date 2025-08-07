@@ -15,24 +15,37 @@ async function connectDB() {
         }
 
         await mongoose.connect(mongoUri, {
-            maxPoolSize: 5, // Reduced for serverless
-            serverSelectionTimeoutMS: 10000, // Increased timeout
-            socketTimeoutMS: 30000, // Reduced timeout
-            connectTimeoutMS: 10000, // Connection timeout
-            dbName: 'tweet_extractor', // Use dedicated database for this project
+            maxPoolSize: 10, // Increased for better performance
+            minPoolSize: 2, // Keep minimum connections ready
+            serverSelectionTimeoutMS: 5000, // Reduced timeout
+            socketTimeoutMS: 20000, // Reduced timeout
+            connectTimeoutMS: 5000, // Reduced connection timeout
+            dbName: 'tweet_extractor',
             retryWrites: true,
-            w: 'majority'
+            w: 'majority',
+            // Add connection pooling optimizations
+            maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
+            waitQueueTimeoutMS: 5000, // Wait queue timeout
+            // Enable connection monitoring
+            monitorCommands: false // Disable for production performance
         });
 
         isConnected = true;
         
         // Set up connection event handlers
         mongoose.connection.on('error', (err) => {
+            console.error('❌ MongoDB connection error:', err);
             isConnected = false;
         });
         
         mongoose.connection.on('disconnected', () => {
+            console.log('⚠️ MongoDB disconnected');
             isConnected = false;
+        });
+        
+        mongoose.connection.on('connected', () => {
+            console.log('✅ MongoDB connected');
+            isConnected = true;
         });
         
     } catch (error) {
@@ -52,8 +65,6 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        unique: true,
-        sparse: true, // Allow null values but ensure uniqueness when present
         trim: true
     },
     password_hash: {
@@ -171,31 +182,21 @@ const UserDB = {
             
             const { email, phone, password_hash } = userData;
             
-            // Check if user already exists
-            const existingUser = await User.findOne({
-                $or: [
-                    { email: email.toLowerCase() },
-                    ...(phone ? [{ phone: phone }] : [])
-                ]
-            });
+            // Check if user with this email already exists
+            const existingUser = await User.findOne({ email: email.toLowerCase() });
             
             if (existingUser) {
-                if (existingUser.email === email.toLowerCase()) {
-                    throw { field: 'email', error: 'Email already exists' };
-                }
-                if (phone && existingUser.phone === phone) {
-                    throw { field: 'phone', error: 'Phone number already exists' };
-                }
+                throw { field: 'email', error: 'Email already exists' };
             }
             
             // Create new user
-            const user = new User({
+            const newUser = new User({
                 email: email.toLowerCase(),
                 phone: phone || null,
                 password_hash
             });
             
-            const savedUser = await user.save();
+            const savedUser = await newUser.save();
             
             return {
                 id: savedUser._id,
@@ -205,7 +206,7 @@ const UserDB = {
             };
         } catch (error) {
             if (error.code === 11000) {
-                // MongoDB duplicate key error
+                // MongoDB duplicate key error (should only be for email now)
                 const field = Object.keys(error.keyPattern)[0];
                 throw {
                     field: field,
