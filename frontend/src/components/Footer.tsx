@@ -7,7 +7,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">
-              © 2024 Tweet Extractor. Made with ❤️
+              © 2025 X Archive Extractor. Made with ❤️ by <a href="https://aayushman.dev" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600">Aayushman Singh</a>
             </span>
           </div>
           
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
               rel="noopener noreferrer"
               className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
             >
-              aayushman.dev
+              Portfolio
             </a>
             
             <a

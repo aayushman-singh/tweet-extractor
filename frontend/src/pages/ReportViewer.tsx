@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -13,7 +13,8 @@ import {
   Heart,
   MessageCircle,
   Repeat,
-  Eye
+  Eye,
+  Check
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -83,6 +84,7 @@ const ReportViewer: React.FC = () => {
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'likes' | 'retweets' | 'views' | 'engagement'>('newest');
+  const [hasInitialSort, setHasInitialSort] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
   const [dateRange, setDateRange] = useState<{ startDate: Date | null; endDate: Date | null }>({
@@ -130,16 +132,9 @@ const ReportViewer: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log('ReportViewer mounted with reportId:', reportId);
-    console.log('Current URL:', window.location.href);
-    
     if (reportId) {
-      console.log('ReportId is valid, fetching data...');
       fetchReportData();
     } else {
-      console.error('No reportId provided in URL');
-      console.error('URL pathname:', window.location.pathname);
-      console.error('URL search:', window.location.search);
       toast({
         title: "Error",
         description: "No report ID provided in URL",
@@ -151,8 +146,12 @@ const ReportViewer: React.FC = () => {
 
   useEffect(() => {
     if (reportData) {
-      console.log('🔍 [FRONTEND] useEffect triggered, reportData changed:', reportData);
       filterAndSortTweets();
+      
+      // Mark that initial sort has been applied
+      if (!hasInitialSort) {
+        setHasInitialSort(true);
+      }
     }
   }, [reportData, sortBy, searchQuery, dateRange]);
 
@@ -164,73 +163,14 @@ const ReportViewer: React.FC = () => {
     });
   }, [initialStartDate, initialEndDate]);
 
-  const fetchReportData = async () => {
+    const fetchReportData = async () => {
     try {
-      console.log('🔍 [FRONTEND] Fetching report data for ID:', reportId);
       const token = localStorage.getItem('authToken');
       const response = await axios.get(`${API_BASE}/api/report/${reportId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      
-      console.log('🔍 [FRONTEND] Received report data:', response.data);
-      console.log('🔍 [FRONTEND] Number of tweets:', response.data.tweets?.length || 0);
-      console.log('🔍 [FRONTEND] Profile info:', response.data.profileInfo);
-      console.log('🔍 [FRONTEND] Profile info type:', typeof response.data.profileInfo);
-      console.log('🔍 [FRONTEND] Profile info username:', response.data.profileInfo?.username);
-      console.log('🔍 [FRONTEND] Stats:', response.data.stats);
-      console.log('🔍 [FRONTEND] Timeline:', response.data.timeline);
-      
-      // Log some sample tweet dates to understand the date range
-      if (response.data.tweets && response.data.tweets.length > 0) {
-        const sampleTweets = response.data.tweets.slice(0, 5);
-        console.log('🔍 [FRONTEND] Sample tweet dates:', sampleTweets.map((tweet: Tweet) => ({
-          id: tweet.id,
-          created_at: tweet.created_at,
-          text: tweet.text.substring(0, 30) + '...'
-        })));
-        
-        // Calculate actual date range from tweets
-        const tweetDates = response.data.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
-        const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
-        const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
-        
-        console.log('🔍 [FRONTEND] Actual tweet date range:', {
-          earliest: earliestTweet.toISOString(),
-          latest: latestTweet.toISOString(),
-          totalTweets: response.data.tweets.length
-        });
-        
-                 console.log('🔍 [FRONTEND] Timeline vs Actual:', {
-           timelineStart: response.data.timeline.startDate,
-           timelineEnd: response.data.timeline.endDate,
-           actualStart: earliestTweet.toISOString(),
-           actualEnd: latestTweet.toISOString()
-         });
-         
-         // Check for tweets outside the timeline range
-         const timelineStart = new Date(response.data.timeline.startDate);
-         const timelineEnd = new Date(response.data.timeline.endDate);
-         
-         const tweetsOutsideTimeline = response.data.tweets.filter((tweet: Tweet) => {
-           const tweetDate = new Date(tweet.created_at);
-           return tweetDate < timelineStart || tweetDate > timelineEnd;
-         });
-         
-         if (tweetsOutsideTimeline.length > 0) {
-           console.log('🔍 [FRONTEND] Tweets outside timeline range:', {
-             count: tweetsOutsideTimeline.length,
-             timelineStart: timelineStart.toISOString(),
-             timelineEnd: timelineEnd.toISOString(),
-             sampleTweets: tweetsOutsideTimeline.slice(0, 3).map((tweet: Tweet) => ({
-               id: tweet.id,
-               created_at: tweet.created_at,
-               text: tweet.text.substring(0, 50) + '...'
-             }))
-           });
-         }
-      }
       
       setReportData(response.data);
     } catch (error) {
@@ -248,9 +188,6 @@ const ReportViewer: React.FC = () => {
   const filterAndSortTweets = () => {
     if (!reportData) return;
 
-    console.log('🔍 [FRONTEND] Filtering tweets, reportData:', reportData);
-    console.log('🔍 [FRONTEND] Profile info in filterAndSortTweets:', reportData.profileInfo);
-
     let filtered = reportData.tweets;
 
     // Apply search filter
@@ -262,26 +199,11 @@ const ReportViewer: React.FC = () => {
 
     // Apply date range filter
     if (dateRange.startDate || dateRange.endDate) {
-      console.log('🔍 [DATE FILTER] Applying date filter:', {
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        tweetsBeforeFilter: filtered.length
-      });
-      
       filtered = filtered.filter((tweet: Tweet) => {
         const tweetDate = new Date(tweet.created_at);
         
         if (dateRange.startDate && dateRange.endDate) {
-          const isInRange = tweetDate >= dateRange.startDate && tweetDate <= dateRange.endDate;
-          if (!isInRange) {
-            console.log('🔍 [DATE FILTER] Excluding tweet:', {
-              tweetDate: tweetDate.toISOString(),
-              tweetText: tweet.text.substring(0, 50) + '...',
-              startDate: dateRange.startDate.toISOString(),
-              endDate: dateRange.endDate.toISOString()
-            });
-          }
-          return isInRange;
+          return tweetDate >= dateRange.startDate && tweetDate <= dateRange.endDate;
         } else if (dateRange.startDate) {
           return tweetDate >= dateRange.startDate;
         } else if (dateRange.endDate) {
@@ -290,10 +212,6 @@ const ReportViewer: React.FC = () => {
         
         return true;
       });
-      
-      console.log('🔍 [DATE FILTER] After date filter:', {
-        tweetsAfterFilter: filtered.length
-      });
     }
 
     // Apply sorting
@@ -301,9 +219,25 @@ const ReportViewer: React.FC = () => {
       // Handle different tweet data formats
       switch (sortBy) {
         case 'newest':
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          
+          // Check for invalid dates
+          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+            return 0;
+          }
+          
+          return dateB.getTime() - dateA.getTime();
         case 'oldest':
-          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          const dateAOld = new Date(a.created_at);
+          const dateBOld = new Date(b.created_at);
+          
+          // Check for invalid dates
+          if (isNaN(dateAOld.getTime()) || isNaN(dateBOld.getTime())) {
+            return 0;
+          }
+          
+          return dateAOld.getTime() - dateBOld.getTime();
         case 'likes':
           return getLikeCount(b) - getLikeCount(a);
         case 'retweets':
@@ -338,6 +272,14 @@ const ReportViewer: React.FC = () => {
       newSearchParams.delete('endDate');
     }
     setSearchParams(newSearchParams);
+  };
+
+  const handleApplySort = () => {
+    // Force a fresh sort by temporarily clearing and re-applying
+    setFilteredTweets([]);
+    setTimeout(() => {
+      filterAndSortTweets();
+    }, 10);
   };
 
   const formatDate = (dateString: string) => {
@@ -531,32 +473,18 @@ const ReportViewer: React.FC = () => {
              <CardContent className="p-6">
                <div className="text-center">
                  <h3 className="text-lg font-semibold text-gray-900 mb-2">📅 Timeline Span</h3>
-                 <p className="text-gray-600">
-                   {formatDate(reportData.timeline.startDate)} → {formatDate(reportData.timeline.endDate)}
-                 </p>
-                 {(() => {
-                   // Check if there are tweets outside the timeline range
-                   const timelineStart = new Date(reportData.timeline.startDate);
-                   const timelineEnd = new Date(reportData.timeline.endDate);
-                   const tweetDates = reportData.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
-                   const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
-                   const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
-                   
-                   const hasMismatch = earliestTweet < timelineStart || latestTweet > timelineEnd;
-                   
-                   if (hasMismatch) {
-                     return (
-                       <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                         <p className="text-sm text-yellow-800">
-                           ⚠️ <strong>Note:</strong> This archive contains tweets from{' '}
-                           {formatDate(earliestTweet.toISOString())} to{' '}
-                           {formatDate(latestTweet.toISOString())}, which extends beyond the timeline span.
-                         </p>
-                       </div>
-                     );
-                   }
-                   return null;
-                 })()}
+                                   {(() => {
+                    // Calculate actual date range from tweets
+                    const tweetDates = reportData.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
+                    const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
+                    const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
+                    
+                    return (
+                      <p className="text-gray-600">
+                        {formatDate(earliestTweet.toISOString())} → {formatDate(latestTweet.toISOString())}
+                      </p>
+                    );
+                  })()}
                </div>
              </CardContent>
            </Card>
@@ -583,19 +511,30 @@ const ReportViewer: React.FC = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <div className="sm:w-48">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <div className="flex gap-2">
+              <div className="sm:w-48">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="newest">📅 Newest First</option>
+                  <option value="oldest">⏰ Oldest First</option>
+                  <option value="likes">❤️ Most Liked</option>
+                  <option value="retweets">🔄 Most Retweeted</option>
+                  <option value="views">👀 Most Viewed</option>
+                  <option value="engagement">🚀 Most Engaging</option>
+                </select>
+              </div>
+              <Button 
+                onClick={handleApplySort}
+                variant="outline"
+                className="px-4 py-2"
+                title="Apply current sort"
               >
-                <option value="newest">📅 Newest First</option>
-                <option value="oldest">⏰ Oldest First</option>
-                <option value="likes">❤️ Most Liked</option>
-                <option value="retweets">🔄 Most Retweeted</option>
-                <option value="views">👀 Most Viewed</option>
-                <option value="engagement">🚀 Most Engaging</option>
-              </select>
+                <Check className="w-4 h-4 mr-1" />
+                Apply
+              </Button>
             </div>
           </div>
           <div className="text-sm text-gray-600">
@@ -608,10 +547,9 @@ const ReportViewer: React.FC = () => {
           </div>
         </div>
 
-        {/* Tweets */}
-        <div className="space-y-4">
-          {(() => { console.log('🔍 [FRONTEND] Rendering tweets, profileInfo:', reportData.profileInfo); return null; })()}
-          {filteredTweets.map((tweet) => (
+                 {/* Tweets */}
+         <div className="space-y-4">
+           {filteredTweets.map((tweet) => (
             <Card key={tweet.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-3">
