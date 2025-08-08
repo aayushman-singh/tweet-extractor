@@ -13,7 +13,8 @@ import {
   Heart,
   MessageCircle,
   Repeat,
-  Eye
+  Eye,
+  RefreshCw
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -250,6 +251,17 @@ const ReportViewer: React.FC = () => {
 
     console.log('🔍 [FRONTEND] Filtering tweets, reportData:', reportData);
     console.log('🔍 [FRONTEND] Profile info in filterAndSortTweets:', reportData.profileInfo);
+    
+    // Debug: Check the structure of the first few tweets
+    if (reportData.tweets && reportData.tweets.length > 0) {
+      console.log('🔍 [DEBUG] First tweet structure:', {
+        id: reportData.tweets[0].id,
+        created_at: reportData.tweets[0].created_at,
+        created_at_type: typeof reportData.tweets[0].created_at,
+        created_at_parsed: new Date(reportData.tweets[0].created_at),
+        text: reportData.tweets[0].text.substring(0, 50) + '...'
+      });
+    }
 
     let filtered = reportData.tweets;
 
@@ -297,13 +309,45 @@ const ReportViewer: React.FC = () => {
     }
 
     // Apply sorting
+    console.log('🔍 [SORT] Sorting by:', sortBy);
+    console.log('🔍 [SORT] Sample tweet dates before sort:', filtered.slice(0, 3).map(t => ({
+      id: t.id,
+      created_at: t.created_at,
+      date: new Date(t.created_at).toISOString(),
+      readableDate: new Date(t.created_at).toLocaleString()
+    })));
+    
     filtered.sort((a, b) => {
       // Handle different tweet data formats
       switch (sortBy) {
         case 'newest':
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+          const dateA = new Date(a.created_at);
+          const dateB = new Date(b.created_at);
+          
+          // Check for invalid dates
+          if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+            console.warn('🔍 [SORT] Invalid date found:', {
+              tweetA: { id: a.id, created_at: a.created_at, parsed: dateA },
+              tweetB: { id: b.id, created_at: b.created_at, parsed: dateB }
+            });
+            return 0;
+          }
+          
+          return dateB.getTime() - dateA.getTime();
         case 'oldest':
-          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+          const dateAOld = new Date(a.created_at);
+          const dateBOld = new Date(b.created_at);
+          
+          // Check for invalid dates
+          if (isNaN(dateAOld.getTime()) || isNaN(dateBOld.getTime())) {
+            console.warn('🔍 [SORT] Invalid date found:', {
+              tweetA: { id: a.id, created_at: a.created_at, parsed: dateAOld },
+              tweetB: { id: b.id, created_at: b.created_at, parsed: dateBOld }
+            });
+            return 0;
+          }
+          
+          return dateAOld.getTime() - dateBOld.getTime();
         case 'likes':
           return getLikeCount(b) - getLikeCount(a);
         case 'retweets':
@@ -318,6 +362,13 @@ const ReportViewer: React.FC = () => {
           return 0;
       }
     });
+    
+    console.log('🔍 [SORT] Sample tweet dates after sort:', filtered.slice(0, 3).map(t => ({
+      id: t.id,
+      created_at: t.created_at,
+      date: new Date(t.created_at).toISOString(),
+      readableDate: new Date(t.created_at).toLocaleString()
+    })));
 
     setFilteredTweets(filtered);
   };
@@ -338,6 +389,11 @@ const ReportViewer: React.FC = () => {
       newSearchParams.delete('endDate');
     }
     setSearchParams(newSearchParams);
+  };
+
+  const handleRebuildTweets = () => {
+    console.log('🔍 [FRONTEND] Rebuilding tweets with sort:', sortBy);
+    filterAndSortTweets();
   };
 
   const formatDate = (dateString: string) => {
@@ -531,36 +587,18 @@ const ReportViewer: React.FC = () => {
              <CardContent className="p-6">
                <div className="text-center">
                  <h3 className="text-lg font-semibold text-gray-900 mb-2">📅 Timeline Span</h3>
-                 {(() => {
-                   // Check if there are tweets outside the timeline range
-                   const timelineStart = new Date(reportData.timeline.startDate);
-                   const timelineEnd = new Date(reportData.timeline.endDate);
-                   const tweetDates = reportData.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
-                   const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
-                   const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
-                   
-                   const hasMismatch = earliestTweet < timelineStart || latestTweet > timelineEnd;
-                   
-                   return (
-                     <>
-                       <p className="text-gray-600">
-                         {hasMismatch 
-                           ? `${formatDate(earliestTweet.toISOString())} → ${formatDate(latestTweet.toISOString())}`
-                           : `${formatDate(reportData.timeline.startDate)} → ${formatDate(reportData.timeline.endDate)}`
-                         }
-                       </p>
-                       {hasMismatch && (
-                         <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                           <p className="text-sm text-yellow-800">
-                             ⚠️ <strong>Note:</strong> This archive contains tweets from{' '}
-                             {formatDate(earliestTweet.toISOString())} to{' '}
-                             {formatDate(latestTweet.toISOString())}, which extends beyond the timeline span.
-                           </p>
-                         </div>
-                       )}
-                     </>
-                   );
-                 })()}
+                                   {(() => {
+                    // Calculate actual date range from tweets
+                    const tweetDates = reportData.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
+                    const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
+                    const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
+                    
+                    return (
+                      <p className="text-gray-600">
+                        {formatDate(earliestTweet.toISOString())} → {formatDate(latestTweet.toISOString())}
+                      </p>
+                    );
+                  })()}
                </div>
              </CardContent>
            </Card>
@@ -587,19 +625,29 @@ const ReportViewer: React.FC = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <div className="sm:w-48">
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <div className="flex gap-2">
+              <div className="sm:w-48">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="newest">📅 Newest First</option>
+                  <option value="oldest">⏰ Oldest First</option>
+                  <option value="likes">❤️ Most Liked</option>
+                  <option value="retweets">🔄 Most Retweeted</option>
+                  <option value="views">👀 Most Viewed</option>
+                  <option value="engagement">🚀 Most Engaging</option>
+                </select>
+              </div>
+              <Button 
+                onClick={handleRebuildTweets}
+                variant="outline"
+                className="px-4 py-2"
+                title="Rebuild tweets with current sort"
               >
-                <option value="newest">📅 Newest First</option>
-                <option value="oldest">⏰ Oldest First</option>
-                <option value="likes">❤️ Most Liked</option>
-                <option value="retweets">🔄 Most Retweeted</option>
-                <option value="views">👀 Most Viewed</option>
-                <option value="engagement">🚀 Most Engaging</option>
-              </select>
+                <RefreshCw className="w-4 h-4" />
+              </Button>
             </div>
           </div>
           <div className="text-sm text-gray-600">
