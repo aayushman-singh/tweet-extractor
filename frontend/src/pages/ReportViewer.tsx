@@ -132,16 +132,9 @@ const ReportViewer: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log('ReportViewer mounted with reportId:', reportId);
-    console.log('Current URL:', window.location.href);
-    
     if (reportId) {
-      console.log('ReportId is valid, fetching data...');
       fetchReportData();
     } else {
-      console.error('No reportId provided in URL');
-      console.error('URL pathname:', window.location.pathname);
-      console.error('URL search:', window.location.search);
       toast({
         title: "Error",
         description: "No report ID provided in URL",
@@ -153,7 +146,6 @@ const ReportViewer: React.FC = () => {
 
   useEffect(() => {
     if (reportData) {
-      console.log('🔍 [FRONTEND] useEffect triggered, reportData changed:', reportData);
       filterAndSortTweets();
       
       // Mark that initial sort has been applied
@@ -171,73 +163,14 @@ const ReportViewer: React.FC = () => {
     });
   }, [initialStartDate, initialEndDate]);
 
-  const fetchReportData = async () => {
+    const fetchReportData = async () => {
     try {
-      console.log('🔍 [FRONTEND] Fetching report data for ID:', reportId);
       const token = localStorage.getItem('authToken');
       const response = await axios.get(`${API_BASE}/api/report/${reportId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      
-      console.log('🔍 [FRONTEND] Received report data:', response.data);
-      console.log('🔍 [FRONTEND] Number of tweets:', response.data.tweets?.length || 0);
-      console.log('🔍 [FRONTEND] Profile info:', response.data.profileInfo);
-      console.log('🔍 [FRONTEND] Profile info type:', typeof response.data.profileInfo);
-      console.log('🔍 [FRONTEND] Profile info username:', response.data.profileInfo?.username);
-      console.log('🔍 [FRONTEND] Stats:', response.data.stats);
-      console.log('🔍 [FRONTEND] Timeline:', response.data.timeline);
-      
-      // Log some sample tweet dates to understand the date range
-      if (response.data.tweets && response.data.tweets.length > 0) {
-        const sampleTweets = response.data.tweets.slice(0, 5);
-        console.log('🔍 [FRONTEND] Sample tweet dates:', sampleTweets.map((tweet: Tweet) => ({
-          id: tweet.id,
-          created_at: tweet.created_at,
-          text: tweet.text.substring(0, 30) + '...'
-        })));
-        
-        // Calculate actual date range from tweets
-        const tweetDates = response.data.tweets.map((tweet: Tweet) => new Date(tweet.created_at));
-        const earliestTweet = new Date(Math.min(...tweetDates.map((d: Date) => d.getTime())));
-        const latestTweet = new Date(Math.max(...tweetDates.map((d: Date) => d.getTime())));
-        
-        console.log('🔍 [FRONTEND] Actual tweet date range:', {
-          earliest: earliestTweet.toISOString(),
-          latest: latestTweet.toISOString(),
-          totalTweets: response.data.tweets.length
-        });
-        
-                 console.log('🔍 [FRONTEND] Timeline vs Actual:', {
-           timelineStart: response.data.timeline.startDate,
-           timelineEnd: response.data.timeline.endDate,
-           actualStart: earliestTweet.toISOString(),
-           actualEnd: latestTweet.toISOString()
-         });
-         
-         // Check for tweets outside the timeline range
-         const timelineStart = new Date(response.data.timeline.startDate);
-         const timelineEnd = new Date(response.data.timeline.endDate);
-         
-         const tweetsOutsideTimeline = response.data.tweets.filter((tweet: Tweet) => {
-           const tweetDate = new Date(tweet.created_at);
-           return tweetDate < timelineStart || tweetDate > timelineEnd;
-         });
-         
-         if (tweetsOutsideTimeline.length > 0) {
-           console.log('🔍 [FRONTEND] Tweets outside timeline range:', {
-             count: tweetsOutsideTimeline.length,
-             timelineStart: timelineStart.toISOString(),
-             timelineEnd: timelineEnd.toISOString(),
-             sampleTweets: tweetsOutsideTimeline.slice(0, 3).map((tweet: Tweet) => ({
-               id: tweet.id,
-               created_at: tweet.created_at,
-               text: tweet.text.substring(0, 50) + '...'
-             }))
-           });
-         }
-      }
       
       setReportData(response.data);
     } catch (error) {
@@ -255,20 +188,6 @@ const ReportViewer: React.FC = () => {
   const filterAndSortTweets = () => {
     if (!reportData) return;
 
-    console.log('🔍 [FRONTEND] Filtering tweets, reportData:', reportData);
-    console.log('🔍 [FRONTEND] Profile info in filterAndSortTweets:', reportData.profileInfo);
-    
-    // Debug: Check the structure of the first few tweets
-    if (reportData.tweets && reportData.tweets.length > 0) {
-      console.log('🔍 [DEBUG] First tweet structure:', {
-        id: reportData.tweets[0].id,
-        created_at: reportData.tweets[0].created_at,
-        created_at_type: typeof reportData.tweets[0].created_at,
-        created_at_parsed: new Date(reportData.tweets[0].created_at),
-        text: reportData.tweets[0].text.substring(0, 50) + '...'
-      });
-    }
-
     let filtered = reportData.tweets;
 
     // Apply search filter
@@ -280,26 +199,11 @@ const ReportViewer: React.FC = () => {
 
     // Apply date range filter
     if (dateRange.startDate || dateRange.endDate) {
-      console.log('🔍 [DATE FILTER] Applying date filter:', {
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        tweetsBeforeFilter: filtered.length
-      });
-      
       filtered = filtered.filter((tweet: Tweet) => {
         const tweetDate = new Date(tweet.created_at);
         
         if (dateRange.startDate && dateRange.endDate) {
-          const isInRange = tweetDate >= dateRange.startDate && tweetDate <= dateRange.endDate;
-          if (!isInRange) {
-            console.log('🔍 [DATE FILTER] Excluding tweet:', {
-              tweetDate: tweetDate.toISOString(),
-              tweetText: tweet.text.substring(0, 50) + '...',
-              startDate: dateRange.startDate.toISOString(),
-              endDate: dateRange.endDate.toISOString()
-            });
-          }
-          return isInRange;
+          return tweetDate >= dateRange.startDate && tweetDate <= dateRange.endDate;
         } else if (dateRange.startDate) {
           return tweetDate >= dateRange.startDate;
         } else if (dateRange.endDate) {
@@ -308,21 +212,9 @@ const ReportViewer: React.FC = () => {
         
         return true;
       });
-      
-      console.log('🔍 [DATE FILTER] After date filter:', {
-        tweetsAfterFilter: filtered.length
-      });
     }
 
     // Apply sorting
-    console.log('🔍 [SORT] Sorting by:', sortBy);
-    console.log('🔍 [SORT] Sample tweet dates before sort:', filtered.slice(0, 3).map(t => ({
-      id: t.id,
-      created_at: t.created_at,
-      date: new Date(t.created_at).toISOString(),
-      readableDate: new Date(t.created_at).toLocaleString()
-    })));
-    
     filtered.sort((a, b) => {
       // Handle different tweet data formats
       switch (sortBy) {
@@ -332,10 +224,6 @@ const ReportViewer: React.FC = () => {
           
           // Check for invalid dates
           if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-            console.warn('🔍 [SORT] Invalid date found:', {
-              tweetA: { id: a.id, created_at: a.created_at, parsed: dateA },
-              tweetB: { id: b.id, created_at: b.created_at, parsed: dateB }
-            });
             return 0;
           }
           
@@ -346,10 +234,6 @@ const ReportViewer: React.FC = () => {
           
           // Check for invalid dates
           if (isNaN(dateAOld.getTime()) || isNaN(dateBOld.getTime())) {
-            console.warn('🔍 [SORT] Invalid date found:', {
-              tweetA: { id: a.id, created_at: a.created_at, parsed: dateAOld },
-              tweetB: { id: b.id, created_at: b.created_at, parsed: dateBOld }
-            });
             return 0;
           }
           
@@ -368,13 +252,6 @@ const ReportViewer: React.FC = () => {
           return 0;
       }
     });
-    
-    console.log('🔍 [SORT] Sample tweet dates after sort:', filtered.slice(0, 3).map(t => ({
-      id: t.id,
-      created_at: t.created_at,
-      date: new Date(t.created_at).toISOString(),
-      readableDate: new Date(t.created_at).toLocaleString()
-    })));
 
     setFilteredTweets(filtered);
   };
@@ -398,7 +275,6 @@ const ReportViewer: React.FC = () => {
   };
 
   const handleApplySort = () => {
-    console.log('🔍 [FRONTEND] Applying sort:', sortBy);
     // Force a fresh sort by temporarily clearing and re-applying
     setFilteredTweets([]);
     setTimeout(() => {
@@ -671,10 +547,9 @@ const ReportViewer: React.FC = () => {
           </div>
         </div>
 
-        {/* Tweets */}
-        <div className="space-y-4">
-          {(() => { console.log('🔍 [FRONTEND] Rendering tweets, profileInfo:', reportData.profileInfo); return null; })()}
-          {filteredTweets.map((tweet) => (
+                 {/* Tweets */}
+         <div className="space-y-4">
+           {filteredTweets.map((tweet) => (
             <Card key={tweet.id} className="hover:shadow-md transition-shadow">
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-3">
