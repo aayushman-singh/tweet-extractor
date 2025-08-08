@@ -14,7 +14,7 @@ import {
   MessageCircle,
   Repeat,
   Eye,
-  RefreshCw
+  Check
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -84,6 +84,7 @@ const ReportViewer: React.FC = () => {
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'likes' | 'retweets' | 'views' | 'engagement'>('newest');
+  const [hasInitialSort, setHasInitialSort] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredTweets, setFilteredTweets] = useState<Tweet[]>([]);
   const [dateRange, setDateRange] = useState<{ startDate: Date | null; endDate: Date | null }>({
@@ -154,6 +155,11 @@ const ReportViewer: React.FC = () => {
     if (reportData) {
       console.log('🔍 [FRONTEND] useEffect triggered, reportData changed:', reportData);
       filterAndSortTweets();
+      
+      // Mark that initial sort has been applied
+      if (!hasInitialSort) {
+        setHasInitialSort(true);
+      }
     }
   }, [reportData, sortBy, searchQuery, dateRange]);
 
@@ -391,9 +397,13 @@ const ReportViewer: React.FC = () => {
     setSearchParams(newSearchParams);
   };
 
-  const handleRebuildTweets = () => {
-    console.log('🔍 [FRONTEND] Rebuilding tweets with sort:', sortBy);
-    filterAndSortTweets();
+  const handleApplySort = () => {
+    console.log('🔍 [FRONTEND] Applying sort:', sortBy);
+    // Force a fresh sort by temporarily clearing and re-applying
+    setFilteredTweets([]);
+    setTimeout(() => {
+      filterAndSortTweets();
+    }, 10);
   };
 
   const formatDate = (dateString: string) => {
@@ -641,12 +651,13 @@ const ReportViewer: React.FC = () => {
                 </select>
               </div>
               <Button 
-                onClick={handleRebuildTweets}
+                onClick={handleApplySort}
                 variant="outline"
                 className="px-4 py-2"
-                title="Rebuild tweets with current sort"
+                title="Apply current sort"
               >
-                <RefreshCw className="w-4 h-4" />
+                <Check className="w-4 h-4 mr-1" />
+                Apply
               </Button>
             </div>
           </div>
