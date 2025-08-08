@@ -531,9 +531,6 @@ const ReportViewer: React.FC = () => {
              <CardContent className="p-6">
                <div className="text-center">
                  <h3 className="text-lg font-semibold text-gray-900 mb-2">📅 Timeline Span</h3>
-                 <p className="text-gray-600">
-                   {formatDate(reportData.timeline.startDate)} → {formatDate(reportData.timeline.endDate)}
-                 </p>
                  {(() => {
                    // Check if there are tweets outside the timeline range
                    const timelineStart = new Date(reportData.timeline.startDate);
@@ -544,18 +541,25 @@ const ReportViewer: React.FC = () => {
                    
                    const hasMismatch = earliestTweet < timelineStart || latestTweet > timelineEnd;
                    
-                   if (hasMismatch) {
-                     return (
-                       <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                         <p className="text-sm text-yellow-800">
-                           ⚠️ <strong>Note:</strong> This archive contains tweets from{' '}
-                           {formatDate(earliestTweet.toISOString())} to{' '}
-                           {formatDate(latestTweet.toISOString())}, which extends beyond the timeline span.
-                         </p>
-                       </div>
-                     );
-                   }
-                   return null;
+                   return (
+                     <>
+                       <p className="text-gray-600">
+                         {hasMismatch 
+                           ? `${formatDate(earliestTweet.toISOString())} → ${formatDate(latestTweet.toISOString())}`
+                           : `${formatDate(reportData.timeline.startDate)} → ${formatDate(reportData.timeline.endDate)}`
+                         }
+                       </p>
+                       {hasMismatch && (
+                         <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                           <p className="text-sm text-yellow-800">
+                             ⚠️ <strong>Note:</strong> This archive contains tweets from{' '}
+                             {formatDate(earliestTweet.toISOString())} to{' '}
+                             {formatDate(latestTweet.toISOString())}, which extends beyond the timeline span.
+                           </p>
+                         </div>
+                       )}
+                     </>
+                   );
                  })()}
                </div>
              </CardContent>
