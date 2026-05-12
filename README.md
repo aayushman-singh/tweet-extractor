@@ -1,402 +1,141 @@
-# <img src="extractor.png" alt="Tweet Extractor" width="32" height="32" /> Tweet Extractor - Chrome Extension & API
+# X Archive Extractor
 
-A comprehensive solution for extracting and archiving tweets from X/Twitter profiles with rich HTML archives and cloud hosting capabilities.
+Chrome extension + web app to extract, sort, filter, and archive Twitter/X profile tweets. Rich interactive HTML reports, cloud-hosted, JSON/CSV export.
 
-## 🎯 Quick Start for Users
-
-**Want to use this app right now? No technical setup required!**
-
-### 📦 Pre-packaged Extension
-- Download `x_archive_extractor.zip` from the releases
-- Extract and load it as an unpacked extension in Chrome
-- Start extracting tweets immediately!
-
-### 🌐 Web Interface
-- Visit [extractor.aayushman.dev](https://extractor.aayushman.dev) for the full web interface
-- No installation required - works in any browser
-- Upload and manage your tweet archives online
-
-### 📱 How to Use
-1. **Install the extension** or **visit the website**
-2. **Navigate to any Twitter/X profile** you want to extract
-3. **Click the extract button** and choose how many tweets to download
-4. **Download your archive** as JSON or view it online
-
-That's it! No coding, no deployment, no technical knowledge required.
+[**Live →**](https://extractor.aayushman.dev/dashboard) · [**Releases →**](https://github.com/aayushman-singh/tweet-extractor/releases) · [![License](https://img.shields.io/badge/License-MIT-c8693d?style=flat)](LICENSE.txt) · [![Sponsor](https://img.shields.io/badge/Buy_me_a_coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/aayushmansingh)
 
 ---
 
-*For developers who want to deploy their own instance, see the technical setup guide below.*
+## Why
 
-## ☕ Support This Project
+Twitter killed third-party archive APIs and the official export is incomplete, slow, and undatable. This tool runs in-page on profile views, scrapes via the same fetches the UI already makes, and ships a self-contained HTML archive with sort/filter/export built in. Cloud-hosted reports get a shareable URL; local downloads get a zip you own.
 
-If you find this project helpful, consider supporting its development:
+## Use it now (no setup)
 
-[![Buy me a coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-%23FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/aayushmansingh)
+**Extension** — download `x_archive_extractor.zip` from [releases](https://github.com/aayushman-singh/tweet-extractor/releases) → extract → load unpacked in Chrome (Developer mode).
 
-Your support helps keep this project maintained and free for everyone! ☕
+**Web app** — [extractor.aayushman.dev](https://extractor.aayushman.dev/dashboard) for archive management.
 
-## 📁 Project Structure
+**Flow:** open any X/Twitter profile → click extension → pick count → download or upload.
+
+## Features
+
+**Extension**
+- Tweet extraction at any depth (10 / 100 / 1k / 10k / custom)
+- Sort by date, likes, retweets, views, engagement
+- Search across content
+- Export JSON / CSV / interactive HTML
+- Upload to cloud or download locally
+
+**API (backend)**
+- S3 upload, public report URLs
+- JWT-authenticated dashboard
+- Health + recent-uploads endpoints
+- Deploys to Vercel / Netlify / AWS Lambda
+
+**Frontend dashboard**
+- Login / registration
+- Browse + manage archives
+- Responsive (desktop + mobile)
+- React 18 + Vite + Tailwind
+
+## Stack
+
+**Extension** — Chrome Manifest V3 · vanilla JS
+**Backend** — Node.js · Express · AWS S3 · MongoDB · JWT
+**Frontend** — React 18 · TypeScript · Vite · Tailwind
+
+## Project structure
 
 ```
 tweet-extractor/
-├── extension/          # Chrome Extension files
-│   ├── manifest.json
-│   ├── popup.html
-│   ├── popup.js
-│   ├── content.js
-│   ├── working.js
-│   ├── download-helper.js
-│   ├── background.js
-│   └── README.md
-├── api/                # Backend API for S3 uploads
-│   ├── server.js
-│   ├── package.json
-│   └── README.md
-├── frontend/           # React/TypeScript frontend
-│   ├── src/
-│   ├── package.json
-│   └── README.md
-└── README.md          # This file
+├── extension/   Chrome extension (manifest, popup, content, background)
+├── api/         Node backend (S3 upload, auth)
+└── frontend/    React + TS dashboard
 ```
 
-## 🚀 Quick Setup Guide
+## Self-hosting
 
 ### Prerequisites
-- **Node.js 16+** installed on your system
-- **Chrome/Chromium browser** for the extension
-- **Git** for cloning the repository
-- **AWS Account** (optional, for cloud storage)
 
-### 1. Clone and Setup
+- Node.js 16+
+- Chrome/Chromium (Manifest V3)
+- AWS S3 bucket + IAM keys
+- MongoDB URI (optional, for dashboard auth)
+
+### Setup
+
 ```bash
-# Clone the repository
 git clone https://github.com/aayushman-singh/tweet-extractor.git
 cd tweet-extractor
 
-# Install dependencies for all components
-cd api && npm install && cd ..
-cd frontend && npm install && cd ..
-```
+# API
+cd api && npm install && cp .env.example .env  # fill keys
+npm start
 
-### 2. Environment Configuration
-
-#### API Setup
-```bash
-cd api
-cp .env.example .env
-# Edit .env with your AWS credentials and other settings
-```
-
-Required environment variables:
-- `AWS_ACCESS_KEY_ID` - Your AWS access key
-- `AWS_SECRET_ACCESS_KEY` - Your AWS secret key
-- `AWS_REGION` - AWS region (e.g., us-east-1)
-- `S3_BUCKET_NAME` - Your S3 bucket name
-- `JWT_SECRET` - Secret key for JWT tokens
-- `MONGODB_URI` - MongoDB connection string (optional)
-
-#### Frontend Setup
-```bash
-cd frontend
-cp .env.example .env
-# Edit .env with your API domain
-```
-
-Required environment variables:
-- `VITE_API_BASE_URL` - Your deployed API URL
-
-### 3. Deploy Components
-
-#### Deploy API (Backend)
-```bash
-cd api
-npm start  
-```
-
-#### Deploy Frontend
-```bash
-cd frontend
+# Frontend
+cd ../frontend && npm install && cp .env.example .env
 npm run dev
 ```
 
-### 4. Configure Extension
-1. Update API endpoint in extension files:
-   - `extension/working.js` - Update `apiBase` parameter
-   - `extension/popup.js` - Update `API_BASE` URL
-   - `extension/manifest.json` - Update `host_permissions`
+### Environment
 
-2. Load extension in Chrome:
-   - Open `chrome://extensions/`
-   - Enable "Developer mode"
-   - Click "Load unpacked"
-   - Select the `extension/` folder
-
-### 5. Test the Setup
-1. Navigate to any Twitter/X profile
-2. Click the Tweet Extractor extension icon
-3. Select tweet count and extraction options
-4. Verify upload to your configured cloud storage
-
-
-
-## ✨ Features
-
-### Chrome Extension
-- 🐦 **Tweet Extraction** - Extract tweets from any X/Twitter profile
-- 📊 **Flexible Count** - Download 10, 100, 500, 1000, 10000, or custom amount
-- 🌐 **Cloud Upload** - Upload to custom domain or download locally
-- 📱 **Rich HTML Output** - Interactive archives with sorting and filtering
-- 🔍 **Search & Filter** - Search through tweet content
-- 📈 **Multiple Sort Options** - By date, likes, retweets, views, engagement
-- 📄 **Export Options** - JSON, CSV, and HTML formats
-
-### Backend API
-- 🌐 **S3 Upload** - Upload HTML files to AWS S3
-- 🔒 **Security** - CORS configured for Chrome extensions
-- 📁 **Public Access** - Generated reports accessible via custom URLs
-- 🚀 **Serverless** - Deploy to Vercel, Netlify, or AWS Lambda
-- 📊 **Monitoring** - Health check and recent uploads endpoints
-
-### Frontend
-- 🔐 **User Authentication** - Secure login and registration
-- 📊 **Dashboard** - View and manage your tweet archives
-- 📱 **Responsive Design** - Works on desktop and mobile
-- 🎨 **Modern UI** - Built with React and Tailwind CSS
-
-## 📋 Requirements
-
-### Extension
-- Chrome/Chromium browser (Manifest V3)
-- Active internet connection
-- Access to X/Twitter website
-
-### API
-- Node.js 16+
-- AWS S3 bucket
-- AWS credentials
-- Domain for hosting (optional)
-
-### Frontend
-- Node.js 16+
-- Modern web browser
-- API endpoint configured
-
-## 🔧 Configuration
-
-### Extension Configuration
-Update `working.js` to change the API endpoint:
-```javascript
-const API_BASE_URL = 'https://your-domain.com';
+**API (`api/.env`):**
 ```
-
-### API Configuration
-Set environment variables:
-```env
-AWS_ACCESS_KEY_ID=your_key
-AWS_SECRET_ACCESS_KEY=your_secret
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
 AWS_REGION=us-east-1
-S3_BUCKET_NAME=your-bucket
+S3_BUCKET_NAME=
+JWT_SECRET=
+MONGODB_URI=         # optional
 ```
 
-### Frontend Configuration
-Create `.env` file:
-```env
+**Frontend (`frontend/.env`):**
+```
 VITE_API_BASE_URL=https://your-api-domain.com
 ```
 
-## 📊 Output Examples
+### Wire extension to your API
 
-### Generated URLs
-- `https://your-domain.com/report1704123456.html`
-- Interactive HTML with sorting and filtering
-- JSON/CSV export options within the HTML
+Edit before loading unpacked:
+- `extension/working.js` → `apiBase` constant
+- `extension/popup.js` → `API_BASE` constant
+- `extension/manifest.json` → `host_permissions`
 
-### File Structure
-```
-report1704123456.html
-├── Tweet statistics
-├── Timeline visualization
-├── Sort & filter controls
-├── Interactive tweet list
-└── Export buttons (JSON/CSV)
-```
+Load: `chrome://extensions/` → Developer mode → Load unpacked → select `extension/`.
 
-## 🚀 Deployment
+## Deploy
 
-### Extension
-1. Load unpacked in Chrome developer mode
-2. Or package for Chrome Web Store
+| Component | Recommended | Alt |
+| --- | --- | --- |
+| API | AWS Lambda (serverless) | Vercel · Netlify |
+| Frontend | Vercel | Netlify |
+| Extension | Chrome Web Store | Unpacked install |
 
-### API
-1. **AWS (Recommended):**
-   ```bash
-   cd api && serverless deploy
-   ```
+## Output
 
-2. **Netlify:**
-   ```bash
-   cd api && netlify deploy
-   ```
+Generated reports land at `https://your-domain.com/report<timestamp>.html` — interactive, sortable, filterable, JSON/CSV-exportable inline.
 
-3. **AWS Lambda:**
-   ```bash
-   cd api && vercel
-   ```
+## Security
 
-### Frontend
-1. **Vercel (Recommended):**
-   ```bash
-   cd frontend && vercel
-   ```
+- Extension scoped to X/Twitter domains only
+- API CORS locked to extension origins
+- S3 reports are read-only public; uploads require auth
+- AWS credentials env-only, never committed
+- Frontend uses JWT bearer auth
 
-2. **Netlify:**
-   ```bash
-   cd frontend && netlify deploy --prod --dir=dist
-   ```
+## Data model
 
-## 🔒 Security
+See [`extension/README.md`](extension/README.md) and [`api/README.md`](api/README.md) for the full Twitter/X internal API response schema this tool consumes.
 
-- **Extension**: Runs only on X/Twitter domains
-- **API**: CORS restricted to extension origins
-- **S3**: Public read access for generated reports only
-- **Credentials**: Environment-based AWS configuration
-- **Frontend**: JWT-based authentication
+## Contributing
 
-## 📝 License
+PRs welcome. Open an issue first for non-trivial features. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-MIT License - see LICENSE.txt for details
+## Author
 
-## 🤝 Contributing
+Built by [Aayushman Singh](https://aayushman.dev) — engineer building autonomous coding agents and OSINT tooling. Smart India Hackathon '24 winner.
 
-1. Fork the repository
-2. Create feature branch
-3. Make changes in appropriate folder (`extension/`, `api/`, or `frontend/`)
-4. Test thoroughly
-5. Submit pull request
+## License
 
-## 📞 Support
-
-For issues or questions:
-- Create an issue in this repository
-- Check the README files in `extension/`, `api/`, or `frontend/` folders
-
-## 📊 API Response Data Model
-
-The extension processes Twitter/X API responses with the following data structure:
-
-```javascript
-Data: {
-  User: {
-    __typename: "User",
-    id: String,
-    rest_id: String,
-    core: {
-      created_at: String,
-      name: String,
-      screen_name: String
-    },
-    avatar: {
-      image_url: String
-    },
-    legacy: {
-      description: String,
-      entities: {
-        description: {
-          urls: [
-            {
-              url: String,
-              expanded_url: String,
-              display_url: String
-            }
-          ]
-        },
-        url: {
-          urls: [
-            {
-              url: String,
-              expanded_url: String,
-              display_url: String
-            }
-          ]
-        }
-      },
-      followers_count: Number,
-      friends_count: Number,
-      statuses_count: Number,
-      pinned_tweet_ids_str: [String],
-      profile_banner_url: String,
-      url: String
-    },
-    location: {
-      location: String
-    },
-    verification: {
-      verified: Boolean
-    }
-  },
-  Tweet: {
-    __typename: "Tweet",
-    rest_id: String,
-    core: {
-      user_results: {
-        result: User  // Embedded User object
-      }
-    },
-    legacy: {
-      created_at: String,
-      full_text: String,
-      entities: {  //Often other Tweets or Users
-        hashtags: [],
-        urls: [],
-        user_mentions: []
-      },
-      favorite_count: Number,
-      retweet_count: Number,
-      reply_count: Number,
-      bookmark_count: Number,
-      user_id_str: String,
-      id_str: String
-    },
-    views: {
-      count: String
-    },
-    source: String
-  },
-  Timeline: {
-    instructions: [
-      {
-        type: "TimelineClearCache" | "TimelinePinEntry" | "TimelineAddEntries",
-        entry: {
-          entryId: String,
-          sortIndex: String,
-          content: {
-            itemContent: {
-              tweet_results: {
-                result: Tweet  // Embedded Tweet object
-              }
-            },
-             socialContext: {  //optional
-                type: String,
-                contextType: String,
-                text: String
-              }
-          }
-        }
-      }
-    ]
-  }
-}
-```
-
-### Key Fields Extracted
-
-The extension specifically extracts the following engagement metrics from the API response:
-
-- **`favorite_count`** - Number of likes
-- **`retweet_count`** - Number of retweets  
-- **`reply_count`** - Number of replies
-- **`bookmark_count`** - Number of bookmarks
-- **`views.count`** - Number of views (from the `views` object)
-
-These fields are processed and included in the exported JSON data, which is then stored in S3 and displayed in the frontend reports.
+MIT — see [LICENSE.txt](LICENSE.txt).
